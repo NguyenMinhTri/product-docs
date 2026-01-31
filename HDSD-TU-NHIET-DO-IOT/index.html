@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Sử Dụng Tủ Giám Sát Nhiệt Độ IoT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #00875A;
+            --primary-light: #00A86B;
+            --secondary: #1A73E8;
+            --background: #FFFFFF;
+            --surface: #FFFFFF;
+            --text-primary: #1A2B3C;
+            --text-secondary: #5F6C7B;
+            --border: #E4E8EC;
+            --accent-gradient: linear-gradient(135deg, #00875A 0%, #00A86B 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header - Compact với logo và sản phẩm nằm ngang */
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
+            border-radius: 16px;
+            border: 2px solid var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            flex-shrink: 0;
+        }
+
+        .header-logo img {
+            width: 70px;
+            height: auto;
+        }
+
+        .header-product {
+            flex-shrink: 0;
+        }
+
+        .header-product img {
+            width: 140px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header-text h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .header-text .subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .section h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 12px 0 8px;
+        }
+
+        /* Spec Cards - Grid 2x2 compact */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .spec-card {
+            background: #F8FAFB;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .spec-card .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .spec-card .value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* Steps - Inline compact */
+        .steps-inline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .step-item {
+            background: #F8FAFB;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .step-num {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-gradient);
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .step-item .title {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .step-item .desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* App Download - Compact */
+        .app-download {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: white;
+            margin: 12px 0;
+        }
+
+        .app-download-text {
+            flex: 1;
+        }
+
+        .app-download h3 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .app-download p {
+            opacity: 0.9;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .app-download img {
+            max-width: 200px;
+            border-radius: 8px;
+        }
+
+        /* Feature Cards - Compact grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .feature-card {
+            background: #F8FAFB;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .feature-card h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .feature-card p {
+            font-size: 10px;
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        /* Screenshots - 2 column layout */
+        .screenshots-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin: 12px 0;
+        }
+
+        .screenshots-row img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .screenshot-single {
+            text-align: center;
+            margin: 12px 0;
+        }
+
+        .screenshot-single img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Alert Box */
+        .alert {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 4px solid #EA580C;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-icon {
+            font-size: 20px;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: #EA580C;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .alert p {
+            color: #9A3412;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 16px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 16px;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Link Box */
+        .link-box {
+            display: inline-block;
+            background: #EFF6FF;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        /* Two Column Layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            align-items: start;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                font-size: 11pt;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            .section {
+                break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+
+            .app-download {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .header-row {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Row: Logo + Product Image + Title -->
+        <div class="header-row">
+            <div class="header-logo">
+                <img src="images/image1.png" alt="Logo OM">
+            </div>
+            <div class="header-product">
+                <img src="images/image3.png" alt="Tủ giám sát nhiệt độ">
+            </div>
+            <div class="header-text">
+                <h1>HƯỚNG DẪN SỬ DỤNG</h1>
+                <p class="subtitle">Tủ Giám Sát Nhiệt Độ IoT</p>
+            </div>
+        </div>
+
+        <!-- Section 1: Thông tin sản phẩm -->
+        <div class="section">
+            <h2><span class="section-number">1</span>Thông Tin Sản Phẩm</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="label">Dãy nhiệt độ</div>
+                    <div class="value">-30°C → 80°C</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">Nguồn điện</div>
+                    <div class="value">220VAC</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">Kết nối</div>
+                    <div class="value">Ethernet/4G/WiFi</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">Hiển thị</div>
+                    <div class="value">LED & Còi báo</div>
+                </div>
+            </div>
+            <ul style="margin-top: 10px;">
+                <li>Phần mềm giám sát từ xa qua điện thoại và máy tính</li>
+                <li>Hỗ trợ đa nền tảng: iOS, Android, Web</li>
+            </ul>
+        </div>
+
+        <!-- Section 2: Hướng dẫn lắp đặt -->
+        <div class="section">
+            <h2><span class="section-number">2</span>Hướng Dẫn Lắp Đặt</h2>
+            <div class="steps-inline">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="title">Vị trí cảm biến</div>
+                    <div class="desc">Chọn vị trí đại diện khu vực giám sát</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="title">Lắp đặt tủ</div>
+                    <div class="desc">Gắn cố định, tránh va đập và nước</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="title">Cấp nguồn</div>
+                    <div class="desc">Kết nối nguồn 220VAC ổn định</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="title">Kết nối mạng</div>
+                    <div class="desc">Ethernet, 4G hoặc WiFi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Cài đặt điện thoại -->
+        <div class="section">
+            <h2><span class="section-number">3</span>Cài Đặt Phần Mềm Điện Thoại</h2>
+
+            <div class="app-download">
+                <div class="app-download-text">
+                    <h3>NAVIS SMART INDUSTRY</h3>
+                    <p>Ứng dụng giám sát thông minh, an toàn & tiết kiệm</p>
+                    <p style="margin-top: 8px;">🌐 <a href="https://navis.iotdaiviet.com"
+                            style="color: white; text-decoration: underline;">navis.iotdaiviet.com</a></p>
+                </div>
+                <img src="images/image4.png" alt="Download App">
+            </div>
+
+            <h3>Đăng Ký và Sử Dụng</h3>
+            <ul>
+                <li>Tải App → Đăng ký tài khoản → Đăng nhập</li>
+                <li>Scan mã QR dán trên tủ để bắt đầu giám sát</li>
+            </ul>
+
+            <div class="screenshot-single">
+                <img src="images/image5.png" alt="Giao diện App" style="max-height: 320px;">
+            </div>
+        </div>
+
+        <!-- Section 4: Tính năng -->
+        <div class="section">
+            <h2><span class="section-number">4</span>Tính Năng Chính</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌡️</div>
+                    <h4>Xem nhiệt độ</h4>
+                    <p>Giám sát real-time</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Biểu đồ</h4>
+                    <p>Lịch sử trực quan</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h4>Xuất báo cáo</h4>
+                    <p>Export Excel</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4>Cảnh báo</h4>
+                    <p>Vượt ngưỡng</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h4>Phân quyền</h4>
+                    <p>Nhiều người dùng</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h4>Lưu tự động</h4>
+                    <p>2-5 phút/lần</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Mất kết nối</h4>
+                    <p>Thông báo ngay</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Đa nền tảng</h4>
+                    <p>iOS, Android, Web</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert -->
+        <div class="alert">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+                <div class="alert-title">Lưu Ý Quan Trọng</div>
+                <p>Để tắt còi báo động: nhấn bất kỳ nút nào trên màn hình tủ hoặc cài lại ngưỡng cảnh báo trong app.</p>
+            </div>
+        </div>
+
+        <!-- Section 5: Cài đặt máy tính -->
+        <div class="section">
+            <h2><span class="section-number">5</span>Phần Mềm Trên Máy Tính</h2>
+
+            <div class="two-col">
+                <div>
+                    <p style="margin-bottom: 8px;"><strong>Lưu ý:</strong> Hoàn thành cài đặt trên điện thoại trước.</p>
+                    <div class="link-box">🖥️ <a href="https://datalogger.iotdaiviet.com">datalogger.iotdaiviet.com</a>
+                    </div>
+                    <ul style="margin-top: 10px;">
+                        <li>Giao diện đăng nhập hiện mã QR</li>
+                        <li>Mở App điện thoại quét QR để đăng nhập</li>
+                    </ul>
+                </div>
+                <div>
+                    <img src="images/image6.png" alt="Đăng nhập"
+                        style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                </div>
+            </div>
+
+            <h3>Giao diện giám sát</h3>
+            <div class="screenshot-single">
+                <img src="images/image7.png" alt="Giao diện máy tính" style="max-width: 100%;">
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <strong>ĐẠI VIỆT IoT</strong> | Hỗ trợ: <a href="https://iotdaiviet.com">iotdaiviet.com</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+# Ignore temporary files
+*.py
+extracted_images/
+nm03_images/
+
+# Word source files (optional - uncomment if you want to ignore)
+# *.docx
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# macOS
+.DS_Store
+
+# Old HTML files at root level
+HDSD-TU-NHIET-DO-IOT.html
+NavisMod_NM03_manual.html
+HDSD-TU-NHIET-DO-IOT-NEW.docx

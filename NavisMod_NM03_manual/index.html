@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Kết Nối Navis Mod với Biến Tần FRECON</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #1565C0;
+            --primary-light: #1976D2;
+            --secondary: #00875A;
+            --background: #FFFFFF;
+            --text-primary: #1A2B3C;
+            --text-secondary: #5F6C7B;
+            --border: #E4E8EC;
+            --accent-gradient: linear-gradient(135deg, #1565C0 0%, #1976D2 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.4;
+            font-size: 12px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .header .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .header img {
+            max-height: 80px;
+            border-radius: 6px;
+        }
+
+        /* Section */
+        .section {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+
+        .section-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .section h2 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h3 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 10px 0 6px;
+            padding-left: 6px;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* Flex layouts */
+        .flex-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .flex-center {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .flex-1 {
+            flex: 1;
+        }
+
+        /* Device grid */
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .device-card {
+            background: linear-gradient(135deg, #F0F7FF 0%, #E3F2FD 100%);
+            border: 1px solid #BBDEFB;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .device-card img {
+            max-height: 80px;
+            margin-bottom: 6px;
+        }
+
+        .device-card h4 {
+            font-size: 11px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .device-card .specs {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-align: left;
+        }
+
+        .device-card .specs div {
+            margin: 2px 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 6px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 600;
+            font-size: 10px;
+        }
+
+        tr:nth-child(even) {
+            background: #F8FAFB;
+        }
+
+        .code {
+            font-family: 'Consolas', monospace;
+            background: #FFF3E0;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-size: 10px;
+            color: #E65100;
+        }
+
+        /* Steps */
+        .step-item {
+            display: flex;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--border);
+            font-size: 11px;
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+        }
+
+        .step-num-small {
+            width: 18px;
+            height: 18px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Images */
+        .img-center {
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        .img-center img {
+            max-width: 100%;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .img-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+
+        .img-row img {
+            max-height: 160px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Wiring */
+        .wiring-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #F0FDF4;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 6px 0;
+            font-size: 11px;
+        }
+
+        .wiring-box .pin {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .wiring-box .arrow {
+            font-size: 16px;
+        }
+
+        /* LED Grid */
+        .led-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .led-card {
+            background: #F8FAFB;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .led-card .type {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+
+        /* Info box */
+        .info-box {
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+            border-left: 3px solid #FFA000;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 11px;
+        }
+
+        .info-box strong {
+            color: #E65100;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 10px;
+            color: var(--text-secondary);
+            font-size: 10px;
+            border-top: 1px solid var(--border);
+            margin-top: 10px;
+        }
+
+        /* Two columns */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Print */
+        @media print {
+            body {
+                font-size: 9pt;
+            }
+
+            .container {
+                padding: 8px;
+            }
+
+            .section {
+                break-inside: avoid;
+            }
+
+            .header,
+            th {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-text">
+                <h1>HƯỚNG DẪN KẾT NỐI NAVIS MOD</h1>
+                <p class="subtitle">Với Biến Tần FRECON - Model NM03</p>
+            </div>
+            <img src="images/image8.png" alt="Navis Mod">
+        </div>
+
+        <!-- Sơ đồ tổng quan -->
+        <div class="section">
+            <h2><span class="section-num">1</span>Sơ Đồ Tổng Quan Hệ Thống</h2>
+            <div class="img-center">
+                <img src="images/image.png" alt="Sơ đồ hệ thống" style="max-height: 280px;">
+            </div>
+            <div class="info-box">
+                <strong>Mục đích:</strong> Hướng dẫn kết nối, cấu hình, vận hành | <strong>Đối tượng:</strong> Kỹ thuật
+                điện, bảo trì, tích hợp hệ thống
+            </div>
+        </div>
+
+        <!-- Thiết bị -->
+        <div class="section">
+            <h2><span class="section-num">2</span>Thiết Bị & Yêu Cầu Kỹ Thuật</h2>
+
+            <div class="device-grid">
+                <div class="device-card">
+                    <img src="images/image2.png" alt="Biến tần FRECON">
+                    <h4>🔌 Biến Tần FRECON</h4>
+                    <div class="specs">
+                        <div><b>Model:</b> FR150A-2S-0.7B-H</div>
+                        <div><b>Nguồn:</b> 1P 220VAC</div>
+                        <div><b>Công suất:</b> 0.75kW</div>
+                        <div><b>Tần số:</b> 0-600Hz</div>
+                    </div>
+                </div>
+
+                <div class="device-card">
+                    <img src="images/imagea.png" alt="Navis Mod" style="max-height: 70px;">
+                    <h4>📡 Navis Mod Gateway</h4>
+                    <div class="specs">
+                        <div><b>Nguồn:</b> 12-24VDC</div>
+                        <div><b>Giao tiếp:</b> RS485, TCP/IP</div>
+                        <div><b>Kết nối:</b> WiFi/LAN/4G</div>
+                    </div>
+                </div>
+
+                <div class="device-card">
+                    <img src="images/image9.png" alt="Nguồn 24V">
+                    <h4>⚡ Nguồn 24VDC</h4>
+                    <div class="specs">
+                        <div><b>Model:</b> Meanwell MDR-60-24</div>
+                        <div><b>Ngõ ra:</b> 24VDC 2.5A</div>
+                        <div><b>Công suất:</b> 60W</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cấu hình biến tần -->
+        <div class="section">
+            <h2><span class="section-num">3</span>Cấu Hình Biến Tần FRECON</h2>
+
+            <div class="two-col">
+                <div>
+                    <h3>3.1 Kích hoạt Modbus RTU</h3>
+                    <table>
+                        <tr>
+                            <th>Tham số</th>
+                            <th>Giá trị</th>
+                            <th>Ý nghĩa</th>
+                        </tr>
+                        <tr>
+                            <td><span class="code">F02.00</span></td>
+                            <td>2</td>
+                            <td>RUN từ Modbus</td>
+                        </tr>
+                        <tr>
+                            <td><span class="code">F01.01</span></td>
+                            <td>3</td>
+                            <td>SET tần số bằng Modbus</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <h3>3.2 Cấu hình RS485</h3>
+                    <table>
+                        <tr>
+                            <th>Tham số</th>
+                            <th>Giá trị</th>
+                            <th>Ý nghĩa</th>
+                        </tr>
+                        <tr>
+                            <td><span class="code">F15.00</span></td>
+                            <td>1</td>
+                            <td>9600 bps</td>
+                        </tr>
+                        <tr>
+                            <td><span class="code">F15.01</span></td>
+                            <td>3</td>
+                            <td>8N1 RTU</td>
+                        </tr>
+                        <tr>
+                            <td><span class="code">F15.02</span></td>
+                            <td>1</td>
+                            <td>Slave ID = 1</td>
+                        </tr>
+                        <tr>
+                            <td><span class="code">F15.04</span></td>
+                            <td>0</td>
+                            <td>Chế độ Slave</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cấu hình Gateway -->
+        <div class="section">
+            <h2><span class="section-num">4</span>Cấu Hình Navis Gateway</h2>
+
+            <div class="flex-row">
+                <div class="flex-1">
+                    <h3>4.1 Sơ đồ nối dây</h3>
+                    <div class="wiring-box">
+                        <div><span class="pin">RS485 A (D+)</span><br><small>Navis Mod</small></div>
+                        <span class="arrow">⟷</span>
+                        <div><span class="pin">RS+ / A</span><br><small>FRECON</small></div>
+                    </div>
+                    <div class="wiring-box">
+                        <div><span class="pin">RS485 B (D-)</span><br><small>Navis Mod</small></div>
+                        <span class="arrow">⟷</span>
+                        <div><span class="pin">RS- / B</span><br><small>FRECON</small></div>
+                    </div>
+                </div>
+                <div>
+                    <h3>Sơ đồ LED Gateway</h3>
+                    <img src="images/imageb.png" alt="LED indicators"
+                        style="max-width: 220px; border-radius: 6px;">
+                </div>
+            </div>
+
+            <h3>4.2 Kết nối mạng</h3>
+            <div class="flex-row">
+                <div class="flex-1">
+                    <div class="step-item">
+                        <div class="step-num-small">1</div>
+                        <div>Dùng App <b>Navis Smart Industrial</b> quét mã QR trên thiết bị</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num-small">2</div>
+                        <div>Cấp nguồn + chọn kết nối: <b>WiFi</b> (giữ Config >5s) | <b>LAN</b> (nhấn 1 lần) |
+                            <b>4G</b> (lắp SIM)</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num-small">3</div>
+                        <div>WiFi: Vào App → Kết nối WiFi 2.4GHz | LAN/4G: Đợi 30-60s</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num-small">4</div>
+                        <div>Kiểm tra LED sáng và App hiển thị Online</div>
+                    </div>
+                </div>
+                <div>
+                    <img src="images/imagec.png" alt="Cài đặt WiFi" style="max-height: 140px; border-radius: 6px;">
+                </div>
+            </div>
+
+            <h3>Trạng thái LED</h3>
+            <div class="flex-row">
+                <div class="led-grid flex-1">
+                    <div class="led-card">
+                        <div class="type">📶 WiFi</div>Led 1: 2 lần/s | Led 2: Sáng
+                    </div>
+                    <div class="led-card">
+                        <div class="type">🔌 LAN</div>Led 1: 1 lần/s | Led 2: Sáng
+                    </div>
+                    <div class="led-card">
+                        <div class="type">📱 4G</div>Led 1: 3 lần/s | Led 2: Sáng
+                    </div>
+                </div>
+                <div>
+                    <img src="images/imaged.png" alt="LED status" style="max-height: 60px; border-radius: 4px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Cấu hình App -->
+        <div class="section">
+            <h2><span class="section-num">5</span>Cấu Hình App Navis Smart Industrial</h2>
+
+            <div class="flex-row">
+                <div class="flex-1">
+                    <div class="step-item">
+                        <div class="step-num-small">1</div>
+                        <div>Vào <b>Settings → Advance Settings → Modbus Settings</b></div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num-small">2</div>
+                        <div>Chọn template hoặc cấu hình thanh ghi theo datasheet</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num-small">3</div>
+                        <div>Lưu và Update → Đợi 20-30s</div>
+                    </div>
+
+                    <h3>Thanh ghi giám sát (Ví dụ)</h3>
+                    <table>
+                        <tr>
+                            <th>Tham số</th>
+                            <th>Địa chỉ</th>
+                            <th>Ý nghĩa</th>
+                        </tr>
+                        <tr>
+                            <td><span class="code">U00.23</span></td>
+                            <td>12311</td>
+                            <td>Nhiệt độ biến tần</td>
+                        </tr>
+                        <tr>
+                            <td><span class="code">U00.06</span></td>
+                            <td>12294</td>
+                            <td>Điện áp DC Bus</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <img src="images/image3.png" alt="App Settings" style="max-height: 200px; border-radius: 6px;">
+                </div>
+            </div>
+
+            <h3>Giao diện cấu hình Sensor</h3>
+            <div class="img-row">
+                <img src="images/image4.png" alt="Cấu hình sensor" style="max-height: 140px;">
+                <img src="images/image6.png" alt="Cấu hình nhiệt độ/điện áp" style="max-height: 140px;">
+                <img src="images/image7.png" alt="Update cấu hình" style="max-height: 140px;">
+            </div>
+
+            <h3>Bảng thanh ghi U00 (Tham khảo)</h3>
+            <div class="img-center">
+                <img src="images/image5.png" alt="Bảng thanh ghi U00" style="max-height: 300px;">
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <strong>NAVIS SMART INDUSTRIAL</strong> | Đại Việt IoT | <a href="https://iotdaiviet.com"
+                style="color: var(--primary);">iotdaiviet.com</a>
+        </div>
+    </div>
+</body>
+
+</html>
