@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảo Trì Hệ Thống RO - OMWater.vn</title>
+    <meta name="description"
+        content="Giải pháp giám sát & bảo trì thông minh hệ thống lọc nước RO từ OMWater - Real-time monitoring & cảnh báo sự cố qua smartphone">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #0a0f1c;
+            --surface: #111827;
+            --card: #1a2235;
+            --card-hover: #1e293b;
+            --accent: #06b6d4;
+            --accent2: #3b82f6;
+            --accent3: #8b5cf6;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --text: #e2e8f0;
+            --text2: #94a3b8;
+            --text3: #64748b;
+            --border: rgba(148, 163, 184, .12);
+            --glow: 0 0 30px rgba(6, 182, 212, .15)
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden
+        }
+
+        .hero {
+            position: relative;
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #0a0f1c 0%, #0f172a 40%, #1e1b4b 100%);
+            overflow: hidden
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, .12) 0%, transparent 60%)
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(6, 182, 212, .03) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, .03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite
+        }
+
+        @keyframes gridMove {
+            to {
+                background-position: 60px 60px
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 18px;
+            border-radius: 50px;
+            background: rgba(6, 182, 212, .1);
+            border: 1px solid rgba(6, 182, 212, .25);
+            color: var(--accent);
+            font-size: .8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .3
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #e2e8f0, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text2);
+            max-width: 650px;
+            margin: 0 auto 2rem
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap
+        }
+
+        .hero-stat {
+            text-align: center
+        }
+
+        .hero-stat .num {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block
+        }
+
+        .hero-stat .label {
+            font-size: .8rem;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem
+        }
+
+        section {
+            padding: 5rem 0
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 1rem
+        }
+
+        .tag-red {
+            background: rgba(239, 68, 68, .1);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, .2)
+        }
+
+        .tag-blue {
+            background: rgba(59, 130, 246, .1);
+            color: var(--accent2);
+            border: 1px solid rgba(59, 130, 246, .2)
+        }
+
+        .tag-cyan {
+            background: rgba(6, 182, 212, .1);
+            color: var(--accent);
+            border: 1px solid rgba(6, 182, 212, .2)
+        }
+
+        .tag-green {
+            background: rgba(16, 185, 129, .1);
+            color: var(--green);
+            border: 1px solid rgba(16, 185, 129, .2)
+        }
+
+        .tag-purple {
+            background: rgba(139, 92, 246, .1);
+            color: var(--accent3);
+            border: 1px solid rgba(139, 92, 246, .2)
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 700;
+            margin-bottom: .8rem
+        }
+
+        .section-header p {
+            color: var(--text2);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1rem
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.8rem;
+            transition: all .3s ease
+        }
+
+        .card:hover {
+            border-color: rgba(6, 182, 212, .2);
+            box-shadow: var(--glow);
+            transform: translateY(-2px)
+        }
+
+        .error-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.2rem
+        }
+
+        .error-card {
+            position: relative;
+            overflow: hidden
+        }
+
+        .error-card .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1rem
+        }
+
+        .error-card h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: .6rem
+        }
+
+        .error-card p {
+            font-size: .88rem;
+            color: var(--text2);
+            line-height: 1.6
+        }
+
+        .icon-leak {
+            background: rgba(59, 130, 246, .15);
+            color: #60a5fa
+        }
+
+        .icon-noise {
+            background: rgba(245, 158, 11, .15);
+            color: #fbbf24
+        }
+
+        .icon-stop {
+            background: rgba(239, 68, 68, .15);
+            color: #f87171
+        }
+
+        .icon-smell {
+            background: rgba(139, 92, 246, .15);
+            color: #a78bfa
+        }
+
+        .icon-loop {
+            background: rgba(16, 185, 129, .15);
+            color: #34d399
+        }
+
+        .chem-section {
+            background: linear-gradient(180deg, var(--bg) 0%, #0d1424 100%)
+        }
+
+        .chem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem
+        }
+
+        .chem-card {
+            text-align: center;
+            padding: 2rem
+        }
+
+        .chem-card .formula {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(6, 182, 212, .05);
+            border: 1px solid rgba(6, 182, 212, .1);
+            margin-bottom: 1rem;
+            color: var(--accent);
+            line-height: 2
+        }
+
+        .chem-card h4 {
+            font-size: .95rem;
+            font-weight: 600;
+            margin-bottom: .5rem
+        }
+
+        .chem-card p {
+            font-size: .85rem;
+            color: var(--text2)
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent), var(--accent2), var(--accent3))
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 1.5rem
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 6px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            background: var(--bg)
+        }
+
+        .timeline-item h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: .3rem
+        }
+
+        .timeline-item p {
+            font-size: .88rem;
+            color: var(--text2)
+        }
+
+        .timeline-item .time {
+            font-size: .8rem;
+            color: var(--accent);
+            font-weight: 500
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 1.5rem
+        }
+
+        .chart-card {
+            padding: 1.5rem
+        }
+
+        .chart-card h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .chart-card canvas {
+            max-height: 320px
+        }
+
+        .iot-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.2rem
+        }
+
+        .iot-card {
+            padding: 1.8rem;
+            position: relative
+        }
+
+        .iot-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0
+        }
+
+        .iot-card:nth-child(1)::before {
+            background: linear-gradient(90deg, var(--accent), var(--accent2))
+        }
+
+        .iot-card:nth-child(2)::before {
+            background: linear-gradient(90deg, var(--green), var(--accent))
+        }
+
+        .iot-card:nth-child(3)::before {
+            background: linear-gradient(90deg, var(--accent3), var(--red))
+        }
+
+        .iot-card:nth-child(4)::before {
+            background: linear-gradient(90deg, var(--orange), var(--green))
+        }
+
+        .iot-card .iot-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem
+        }
+
+        .iot-card h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: .7rem
+        }
+
+        .iot-card ul {
+            list-style: none;
+            padding: 0
+        }
+
+        .iot-card li {
+            font-size: .88rem;
+            color: var(--text2);
+            padding: .4rem 0;
+            padding-left: 1.2rem;
+            position: relative
+        }
+
+        .iot-card li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border)
+        }
+
+        .compare-table th {
+            background: rgba(6, 182, 212, .08);
+            padding: 1rem 1.2rem;
+            text-align: left;
+            font-size: .85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .compare-table td {
+            padding: .9rem 1.2rem;
+            font-size: .9rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text2)
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none
+        }
+
+        .compare-table tr:hover td {
+            background: rgba(6, 182, 212, .03)
+        }
+
+        .compare-table .check {
+            color: var(--green);
+            font-weight: 700;
+            font-size: 1.1rem
+        }
+
+        .compare-table .cross {
+            color: var(--red);
+            font-weight: 700;
+            font-size: 1.1rem
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text3);
+            font-size: .85rem
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, .06);
+            border: 1px solid rgba(239, 68, 68, .15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0
+        }
+
+        .warning-box h4 {
+            color: var(--red);
+            margin-bottom: .5rem;
+            font-size: 1rem
+        }
+
+        .warning-box ul {
+            list-style: none;
+            padding: 0
+        }
+
+        .warning-box li {
+            padding: .3rem 0 .3rem 1.2rem;
+            font-size: .88rem;
+            color: var(--text2);
+            position: relative
+        }
+
+        .warning-box li::before {
+            content: '⚠';
+            position: absolute;
+            left: 0;
+            font-size: .75rem
+        }
+
+        @media(max-width:768px) {
+            .hero-stats {
+                gap: 1.5rem
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr
+            }
+
+            .hero {
+                min-height: 60vh
+            }
+
+            .compare-table {
+                font-size: .8rem
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <div class="hero-badge"><span class="dot"></span> OMWater Smart RO</div>
+            <h1>Biến Hệ Thống RO Thành Máy Lọc Thông Minh</h1>
+            <p>Giám sát Real-time & Cảnh báo sự cố qua Smartphone — Giải pháp IoT toàn diện cho hệ thống xử lý nước RO
+                công nghiệp</p>
+            <div class="hero-stats">
+                <div class="hero-stat"><span class="num">38</span><span class="label">Trạm RO Miền Tây</span></div>
+                <div class="hero-stat"><span class="num">99.9%</span><span class="label">Loại bỏ tạp chất</span></div>
+                <div class="hero-stat"><span class="num">24/7</span><span class="label">Giám sát liên tục</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- I. THỰC TRẠNG -->
+    <section id="thuc-trang">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag tag-red">Phần I</span>
+                <h2>Thực Trạng Bảo Trì Hệ Thống RO</h2>
+                <p>5 lỗi vận hành phổ biến nhất và các nguyên nhân gây tắc nghẽn màng lọc</p>
+            </div>
+            <div class="error-grid">
+                <div class="card error-card">
+                    <div class="icon icon-leak">💧</div>
+                    <h3>Rò rỉ nước</h3>
+                    <p>Lắp đặt không đúng kỹ thuật, gioăng/đầu nối không chặt tạo khe hở, hoặc cột lọc bị vỡ.</p>
+                </div>
+                <div class="card error-card">
+                    <div class="icon icon-noise">🔊</div>
+                    <h3>Tiếng ồn bất thường</h3>
+                    <p>Tắc khí (e khí), van cơ rung, bơm áp cao lỗi, lõi lọc và màng lọc bị tắc nghẽn.</p>
+                </div>
+                <div class="card error-card">
+                    <div class="icon icon-stop">⛔</div>
+                    <h3>Hệ thống không hoạt động</h3>
+                    <p>Sự cố về điện, nguồn nước cấp không đủ, cháy biến áp, van áp cao/thấp hỏng.</p>
+                </div>
+                <div class="card error-card">
+                    <div class="icon icon-smell">👃</div>
+                    <h3>Nước có mùi vị lạ</h3>
+                    <p>Màng RO bị rách/hỏng/quá hạn, bể chứa không vệ sinh định kỳ.</p>
+                </div>
+                <div class="card error-card">
+                    <div class="icon icon-loop">🔄</div>
+                    <h3>Không tự ngắt được</h3>
+                    <p>Tắc khí, cột lọc thô tắc, lưu lượng yếu, máy bơm yếu, van áp sai mức.</p>
+                </div>
+            </div>
+
+            <!-- Dấu hiệu cảnh báo -->
+            <div class="warning-box" style="margin-top:2.5rem">
+                <h4>⚡ Dấu hiệu cần can thiệp ngay</h4>
+                <ul>
+                    <li>Lưu lượng nước tinh khiết giảm 20–30% so với ban đầu</li>
+                    <li>Chỉ số TDS tăng cao, nước có mùi clo hoặc vị lạ</li>
+                    <li>Áp suất màng tăng bất thường do cặn tích tụ</li>
+                    <li>Tỷ lệ nước thải tăng — hiệu suất thu hồi giảm</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- II. CÔNG THỨC HÓA HỌC -->
+    <section class="chem-section" id="hoa-hoc">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag tag-purple">Hóa học</span>
+                <h2>Cơ Chế Đóng Cáu Cặn & Nhiễm Phèn</h2>
+                <p>Các phản ứng hóa học chính gây tắc nghẽn màng RO</p>
+            </div>
+            <div class="chem-grid">
+                <div class="card chem-card">
+                    <div class="formula">Ca²⁺ + 2HCO₃⁻ → CaCO₃↓ + H₂O + CO₂↑</div>
+                    <h4>Cáu cặn Canxi Cacbonat</h4>
+                    <p>Khi nước có độ cứng cao, ion Ca²⁺ kết hợp với bicarbonate tạo cặn CaCO₃ bám trên màng RO.</p>
+                </div>
+                <div class="card chem-card">
+                    <div class="formula">Ca²⁺ + SO₄²⁻ → CaSO₄↓</div>
+                    <h4>Cặn Canxi Sunfat</h4>
+                    <p>Thạch cao (CaSO₄) rất khó hòa tan, là nguyên nhân chính gây tắc không thể rửa bằng axit thông
+                        thường.</p>
+                </div>
+                <div class="card chem-card">
+                    <div class="formula">4Fe²⁺ + O₂ + 10H₂O → 4Fe(OH)₃↓ + 8H⁺</div>
+                    <h4>Oxy hóa Sắt (II) — Nhiễm phèn</h4>
+                    <p>Fe²⁺ hòa tan trong nước ngầm bị oxy hóa thành Fe(OH)₃ kết tủa nâu đỏ, bám chặt trên bề mặt màng.
+                    </p>
+                </div>
+                <div class="card chem-card">
+                    <div class="formula">2Mn²⁺ + O₂ + 2H₂O → 2MnO₂↓ + 4H⁺</div>
+                    <h4>Oxy hóa Mangan (II)</h4>
+                    <p>Mn²⁺ bị oxy hóa thành MnO₂ kết tủa đen, gây bẩn màng và giảm lưu lượng nước qua màng RO.</p>
+                </div>
+                <div class="card chem-card">
+                    <div class="formula">Mg²⁺ + 2OH⁻ → Mg(OH)₂↓</div>
+                    <h4>Cặn Magiê Hydroxit</h4>
+                    <p>Ở pH cao, ion Mg²⁺ kết tủa thành Mg(OH)₂ đóng cặn trắng trên màng và đường ống.</p>
+                </div>
+                <div class="card chem-card">
+                    <div class="formula">SiO₂ + H₂O → H₂SiO₃ (gel)</div>
+                    <h4>Cặn Silica dạng keo</h4>
+                    <p>Silica hòa tan khi vượt ngưỡng bão hòa sẽ polyme hóa tạo lớp gel bám cứng, rất khó xử lý.</p>
+                </div>
+            </div>
+
+            <!-- Phản ứng xử lý CIP -->
+            <div style="margin-top:3rem">
+                <h3 style="text-align:center;font-size:1.2rem;margin-bottom:1.5rem;color:var(--accent)">⚗️ Phản ứng xử
+                    lý CIP (Clean In Place)</h3>
+                <div class="chem-grid">
+                    <div class="card chem-card">
+                        <div class="formula" style="color:var(--green)">CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂↑<br><small
+                                style="color:var(--text3)">Axit (pH 2–3): hòa tan cặn vô cơ</small></div>
+                        <h4>Rửa axit — Loại cặn khoáng</h4>
+                        <p>Dung dịch HCl hoặc axit citric pH 2–3 hòa tan cặn CaCO₃ và các oxit kim loại.</p>
+                    </div>
+                    <div class="card chem-card">
+                        <div class="formula" style="color:var(--green)">Chất hữu cơ + NaOH → Muối Na + H₂O<br><small
+                                style="color:var(--text3)">Kiềm (pH 10–12): loại vi sinh & hữu cơ</small></div>
+                        <h4>Rửa kiềm — Loại sinh học</h4>
+                        <p>Dung dịch NaOH pH 10–12 phá vỡ lớp biofilm, rong rêu, tảo và chất hữu cơ bám trên màng.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- III. GIẢI PHÁP -->
+    <section id="giai-phap">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag tag-blue">Phần II</span>
+                <h2>Tổng Quan Giải Pháp</h2>
+                <p>Kết hợp công nghệ lọc tiên tiến, lịch bảo trì nghiêm ngặt và tối ưu chi phí vận hành</p>
+            </div>
+
+            <!-- Timeline bảo trì -->
+            <h3 style="font-size:1.15rem;margin-bottom:1.5rem">📅 Lịch thay thế lõi lọc định kỳ</h3>
+            <div class="timeline">
+                <div class="timeline-item"><span class="time">3 – 6 tháng</span>
+                    <h4>Lõi PP 5 micron (Lõi số 1)</h4>
+                    <p>Loại bỏ cặn bẩn >5µm — thay sau ~18.000 lít</p>
+                </div>
+                <div class="timeline-item"><span class="time">6 – 9 tháng</span>
+                    <h4>Lõi Than hoạt tính (Lõi số 2)</h4>
+                    <p>Khử mùi, clo, hóa chất — thay sau ~27.000 lít</p>
+                </div>
+                <div class="timeline-item"><span class="time">9 – 12 tháng</span>
+                    <h4>Lõi PP 1 micron (Lõi số 3)</h4>
+                    <p>Lọc tinh trước màng RO — thay sau ~36.000 lít</p>
+                </div>
+                <div class="timeline-item"><span class="time">~12 tháng</span>
+                    <h4>Lõi chức năng</h4>
+                    <p>Ổn định vị nước, bổ sung khoáng chất</p>
+                </div>
+                <div class="timeline-item"><span class="time">18 – 36 tháng</span>
+                    <h4>Màng lọc RO</h4>
+                    <p>Bộ phận cốt lõi — khe lọc 0.0001 micron, loại bỏ 99.9% tạp chất</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IV. BIỂU ĐỒ HIỆU QUẢ -->
+    <section id="hieu-qua" style="background:linear-gradient(180deg,var(--bg),#0d1424)">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag tag-green">Hiệu quả</span>
+                <h2>Minh Chứng Hiệu Quả Vận Hành</h2>
+                <p>Dữ liệu so sánh trước và sau khi áp dụng giải pháp IoT của OMWater</p>
+            </div>
+            <div class="chart-grid">
+                <div class="card chart-card">
+                    <h3>📊 Chi phí vật tư thay thế (triệu VNĐ/năm)</h3><canvas id="chartCost"></canvas>
+                </div>
+                <div class="card chart-card">
+                    <h3>📉 Thời gian dừng máy (giờ/tháng)</h3><canvas id="chartDowntime"></canvas>
+                </div>
+                <div class="card chart-card">
+                    <h3>📈 Hiệu suất thu hồi nước (%)</h3><canvas id="chartEfficiency"></canvas>
+                </div>
+                <div class="card chart-card">
+                    <h3>🔋 Điện năng tiêu thụ (kWh/m³)</h3><canvas id="chartEnergy"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- V. GIẢI PHÁP IOT OMWATER -->
+    <section id="iot">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag tag-cyan">Phần III</span>
+                <h2>Giải Pháp IoT Của OMWater</h2>
+                <p>Số hóa dữ liệu vận hành, giám sát thời gian thực qua nền tảng Navis Control</p>
+            </div>
+            <div class="iot-features">
+                <div class="card iot-card">
+                    <div class="iot-icon">📡</div>
+                    <h3>Giám sát Real-time</h3>
+                    <ul>
+                        <li>Áp suất & lưu lượng đường ống</li>
+                        <li>pH, EC, TDS, độ đục nước đầu ra</li>
+                        <li>Điện năng tiêu thụ máy bơm</li>
+                        <li>Trạng thái hoạt động 24/7</li>
+                    </ul>
+                </div>
+                <div class="card iot-card">
+                    <div class="iot-icon">🚨</div>
+                    <h3>Cảnh báo sớm & Chẩn đoán</h3>
+                    <ul>
+                        <li>Cảnh báo vượt ngưỡng tức thì qua App</li>
+                        <li>Phát hiện rò rỉ qua kiểm soát áp suất</li>
+                        <li>Cảnh báo hỏng cảm biến tự động</li>
+                        <li>Chẩn đoán và hướng dẫn từ xa</li>
+                    </ul>
+                </div>
+                <div class="card iot-card">
+                    <div class="iot-icon">📋</div>
+                    <h3>Quản lý Bảo trì</h3>
+                    <ul>
+                        <li>Nhắc lịch thay lõi, sục rửa tự động</li>
+                        <li>Lưu trữ lịch sử bảo trì chi tiết</li>
+                        <li>Theo dõi vòng đời thiết bị</li>
+                        <li>Kiểm soát quy trình vệ sinh màng</li>
+                    </ul>
+                </div>
+                <div class="card iot-card">
+                    <div class="iot-icon">⚙️</div>
+                    <h3>Tự động hóa Vận hành</h3>
+                    <ul>
+                        <li>Auto đóng/ngắt thiết bị theo cảm biến</li>
+                        <li>Bảo vệ máy bơm khi sự cố nguồn nước</li>
+                        <li>Xuất biểu đồ & báo cáo định kỳ</li>
+                        <li>Tối ưu hóa chi phí vận hành</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- So sánh -->
+            <div style="margin-top:3rem;overflow-x:auto">
+                <h3 style="text-align:center;font-size:1.15rem;margin-bottom:1.5rem">So sánh: Bảo trì truyền thống vs.
+                    OMWater IoT</h3>
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>Tiêu chí</th>
+                            <th>Truyền thống</th>
+                            <th>OMWater IoT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Giám sát thông số</td>
+                            <td class="cross">✗ Kiểm tra thủ công</td>
+                            <td class="check">✓ Real-time 24/7</td>
+                        </tr>
+                        <tr>
+                            <td>Phát hiện sự cố</td>
+                            <td class="cross">✗ Khi đã hư hỏng</td>
+                            <td class="check">✓ Cảnh báo sớm</td>
+                        </tr>
+                        <tr>
+                            <td>Lịch bảo trì</td>
+                            <td class="cross">✗ Ghi chép tay</td>
+                            <td class="check">✓ Tự động nhắc lịch</td>
+                        </tr>
+                        <tr>
+                            <td>Báo cáo dữ liệu</td>
+                            <td class="cross">✗ Không có</td>
+                            <td class="check">✓ Biểu đồ & phân tích</td>
+                        </tr>
+                        <tr>
+                            <td>Chẩn đoán từ xa</td>
+                            <td class="cross">✗ Phải đến hiện trường</td>
+                            <td class="check">✓ Qua App/Web</td>
+                        </tr>
+                        <tr>
+                            <td>Thời gian dừng máy</td>
+                            <td class="cross">✗ Cao (8–12h/tháng)</td>
+                            <td class="check">✓ Thấp (1–2h/tháng)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 <a href="https://omwater.vn" target="_blank">OMWater.vn</a> — Giải pháp bảo trì thông minh hệ
+                thống RO</p>
+            <p style="margin-top:.5rem">Đang vận hành thành công tại 38 Trạm RO xử lý nước nhiễm mặn Miền Tây</p>
+        </div>
+    </footer>
+
+    <script>
+        const cGlobal = { responsive: true, plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 } } }, tooltip: { backgroundColor: '#1a2235', titleColor: '#e2e8f0', bodyColor: '#94a3b8', borderColor: 'rgba(6,182,212,.2)', borderWidth: 1 } }, scales: { x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: 'rgba(148,163,184,.06)' } }, y: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: 'rgba(148,163,184,.06)' } } } };
+        const months = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+
+        // Chart 1: Chi phí vật tư
+        new Chart(document.getElementById('chartCost'), { type: 'bar', data: { labels: ['Lõi PP', 'Than hoạt tính', 'Lõi tinh', 'Màng RO', 'Hóa chất CIP', 'Tổng/năm'], datasets: [{ label: 'Trước IoT', data: [4.2, 3.8, 3.5, 18, 5.5, 35], backgroundColor: 'rgba(239,68,68,.6)', borderColor: 'rgba(239,68,68,.8)', borderWidth: 1, borderRadius: 6 }, { label: 'Sau IoT OMWater', data: [2.8, 2.5, 2.2, 12, 3.2, 22.7], backgroundColor: 'rgba(6,182,212,.6)', borderColor: 'rgba(6,182,212,.8)', borderWidth: 1, borderRadius: 6 }] }, options: { ...cGlobal, plugins: { ...cGlobal.plugins, title: { display: true, text: 'Giảm ~35% chi phí vật tư nhờ bảo trì đúng hạn', color: '#10b981', font: { size: 13, weight: 600 } } } } });
+
+        // Chart 2: Thời gian dừng máy
+        new Chart(document.getElementById('chartDowntime'), { type: 'line', data: { labels: months, datasets: [{ label: 'Trước IoT', data: [12, 10, 14, 11, 9, 15, 13, 11, 16, 10, 12, 14], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,.1)', fill: true, tension: .4, pointRadius: 4, pointBackgroundColor: '#ef4444' }, { label: 'Sau IoT OMWater', data: [3, 2.5, 2, 1.5, 2, 1, 1.5, 1, 2, 1.5, 1, 1], borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,.1)', fill: true, tension: .4, pointRadius: 4, pointBackgroundColor: '#06b6d4' }] }, options: { ...cGlobal, plugins: { ...cGlobal.plugins, title: { display: true, text: 'Giảm 85% thời gian dừng máy ngoài kế hoạch', color: '#10b981', font: { size: 13, weight: 600 } } } } });
+
+        // Chart 3: Hiệu suất thu hồi
+        new Chart(document.getElementById('chartEfficiency'), { type: 'line', data: { labels: months, datasets: [{ label: 'Trước IoT', data: [75, 73, 70, 68, 65, 62, 60, 58, 55, 52, 50, 48], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,.08)', fill: true, tension: .3, pointRadius: 4, pointBackgroundColor: '#ef4444' }, { label: 'Sau IoT OMWater', data: [78, 79, 78, 80, 79, 80, 81, 80, 79, 80, 81, 82], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,.08)', fill: true, tension: .3, pointRadius: 4, pointBackgroundColor: '#10b981' }] }, options: { ...cGlobal, plugins: { ...cGlobal.plugins, title: { display: true, text: 'Duy trì hiệu suất ổn định ~80% nhờ bảo trì đúng hạn', color: '#10b981', font: { size: 13, weight: 600 } } } } });
+
+        // Chart 4: Điện năng
+        new Chart(document.getElementById('chartEnergy'), { type: 'bar', data: { labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Trước IoT (kWh/m³)', data: [3.8, 4.2, 4.5, 4.8], backgroundColor: 'rgba(245,158,11,.6)', borderColor: 'rgba(245,158,11,.8)', borderWidth: 1, borderRadius: 6 }, { label: 'Sau IoT (kWh/m³)', data: [2.8, 2.7, 2.6, 2.5], backgroundColor: 'rgba(16,185,129,.6)', borderColor: 'rgba(16,185,129,.8)', borderWidth: 1, borderRadius: 6 }] }, options: { ...cGlobal, plugins: { ...cGlobal.plugins, title: { display: true, text: 'Tiết kiệm ~40% điện năng nhờ vận hành tối ưu', color: '#10b981', font: { size: 13, weight: 600 } } } } });
+    </script>
+</body>
+
+</html>

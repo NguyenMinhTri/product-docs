@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Kết Nối Cảm Biến Lưu Lượng vào Tủ Giám Sát IoT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #00875A;
+            --primary-light: #00A86B;
+            --secondary: #1565C0;
+            --danger: #D32F2F;
+            --warning: #F57C00;
+            --background: #FFFFFF;
+            --text-primary: #1A2B3C;
+            --text-secondary: #5F6C7B;
+            --border: #E4E8EC;
+            --accent-gradient: linear-gradient(135deg, #00875A 0%, #00A86B 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 12px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        .header {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .header .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .header .meta {
+            font-size: 10px;
+            opacity: 0.75;
+            margin-top: 4px;
+        }
+
+        .header img {
+            max-height: 60px;
+            border-radius: 6px;
+            background: white;
+            padding: 4px 8px;
+        }
+
+        .section {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+
+        .section-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .section h2 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h3 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 10px 0 6px;
+            padding-left: 6px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+            border-left: 4px solid var(--danger);
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 11px;
+        }
+
+        .alert-danger strong {
+            color: var(--danger);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border-left: 4px solid var(--warning);
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 11px;
+        }
+
+        .alert-warning strong {
+            color: #E65100;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            border-left: 3px solid var(--primary);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 11px;
+        }
+
+        .info-box strong {
+            color: var(--primary);
+        }
+
+        .info-blue {
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            border-left: 3px solid var(--secondary);
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 11px;
+        }
+
+        .info-blue strong {
+            color: var(--secondary);
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .device-card {
+            background: linear-gradient(135deg, #F0FFF4, #E8F5E9);
+            border: 1px solid #A5D6A7;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .device-card h4 {
+            font-size: 11px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .device-card .specs {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-align: left;
+        }
+
+        .device-card .specs div {
+            margin: 2px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 6px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 600;
+            font-size: 10px;
+        }
+
+        tr:nth-child(even) {
+            background: #F8FAFB;
+        }
+
+        .code {
+            font-family: Consolas, monospace;
+            background: #FFF3E0;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-size: 10px;
+            color: #E65100;
+        }
+
+        .pin-label {
+            font-family: Consolas, monospace;
+            background: #E3F2FD;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 10px;
+            color: #1565C0;
+            font-weight: 600;
+        }
+
+        .pin-old {
+            font-family: Consolas, monospace;
+            background: #FFEBEE;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 10px;
+            color: #D32F2F;
+            font-weight: 600;
+            text-decoration: line-through;
+        }
+
+        .pin-new {
+            font-family: Consolas, monospace;
+            background: #E8F5E9;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 10px;
+            color: #2E7D32;
+            font-weight: 600;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+            font-size: 11px;
+            align-items: flex-start;
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+        }
+
+        .step-num-small {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .step-num-blue {
+            width: 20px;
+            height: 20px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0;
+        }
+
+        .checklist li {
+            padding: 4px 0;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #FAFAFA;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+            border-left: 4px solid #7B1FA2;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+
+        .contact-box strong {
+            color: #7B1FA2;
+        }
+
+        .contact-box .phone {
+            font-size: 16px;
+            font-weight: 700;
+            color: #4A148C;
+        }
+
+        .download-box {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            border: 1px solid #A5D6A7;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .download-box .icon {
+            font-size: 20px;
+        }
+
+        .download-box a {
+            color: var(--secondary);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        .download-box a:hover {
+            text-decoration: underline;
+        }
+
+        .download-box .label {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            color: var(--text-secondary);
+            font-size: 10px;
+            border-top: 1px solid var(--border);
+            margin-top: 10px;
+        }
+
+        .footer img {
+            max-height: 30px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @media print {
+            body {
+                font-size: 9pt;
+            }
+
+            .container {
+                padding: 8px;
+            }
+
+            .section {
+                break-inside: avoid;
+            }
+
+            .header,
+            th {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-text">
+                <h1>📊 HƯỚNG DẪN KẾT NỐI CẢM BIẾN LƯU LƯỢNG</h1>
+                <p class="subtitle">Tủ Giám Sát IoT — Cảm Biến NPN qua Bộ Chuyển Đổi MRI-24TR/INV</p>
+                <p class="meta">CÔNG TY TNHH TM DV KT SX O & M | Phiên bản 1.0</p>
+            </div>
+            <img src="LOGO-omwater.png" alt="O&M Water Logo">
+        </div>
+
+        <!-- 1. Tổng quan -->
+        <div class="section">
+            <h2><span class="section-num">1</span>Tổng Quan</h2>
+            <div class="info-box">
+                <strong>Mục đích:</strong> Bổ sung cảm biến lưu lượng (NPN) vào tủ giám sát IoT. Do PLC Delta sử dụng
+                ngõ vào PNP, cần bộ chuyển đổi tín hiệu NPN → PNP (MRI-24TR/INV) trung gian.
+            </div>
+            <div class="info-blue" style="margin-top: 6px;">
+                <strong>Tóm tắt thay đổi:</strong>
+                <ul style="margin: 4px 0 0 16px;">
+                    <li>Chuyển tín hiệu <b>Bơm RO1,2</b> từ <span class="pin-old">X0</span> sang <span
+                            class="pin-new">X7</span></li>
+                    <li>Bỏ tín hiệu <b>Rò Rỉ Nước</b> (X7 cũ — không sử dụng nữa)</li>
+                    <li>Đưa tín hiệu <b>xung lưu lượng</b> vào <span class="pin-new">X0</span> (High-Speed Counter)</li>
+                    <li>Nạp lại code <b>PLC Delta</b> + giao diện <b>HMI Wecon</b></li>
+                    <li>Cập nhật giao diện <b>IoT</b> từ xa</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 2. Thiết bị -->
+        <div class="section">
+            <h2><span class="section-num">2</span>Thiết Bị Cần Chuẩn Bị</h2>
+            <div class="device-grid">
+                <div class="device-card">
+                    <h4>💧 Cảm Biến Lưu Lượng</h4>
+                    <div class="specs">
+                        <div><b>Loại:</b> Hall Effect (NPN)</div>
+                        <div><b>Nguồn:</b> 5-24VDC</div>
+                        <div><b>Tín hiệu:</b> Xung NPN</div>
+                        <div><b>Dây:</b> Đỏ (+), Đen (GND), Vàng (Signal)</div>
+                    </div>
+                </div>
+                <div class="device-card">
+                    <h4>🔄 Bộ Chuyển Đổi NPN→PNP</h4>
+                    <div class="specs">
+                        <div><b>Model:</b> MRI-24TR/INV</div>
+                        <div><b>Hãng:</b> Linkfreely / LDG</div>
+                        <div><b>Nguồn:</b> 24VDC</div>
+                        <div><b>Ngõ ra:</b> 24V 200mA</div>
+                        <div><b>Lắp:</b> DIN Rail</div>
+                    </div>
+                </div>
+                <div class="device-card">
+                    <h4>🔧 Dụng Cụ & Phụ Kiện</h4>
+                    <div class="specs">
+                        <div>• Tuốc-nơ-vít dẹt 2mm</div>
+                        <div>• Kìm bấm đầu cos</div>
+                        <div>• Dây điện 0.5-1.0mm²</div>
+                        <div>• Đầu cos pin / Y</div>
+                        <div>• Cáp USB lập trình PLC</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Thay đổi chân PLC -->
+        <div class="section">
+            <h2><span class="section-num">3</span>Thay Đổi Phân Bổ Chân PLC</h2>
+
+            <div class="alert-danger">
+                <strong>⚠️ QUAN TRỌNG:</strong> Ngắt toàn bộ nguồn điện tủ trước khi thao tác đấu dây!
+            </div>
+
+            <h3>3.1 Bảng phân bổ chân trước & sau</h3>
+            <table>
+                <tr>
+                    <th>Chân PLC</th>
+                    <th>Trước (Cũ)</th>
+                    <th>Sau (Mới)</th>
+                    <th>Ghi chú</th>
+                </tr>
+                <tr>
+                    <td><span class="pin-new">X0</span></td>
+                    <td>Bơm RO1,2</td>
+                    <td><b>🆕 Xung lưu lượng</b> (qua bộ chuyển đổi)</td>
+                    <td>High-Speed Counter — bắt buộc dùng X0</td>
+                </tr>
+                <tr>
+                    <td><span class="pin-new">X7</span></td>
+                    <td>Rò Rỉ Nước</td>
+                    <td><b>🔀 Bơm RO1,2</b> (từ X0 chuyển qua)</td>
+                    <td>Chức năng Bơm RO1,2 chuyển sang X7</td>
+                </tr>
+            </table>
+
+            <div class="info-box" style="margin-top: 6px;">
+                <strong>💡 Lưu ý:</strong> Tín hiệu <b>Rò Rỉ Nước</b> (X7 cũ) sẽ <b>không sử dụng nữa</b>. Gỡ dây, cuộn
+                gọn và buộc lại.
+            </div>
+
+            <h3>3.2 Các bước thay đổi chân</h3>
+            <div class="step-item">
+                <div class="step-num-small">1</div>
+                <div><b>Ngắt nguồn tủ</b> — Tắt CB chính, đợi 10 giây.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">2</div>
+                <div><b>Gỡ dây Bơm RO1,2 tại X0</b> — Tháo dây tín hiệu Bơm RO1,2 đang đấu tại <span
+                        class="pin-label">X0</span>. Đánh dấu dây này.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">3</div>
+                <div><b>Gỡ dây Rò Rỉ Nước tại X7</b> — Tháo dây tín hiệu Rò Rỉ Nước tại <span
+                        class="pin-label">X7</span>. <b>Cuộn gọn, không sử dụng nữa.</b></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">4</div>
+                <div><b>Đấu dây Bơm RO1,2 → X7</b> — Lấy dây đã đánh dấu (bước 2) đấu vào chân <span
+                        class="pin-new">X7</span>.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">5</div>
+                <div><b>Chân X0 giờ trống</b> — Sẵn sàng nhận tín hiệu xung lưu lượng (bước tiếp theo ở phần 4).</div>
+            </div>
+
+            <h3>3.3 Sơ đồ thay đổi chân</h3>
+            <canvas id="pinSwapDiagram" width="820" height="200"></canvas>
+        </div>
+
+        <!-- 4. Đấu dây cảm biến lưu lượng -->
+        <div class="section">
+            <h2><span class="section-num">4</span>Đấu Dây Cảm Biến Lưu Lượng</h2>
+
+            <div class="alert-warning">
+                <strong>⚠️ LƯU Ý:</strong> Cảm biến NPN + PLC PNP → phải đấu qua bộ chuyển đổi MRI-24TR/INV. <b>KHÔNG
+                    ĐẤU TRỰC TIẾP!</b>
+            </div>
+
+            <h3>4.1 Sơ đồ đấu dây</h3>
+            <canvas id="wiringDiagram" width="820" height="420"></canvas>
+
+            <h3>4.2 Chi tiết đấu dây</h3>
+
+            <p style="font-size:11px; margin: 6px 0;"><b>Bước A — Cấp nguồn cảm biến lưu lượng (từ nguồn 24VDC trong
+                    tủ):</b></p>
+            <table>
+                <tr>
+                    <th>Dây cảm biến</th>
+                    <th>Màu</th>
+                    <th>Đấu vào</th>
+                </tr>
+                <tr>
+                    <td>VCC (+)</td>
+                    <td style="color:#D32F2F; font-weight:600;">Đỏ</td>
+                    <td>Nguồn 24VDC (+) trong tủ</td>
+                </tr>
+                <tr>
+                    <td>GND (−)</td>
+                    <td style="font-weight:600;">Đen</td>
+                    <td>Nguồn 24VDC (−) trong tủ</td>
+                </tr>
+            </table>
+
+            <p style="font-size:11px; margin: 10px 0 6px;"><b>Bước B — Tín hiệu cảm biến → Bộ chuyển đổi:</b></p>
+            <table>
+                <tr>
+                    <th>Từ</th>
+                    <th>Đấu vào MRI-24TR/INV</th>
+                </tr>
+                <tr>
+                    <td>Dây <b style="color:#F9A825;">Vàng</b> (Signal) của cảm biến</td>
+                    <td><span class="pin-label">NPN</span> (bên trái — ngõ vào NPN)</td>
+                </tr>
+            </table>
+
+            <p style="font-size:11px; margin: 10px 0 6px;"><b>Bước C — Cấp nguồn bộ chuyển đổi + Ngõ ra PNP → PLC:</b>
+            </p>
+            <table>
+                <tr>
+                    <th>Chân MRI-24TR/INV</th>
+                    <th>Đấu vào</th>
+                    <th>Mô tả</th>
+                </tr>
+                <tr>
+                    <td><span class="pin-label">P-LOAD (+)</span></td>
+                    <td>Nguồn 24VDC (+) trong tủ</td>
+                    <td>Cấp nguồn dương cho bộ chuyển đổi</td>
+                </tr>
+                <tr>
+                    <td><span class="pin-label">N-LOAD (−)</span></td>
+                    <td><span class="pin-new">X0</span> PLC</td>
+                    <td>Ngõ ra PNP → ngõ vào HSC PLC</td>
+                </tr>
+                <tr>
+                    <td><span class="pin-label">BB</span></td>
+                    <td>Nguồn 24VDC (−) / 0V trong tủ</td>
+                    <td>Nguồn âm — chung GND</td>
+                </tr>
+            </table>
+
+            <div class="info-box" style="margin-top: 8px;">
+                <strong>✅ Kiểm tra:</strong> Cấp nguồn → thổi nước/gió qua cảm biến → LED converter nhấp nháy + LED X0
+                trên PLC nhấp nháy = OK.
+            </div>
+        </div>
+
+        <!-- 5. Nạp lại Code PLC & HMI -->
+        <div class="section">
+            <h2><span class="section-num">5</span>Nạp Lại Code PLC & HMI</h2>
+
+            <h3>5.1 Nạp code PLC Delta</h3>
+            <div class="info-blue">
+                <strong>Thay đổi trong code:</strong>
+                <ul style="margin: 4px 0 0 16px;">
+                    <li>Bơm RO1,2: <span class="pin-old">X0</span> → <span class="pin-new">X7</span></li>
+                    <li>Rò Rỉ Nước: <span class="pin-old">X7</span> → <b>Bỏ</b></li>
+                    <li><span class="pin-new">X0</span> → cấu hình <b>High-Speed Counter (HSC)</b> đếm xung lưu lượng
+                    </li>
+                </ul>
+            </div>
+
+            <div class="download-box">
+                <span class="icon">📥</span>
+                <div>
+                    <a href="https://drive.google.com/file/d/1KwusJsWnbSqOVITWBYGSm8xD5ebG43Qc/view?usp=sharing"
+                        target="_blank">Download chương trình PLC Delta (Google Drive)</a>
+                    <div class="label">File chương trình PLC Delta cập nhật mới</div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-blue">1</div>
+                <div>Kết nối cáp USB lập trình ↔ PLC Delta</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-blue">2</div>
+                <div>Mở phần mềm <b>ISPSoft / WPLSoft</b></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-blue">3</div>
+                <div>Load chương trình PLC mới (tải từ link ở trên)</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-blue">4</div>
+                <div>Download xuống PLC → Chuyển sang chế độ <b>RUN</b></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-blue">5</div>
+                <div>Kiểm tra: Thổi lưu lượng → giá trị đếm xung tăng trên phần mềm monitoring</div>
+            </div>
+
+            <h3>5.2 Nạp giao diện HMI Wecon</h3>
+
+            <div class="download-box">
+                <span class="icon">📥</span>
+                <div>
+                    <a href="https://drive.google.com/file/d/17FYfD6GbBCNRb1zxhnUMuDSILiR9kOpi/view?usp=sharing"
+                        target="_blank">Download giao diện HMI Wecon (Google Drive)</a>
+                    <div class="label">File giao diện HMI Wecon cập nhật mới</div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-blue">1</div>
+                <div>Kết nối cáp USB ↔ HMI Wecon</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-blue">2</div>
+                <div>Mở phần mềm <b>PIStudio</b> (Wecon)</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-blue">3</div>
+                <div>Download giao diện mới có hiển thị <b>lưu lượng (L/phút)</b> và <b>tổng lưu lượng (m³)</b></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-blue">4</div>
+                <div>Kiểm tra: Thổi lưu lượng → giá trị trên HMI thay đổi theo thời gian thực</div>
+            </div>
+        </div>
+
+        <!-- 6. Cập nhật IoT -->
+        <div class="section">
+            <h2><span class="section-num">6</span>Cập Nhật Giao Diện IoT</h2>
+
+            <div class="contact-box">
+                <strong>☁️ CẬP NHẬT TỪ XA:</strong> Sau khi hoàn tất phần cứng và nạp PLC/HMI, liên lạc kỹ thuật IoT để
+                cập nhật giao diện online từ xa:
+                <div style="margin-top: 8px;">
+                    <div style="font-size: 13px; font-weight: 600;">👤 Trí Nguyễn — Kỹ thuật IoT</div>
+                    <div class="phone" style="margin-top: 4px;">📞 0387 226 446</div>
+                </div>
+                <div style="margin-top: 8px; font-size: 11px; opacity: 0.85;">
+                    Nội dung cập nhật: Thêm hiển thị lưu lượng, cấu hình Modbus thanh ghi mới, biểu đồ lịch sử, cảnh báo
+                    vượt ngưỡng (nếu cần).
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Checklist -->
+        <div class="section">
+            <h2><span class="section-num">7</span>Checklist Hoàn Thành</h2>
+            <div class="two-col">
+                <div>
+                    <h3>Phần cứng</h3>
+                    <ul class="checklist">
+                        <li>Ngắt nguồn trước khi đấu dây</li>
+                        <li>Chuyển dây Bơm RO1,2: X0 → X7</li>
+                        <li>Gỡ dây Rò Rỉ Nước (X7 cũ)</li>
+                        <li>Cấp nguồn 24VDC cho cảm biến lưu lượng</li>
+                        <li>Đấu Signal cảm biến → NPN converter</li>
+                        <li>Đấu P-LOAD(+) → 24V(+), N-LOAD → X0</li>
+                        <li>Đấu BB → 24V(−) / 0V trong tủ</li>
+                        <li>LED converter + LED X0 nhấp nháy khi có lưu lượng</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Phần mềm</h3>
+                    <ul class="checklist">
+                        <li>Nạp code PLC Delta mới</li>
+                        <li>Giá trị đếm xung OK trên PLC</li>
+                        <li>Nạp giao diện HMI Wecon mới</li>
+                        <li>Hiển thị lưu lượng trên HMI OK</li>
+                        <li>Liên lạc kỹ thuật IoT cập nhật từ xa</li>
+                        <li>Kiểm tra dữ liệu trên App/Dashboard</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <img src="LOGO-omwater.png" alt="O&M Water">
+            <strong>CÔNG TY TNHH TM DV KT SX O & M</strong> |
+            <a href="https://omwater.vn" style="color: var(--primary);">omwater.vn</a>
+        </div>
+    </div>
+
+    <script>
+        // === Canvas Wiring Diagram ===
+        const canvas = document.getElementById('wiringDiagram');
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = 820 * dpr;
+        canvas.height = 420 * dpr;
+        canvas.style.width = '820px';
+        canvas.style.height = '420px';
+        ctx.scale(dpr, dpr);
+
+        // ── Helpers ──
+        function roundRect(x, y, w, h, r, fill, stroke, lineW) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.closePath();
+            if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+            if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lineW || 1.5; ctx.stroke(); }
+        }
+
+        function txt(text, x, y, color, size, align, bold) {
+            ctx.fillStyle = color || '#333';
+            ctx.font = (bold ? 'bold ' : '') + (size || 11) + 'px "Be Vietnam Pro", sans-serif';
+            ctx.textAlign = align || 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, x, y);
+        }
+
+        function wire(x1, y1, x2, y2, color, w, dash) {
+            ctx.beginPath();
+            ctx.strokeStyle = color; ctx.lineWidth = w || 2;
+            ctx.setLineDash(dash || []);
+            ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function wireElbow(x1, y1, xBend, x2, y2, color, w, dash) {
+            ctx.beginPath();
+            ctx.strokeStyle = color; ctx.lineWidth = w || 2;
+            ctx.setLineDash(dash || []);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(xBend, y1);
+            ctx.lineTo(xBend, y2);
+            ctx.lineTo(x2, y2);
+            ctx.stroke(); ctx.setLineDash([]);
+        }
+
+        function pin(x, y, r, color) {
+            ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fillStyle = color; ctx.fill();
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.stroke();
+        }
+
+        function arrowR(x, y, color) {
+            ctx.fillStyle = color; ctx.beginPath();
+            ctx.moveTo(x - 6, y - 4); ctx.lineTo(x, y); ctx.lineTo(x - 6, y + 4);
+            ctx.closePath(); ctx.fill();
+        }
+
+        // ── Layout constants ──
+        const SX = 15, SW = 155;        // Sensor
+        const CX = 270, CW = 260;       // Converter
+        const PX = 620, PW = 180;       // PLC
+        const BY = 55, BH = 280;        // Box Y, Height
+        const GAP_TOP = 30;             // space above boxes for routing
+        const GAP_BOT = BH + BY + 15;   // Y below boxes for routing
+
+        // ══════ SENSOR BOX ══════
+        roundRect(SX, BY, SW, BH, 8, '#E3F2FD', '#90CAF9');
+        txt('CẢM BIẾN LƯU LƯỢNG', SX + SW / 2, BY - 12, '#1565C0', 11, 'center', true);
+
+        const sVcc = BY + 55, sGnd = BY + 140, sSig = BY + 225;
+
+        pin(SX + SW - 8, sVcc, 5, '#D32F2F');
+        txt('Đỏ (+VCC)', SX + 12, sVcc, '#D32F2F', 11, 'left', true);
+
+        pin(SX + SW - 8, sGnd, 5, '#424242');
+        txt('Đen (GND)', SX + 12, sGnd, '#424242', 11, 'left', true);
+
+        pin(SX + SW - 8, sSig, 5, '#F9A825');
+        txt('Vàng (Signal)', SX + 12, sSig, '#E8A317', 11, 'left', true);
+
+        // ══════ CONVERTER BOX ══════
+        roundRect(CX, BY, CW, BH, 8, '#FFF3E0', '#FFB74D');
+        txt('MRI-24TR/INV', CX + CW / 2, BY - 12, '#E65100', 12, 'center', true);
+
+        // Left side terminals
+        const cNpn = BY + 75;
+        const cPnp = BY + 215;
+
+        pin(CX + 10, cNpn, 5, '#F9A825');
+        txt('NPN', CX + 24, cNpn, '#E65100', 11, 'left', true);
+        txt('(ngõ vào)', CX + 24, cNpn + 14, '#999', 9, 'left', false);
+
+        pin(CX + 10, cPnp, 4, '#aaa');
+        txt('PNP', CX + 24, cPnp, '#aaa', 10, 'left', false);
+        txt('(không dùng)', CX + 24, cPnp + 14, '#bbb', 8, 'left', false);
+
+        // Right side terminals (top to bottom: P-LOAD+, N-LOAD-, BB)
+        const cPloadP = BY + 55;
+        const cNloadN = BY + 145;
+        const cBB = BY + 235;
+
+        // P-LOAD +  → 24V(+)
+        pin(CX + CW - 10, cPloadP, 5, '#D32F2F');
+        txt('P-LOAD (+)', CX + CW - 24, cPloadP, '#D32F2F', 10, 'right', true);
+
+
+        // N-LOAD -  → X0
+        pin(CX + CW - 10, cNloadN, 6, '#2E7D32');
+        txt('N-LOAD (−)', CX + CW - 24, cNloadN, '#2E7D32', 11, 'right', true);
+        txt('PNP output', CX + CW - 24, cNloadN + 14, '#388E3C', 9, 'right', false);
+
+        // BB → 0V / GND (24VDC −)
+        pin(CX + CW - 10, cBB, 5, '#424242');
+        txt('BB', CX + CW - 24, cBB, '#555', 11, 'right', true);
+        txt('→ 0V', CX + CW - 24, cBB + 14, '#666', 8, 'right', false);
+
+        // ══════ PLC BOX ══════
+        roundRect(PX, BY, PW, BH, 8, '#E8F5E9', '#A5D6A7');
+        txt('PLC DELTA', PX + PW / 2, BY - 12, '#2E7D32', 12, 'center', true);
+
+        const pX0 = BY + 140;
+
+        pin(PX + 12, pX0, 6, '#2E7D32');
+        txt('X0 (HSC)', PX + 28, pX0, '#2E7D32', 12, 'left', true);
+        txt('High-Speed Counter', PX + 28, pX0 + 16, '#66BB6A', 9, 'left', false);
+
+        // ══════ WIRES (routed around boxes) ══════
+
+        // 1. Sensor Signal (yellow) → Converter NPN
+        //    Route: go up from sensor pin, across above boxes, then down to NPN
+        ctx.beginPath();
+        ctx.strokeStyle = '#F9A825'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+        ctx.moveTo(SX + SW - 3, sSig);       // sensor Signal pin
+        ctx.lineTo(SX + SW + 12, sSig);      // go right a bit
+        ctx.lineTo(SX + SW + 12, cNpn);      // go up to NPN level
+        ctx.lineTo(CX + 5, cNpn);            // go right to NPN pin
+        ctx.stroke();
+        arrowR(CX + 8, cNpn, '#F9A825');
+
+        // 2. Converter N-LOAD → PLC X0  (GREEN — main signal)
+        //    Route: go right from N-LOAD, up to X0 level, then right to X0
+        ctx.beginPath();
+        ctx.strokeStyle = '#2E7D32'; ctx.lineWidth = 3; ctx.setLineDash([]);
+        ctx.moveTo(CX + CW - 4, cNloadN);    // N-LOAD pin
+        ctx.lineTo(CX + CW + 15, cNloadN);   // go right past converter
+        ctx.lineTo(CX + CW + 15, pX0);       // go up/down to X0 level
+        ctx.lineTo(PX + 6, pX0);             // go right to X0
+        ctx.stroke();
+        arrowR(PX + 9, pX0, '#2E7D32');
+
+        // ── NGUỒN 24VDC TỦ ──
+        roundRect(30, 370, 160, 28, 4, '#FFF9C4', '#FBC02D');
+        txt('⚡ NGUỒN 24VDC TỦ', 110, 384, '#F57F17', 10, 'center', true);
+
+        // 3. 24V(+) → Sensor VCC (dashed up)
+        wire(130, 370, 130, sVcc, '#D32F2F', 1.5, [4, 3]);
+        txt('(+)', 136, 362, '#D32F2F', 9, 'left', false);
+
+        // 4. 24V(−) → Sensor GND (dashed up)
+        wire(70, 370, 70, sGnd, '#666', 1.5, [4, 3]);
+        txt('(−)', 55, 362, '#666', 9, 'left', false);
+
+        // 5. 24V(+) → P-LOAD (+) — route below all boxes
+        ctx.beginPath();
+        ctx.strokeStyle = '#D32F2F'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+        ctx.moveTo(190, 384);                  // from power box right
+        ctx.lineTo(CX + CW + 5, 384);         // go right below converter
+        ctx.lineTo(CX + CW + 5, cPloadP);     // go up to P-LOAD level
+        ctx.lineTo(CX + CW - 4, cPloadP);     // connect to P-LOAD
+        ctx.stroke(); ctx.setLineDash([]);
+        txt('24V(+)', CX + CW + 8, (384 + cPloadP) / 2, '#D32F2F', 8, 'left', false);
+
+        // 6. 24V(−) / 0V → BB — route below boxes
+        ctx.beginPath();
+        ctx.strokeStyle = '#666'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+        ctx.moveTo(70, GAP_BOT);               // from GND line going right
+        ctx.lineTo(CX + CW + 25, GAP_BOT);    // go right below everything
+        ctx.lineTo(CX + CW + 25, cBB);        // go up to BB level
+        ctx.lineTo(CX + CW - 4, cBB);         // connect to BB
+        ctx.stroke(); ctx.setLineDash([]);
+        txt('0V / GND', CX + CW + 28, (GAP_BOT + cBB) / 2, '#666', 8, 'left', false);
+
+    </script>
+
+    <script>
+        // === Pin Swap Diagram ===
+        const ps = document.getElementById('pinSwapDiagram');
+        const pc = ps.getContext('2d');
+        const dpr2 = window.devicePixelRatio || 1;
+        ps.width = 820 * dpr2;
+        ps.height = 200 * dpr2;
+        ps.style.width = '820px';
+        ps.style.height = '200px';
+        pc.scale(dpr2, dpr2);
+
+        function pTxt(text, x, y, color, size, align, bold) {
+            pc.fillStyle = color || '#333';
+            pc.font = (bold ? 'bold ' : '') + (size || 11) + 'px "Be Vietnam Pro", sans-serif';
+            pc.textAlign = align || 'left';
+            pc.textBaseline = 'middle';
+            pc.fillText(text, x, y);
+        }
+        function pRect(x, y, w, h, r, fill, stroke) {
+            pc.beginPath();
+            pc.moveTo(x + r, y); pc.lineTo(x + w - r, y); pc.quadraticCurveTo(x + w, y, x + w, y + r);
+            pc.lineTo(x + w, y + h - r); pc.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            pc.lineTo(x + r, y + h); pc.quadraticCurveTo(x, y + h, x, y + h - r);
+            pc.lineTo(x, y + r); pc.quadraticCurveTo(x, y, x + r, y);
+            pc.closePath();
+            if (fill) { pc.fillStyle = fill; pc.fill(); }
+            if (stroke) { pc.strokeStyle = stroke; pc.lineWidth = 1.5; pc.stroke(); }
+        }
+        function pPin(x, y, r, color) {
+            pc.beginPath(); pc.arc(x, y, r, 0, Math.PI * 2);
+            pc.fillStyle = color; pc.fill();
+            pc.strokeStyle = '#fff'; pc.lineWidth = 1; pc.stroke();
+        }
+
+        // Layout: 3 columns — TRƯỚC | Bước 2-3 | SAU
+        const colW = 240, gap = 50, startX = 10;
+        const col1 = startX;
+        const col2 = startX + colW + gap;
+        const col3 = startX + 2 * (colW + gap);
+        const topY = 15;
+
+        // ── Column 1: TRƯỚC ──
+        pRect(col1, topY, colW, 170, 8, '#FFEBEE', '#EF9A9A');
+        pTxt('TRƯỚC (CŨ)', col1 + colW / 2, topY + 18, '#C62828', 12, 'center', true);
+
+        // PLC pins
+        pRect(col1 + 15, topY + 38, colW - 30, 50, 6, '#fff', '#E4E8EC');
+        pPin(col1 + 30, topY + 63, 5, '#1565C0');
+        pTxt('X0', col1 + 42, topY + 63, '#1565C0', 11, 'left', true);
+        pTxt('← Bơm RO1,2', col1 + 70, topY + 63, '#555', 10, 'left', false);
+
+        pRect(col1 + 15, topY + 98, colW - 30, 50, 6, '#fff', '#E4E8EC');
+        pPin(col1 + 30, topY + 123, 5, '#1565C0');
+        pTxt('X7', col1 + 42, topY + 123, '#1565C0', 11, 'left', true);
+        pTxt('← Rò Rỉ Nước', col1 + 70, topY + 123, '#555', 10, 'left', false);
+
+        // ── Column 2: HÀNH ĐỘNG ──
+        pRect(col2, topY, colW, 170, 8, '#FFF3E0', '#FFB74D');
+        pTxt('THAO TÁC', col2 + colW / 2, topY + 18, '#E65100', 12, 'center', true);
+
+        // Step 2
+        pRect(col2 + 10, topY + 35, colW - 20, 35, 4, '#FFEBEE', '#EF9A9A');
+        pTxt('② Gỡ Bơm RO1,2 khỏi X0', col2 + colW / 2, topY + 52, '#C62828', 10, 'center', true);
+
+        // Step 3
+        pRect(col2 + 10, topY + 78, colW - 20, 35, 4, '#FFCDD2', '#E57373');
+        pTxt('③ Gỡ Rò Rỉ Nước khỏi X7 ✕', col2 + colW / 2, topY + 95, '#B71C1C', 10, 'center', true);
+
+        // Step 4
+        pRect(col2 + 10, topY + 121, colW - 20, 35, 4, '#E8F5E9', '#A5D6A7');
+        pTxt('④ Đấu Bơm RO1,2 → X7', col2 + colW / 2, topY + 138, '#2E7D32', 10, 'center', true);
+
+        // ── Column 3: SAU ──
+        pRect(col3, topY, colW, 170, 8, '#E8F5E9', '#A5D6A7');
+        pTxt('SAU (MỚI)', col3 + colW / 2, topY + 18, '#2E7D32', 12, 'center', true);
+
+        // New X0
+        pRect(col3 + 15, topY + 38, colW - 30, 50, 6, '#C8E6C9', '#66BB6A');
+        pPin(col3 + 30, topY + 63, 5, '#2E7D32');
+        pTxt('X0', col3 + 42, topY + 63, '#2E7D32', 11, 'left', true);
+        pTxt('← TRỐNG (cho lưu lượng)', col3 + 70, topY + 63, '#2E7D32', 10, 'left', true);
+
+        // New X7
+        pRect(col3 + 15, topY + 98, colW - 30, 50, 6, '#fff', '#E4E8EC');
+        pPin(col3 + 30, topY + 123, 5, '#1565C0');
+        pTxt('X7', col3 + 42, topY + 123, '#1565C0', 11, 'left', true);
+        pTxt('← Bơm RO1,2', col3 + 70, topY + 123, '#555', 10, 'left', false);
+
+        // Arrows between columns
+        pc.fillStyle = '#E65100';
+        // Arrow 1→2
+        pc.beginPath();
+        pc.moveTo(col1 + colW + 5, topY + 85);
+        pc.lineTo(col2 - 5, topY + 75); pc.lineTo(col2 - 5, topY + 95);
+        pc.closePath(); pc.fill();
+
+        // Arrow 2→3
+        pc.fillStyle = '#2E7D32';
+        pc.beginPath();
+        pc.moveTo(col2 + colW + 5, topY + 85);
+        pc.lineTo(col3 - 5, topY + 75); pc.lineTo(col3 - 5, topY + 95);
+        pc.closePath(); pc.fill();
+    </script>
+</body>
+
+</html>

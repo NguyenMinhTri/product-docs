@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Pháp IoT Giám Sát Đa Trạm — Navis IoT Platform | Phần 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d7c3d;
+            --primary-light: #15a050;
+            --primary-pale: #e8f7ee;
+            --accent: #1a6fb5;
+            --accent-light: #2196F3;
+            --accent-pale: #e3f2fd;
+            --purple: #7c3aed;
+            --purple-pale: #f0e7ff;
+            --orange: #e67e22;
+            --red: #e74c3c;
+            --bg: #f8fafb;
+            --bg-white: #ffffff;
+            --bg-section: #f1f5f8;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+            --gradient-1: linear-gradient(135deg, #0d7c3d 0%, #1a6fb5 100%);
+            --gradient-hero: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 50%, #f3e5f5 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ============ SLIDE ============ */
+        .slide {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 80px 80px 60px;
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        /* ============ NAV ============ */
+        .nav-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary);
+            padding: 10px 40px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 14px; }
+        .nav-brand img { height: 36px; object-fit: contain; }
+        .nav-brand .logo-divider { width: 1px; height: 28px; background: linear-gradient(to bottom, transparent, var(--primary), transparent); }
+        .nav-links { display: flex; gap: 4px; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-size: 12px;
+            font-weight: 600; padding: 6px 14px; border-radius: 8px; transition: all 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: #fff; background: var(--primary); }
+        .nav-page-indicator {
+            font-size: 11px; color: var(--text-muted); padding: 4px 12px;
+            background: var(--bg-section); border-radius: 6px; font-weight: 600;
+        }
+
+        /* ============ CONTENT ============ */
+        .slide-content { max-width: 1200px; width: 100%; position: relative; z-index: 1; }
+        .slide-header { margin-bottom: 40px; }
+        .slide-number {
+            font-size: 12px; font-weight: 700; color: var(--primary);
+            letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+        }
+        .slide-title { font-size: 36px; font-weight: 800; line-height: 1.2; margin-bottom: 12px; color: var(--text); }
+        .slide-title .accent { color: var(--primary); }
+        .slide-desc { font-size: 16px; color: var(--text-secondary); max-width: 650px; line-height: 1.6; }
+
+        /* ============ COVER ============ */
+        .slide-cover {
+            background: var(--gradient-hero);
+            text-align: center;
+        }
+        .cover-logo-block {
+            display: flex; align-items: center; justify-content: center; gap: 20px;
+            margin-bottom: 36px;
+            animation: fadeInUp 0.6s ease;
+        }
+        .cover-logo-block img { height: 56px; object-fit: contain; }
+        .cover-logo-block .logo-divider {
+            width: 2px; height: 44px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+        }
+        .cover-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(13,124,61,0.1); border: 1px solid rgba(13,124,61,0.25);
+            padding: 8px 22px; border-radius: 50px;
+            font-size: 13px; font-weight: 600; color: var(--primary);
+            margin-bottom: 28px; animation: fadeInUp 0.8s ease;
+        }
+        .cover-badge .pulse-dot {
+            width: 8px; height: 8px; background: var(--primary);
+            border-radius: 50%; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+        .cover-title {
+            font-size: 48px; font-weight: 900; line-height: 1.15;
+            margin-bottom: 20px; color: var(--text);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        .cover-title .highlight { color: var(--primary); }
+        .cover-subtitle {
+            font-size: 18px; color: var(--text-secondary);
+            max-width: 800px; line-height: 1.6; margin: 0 auto 40px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        .cover-meta {
+            display: flex; align-items: center; gap: 28px; justify-content: center;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        .cover-meta-item {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; color: var(--text-muted); font-weight: 500;
+        }
+        .cover-meta-item .icon { font-size: 16px; }
+
+        /* ============ CARDS ============ */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+        .info-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 16px; padding: 28px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s ease;
+        }
+        .info-card:hover {
+            box-shadow: var(--shadow-md); transform: translateY(-4px);
+        }
+        .info-card .card-icon {
+            width: 52px; height: 52px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; margin-bottom: 18px; color: #fff;
+        }
+        .info-card .card-icon.green { background: linear-gradient(135deg, #0d7c3d, #15a050); }
+        .info-card .card-icon.blue { background: linear-gradient(135deg, #1a6fb5, #2196F3); }
+        .info-card .card-icon.purple { background: linear-gradient(135deg, #7c3aed, #9333ea); }
+        .info-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+        .info-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; }
+        .stat-item {
+            text-align: center; padding: 24px 16px;
+            background: var(--primary-pale); border: 1px solid rgba(13,124,61,0.15);
+            border-radius: 14px;
+        }
+        .stat-item .stat-number { font-size: 36px; font-weight: 900; color: var(--primary); }
+        .stat-item .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+
+        /* ============ PROBLEM ============ */
+        .problem-list { display: grid; gap: 14px; }
+        .problem-item {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 20px 24px;
+            background: #fef2f2; border: 1px solid #fecaca;
+            border-radius: 14px; transition: all 0.3s;
+        }
+        .problem-item:hover { transform: translateX(6px); box-shadow: var(--shadow-sm); }
+        .problem-item .p-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+        .problem-item h4 { font-size: 15px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+        .problem-item p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+        .solution-highlight {
+            background: var(--primary-pale); border: 1px solid rgba(13,124,61,0.2);
+            border-radius: 16px; padding: 28px; text-align: center; margin-top: 28px;
+        }
+        .solution-highlight h3 { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+        .solution-highlight p { font-size: 14px; color: var(--text-secondary); }
+
+        /* ============ ARCHITECTURE ============ */
+        .arch-diagram {
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 20px; padding: 40px; box-shadow: var(--shadow-sm);
+        }
+        .arch-row {
+            display: flex; align-items: center; justify-content: center;
+            gap: 20px; margin-bottom: 24px;
+        }
+        .arch-row:last-child { margin-bottom: 0; }
+        .arch-node {
+            padding: 14px 20px; border-radius: 12px;
+            font-size: 13px; font-weight: 600; text-align: center;
+            min-width: 150px; transition: all 0.3s;
+        }
+        .arch-node:hover { transform: scale(1.05); box-shadow: var(--shadow-md); }
+        .arch-node.sensor { background: #fef3c7; border: 1px solid #fde68a; color: #92400e; }
+        .arch-node.gateway { background: var(--accent-pale); border: 1px solid #93c5fd; color: #1e40af; }
+        .arch-node.cloud { background: var(--purple-pale); border: 1px solid #c4b5fd; color: #5b21b6; }
+        .arch-node.app { background: var(--primary-pale); border: 1px solid #86efac; color: #065f46; }
+        .arch-arrow { font-size: 20px; color: var(--text-muted); text-align: center; animation: arrowPulse 2s infinite; }
+        .arch-arrow.down { display: block; margin: -8px 0; }
+        @keyframes arrowPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+        .arch-label {
+            font-size: 11px; color: var(--text-muted); text-align: center;
+            font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;
+        }
+
+        /* ============ SCROLL NAV ============ */
+        .slide-nav-bottom {
+            position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 10;
+        }
+        .slide-nav-bottom span { font-size: 11px; color: var(--text-muted); }
+        .scroll-arrow {
+            width: 36px; height: 36px;
+            border: 1px solid var(--border); border-radius: 50%; background: var(--bg-white);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-size: 14px; text-decoration: none;
+            animation: bounce 2s infinite; cursor: pointer; transition: all 0.3s;
+        }
+        .scroll-arrow:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+        @keyframes bounce { 0%,20%,50%,80%,100%{transform:translateY(0)} 40%{transform:translateY(6px)} 60%{transform:translateY(3px)} }
+
+        /* ============ PAGE NAV ============ */
+        .page-nav {
+            position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; gap: 6px;
+        }
+        .page-nav a {
+            padding: 8px 16px; background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text-secondary); text-decoration: none;
+            font-size: 12px; font-weight: 600; transition: all 0.3s;
+        }
+        .page-nav a:hover, .page-nav a.current { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        @media (max-width: 1024px) {
+            .slide { padding: 60px 30px; }
+            .cover-title { font-size: 36px; }
+            .two-col { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .slide { padding: 50px 20px; }
+            .cover-title { font-size: 28px; }
+            .slide-title { font-size: 26px; }
+            .stat-grid { grid-template-columns: 1fr 1fr; }
+            .nav-bar { padding: 8px 16px; }
+            .nav-brand img { height: 28px; }
+        }
+        @media print {
+            html { scroll-snap-type: none; }
+            body { overflow: visible; }
+            .slide {
+                min-height: auto; page-break-after: always; page-break-inside: avoid;
+                padding: 40px; scroll-snap-align: none;
+                height: auto; overflow: visible;
+            }
+            .nav-bar, .page-nav, .slide-nav-bottom { display: none !important; }
+            .info-card:hover, .arch-node:hover { transform: none; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ NAV BAR ============ -->
+    <nav class="nav-bar">
+        <div class="nav-brand">
+            <img src="LOGO-omwater.png" alt="O&M Water Logo">
+            <div class="logo-divider"></div>
+            <img src="navis-logo.png" alt="Navis IoT Logo">
+        </div>
+        <div class="nav-links">
+            <a href="#cover" class="active">Trang bìa</a>
+            <a href="#company">Giới thiệu</a>
+            <a href="#problem">Thách thức</a>
+            <a href="#architecture">Kiến trúc</a>
+        </div>
+        <div class="nav-page-indicator">Phần 1 / 3</div>
+    </nav>
+
+    <!-- =============================== -->
+    <!-- SLIDE 1: TRANG BÌA              -->
+    <!-- =============================== -->
+    <section class="slide slide-cover" id="cover">
+        <div class="cover-logo-block">
+            <img src="LOGO-omwater.png" alt="O&M Water Logo">
+            <div class="logo-divider"></div>
+            <img src="navis-logo.png" alt="Navis IoT Logo">
+        </div>
+
+        <div class="cover-badge">
+            <span class="pulse-dot"></span>
+            Giải Pháp IoT Công Nghiệp
+        </div>
+
+        <h1 class="cover-title">
+            Nền Tảng <span class="highlight">Navis IoT</span><br>
+            Giám Sát Đa Trạm Thông Minh
+        </h1>
+
+        <p class="cover-subtitle">
+            Giải pháp toàn diện cho giám sát từ xa, cảnh báo tự động, thống kê & phân tích dữ liệu,
+            hướng đến ứng dụng AI dự đoán cảnh báo cho hệ thống xử lý nước & môi trường.
+        </p>
+
+        <div class="cover-meta">
+            <div class="cover-meta-item">
+                <span class="icon">📅</span> Tháng 03/2026
+            </div>
+            <div class="cover-meta-item">
+                <span class="icon">🏢</span> Công Ty TNHH TM DV KT SX O & M
+            </div>
+            <div class="cover-meta-item">
+                <span class="icon">🌐</span> navis.iotdaiviet.com
+            </div>
+        </div>
+
+        <div class="slide-nav-bottom">
+            <span>CUỘN XUỐNG</span>
+            <a href="#company" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 2: GIỚI THIỆU CÔNG TY     -->
+    <!-- =============================== -->
+    <section class="slide" id="company" style="background: var(--bg-white);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">01 — Giới Thiệu</div>
+                <h2 class="slide-title">
+                    Công Ty TNHH TM DV KT SX <span class="accent">O & M</span>
+                </h2>
+                <p class="slide-desc">
+                    Đơn vị chuyên cung cấp giải pháp IoT công nghiệp, vận hành & bảo trì hệ thống xử lý nước
+                    với nền tảng phần mềm Navis IoT Platform.
+                </p>
+            </div>
+
+            <div class="two-col">
+                <div>
+                    <div class="info-card" style="margin-bottom: 20px;">
+                        <div class="card-icon green">🏭</div>
+                        <h3>Lĩnh Vực Hoạt Động</h3>
+                        <p>
+                            Chuyên cung cấp giải pháp IoT cho ngành nước — xử lý nước thải, nước sạch, 
+                            giám sát môi trường. Tích hợp phần cứng Gateway Navis MOD, cảm biến với phần mềm 
+                            Cloud, Web App và Mobile App.
+                        </p>
+                    </div>
+                    <div class="info-card">
+                        <div class="card-icon blue">🔧</div>
+                        <h3>Sản Phẩm Cốt Lõi</h3>
+                        <p>
+                            <strong style="color:var(--primary)">Navis IoT Platform</strong> — Nền tảng phần mềm giám sát 
+                            đa trạm, đa thiết bị. Gateway Navis MOD hỗ trợ giao thức Modbus RTU/TCP, MQTT. 
+                            Server đám mây đặt tại Việt Nam.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <div class="stat-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">177+</div>
+                            <div class="stat-label">Trạm đang hoạt động</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">349+</div>
+                            <div class="stat-label">Thiết bị kết nối</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Giám sát liên tục</div>
+                        </div>
+                    </div>
+                    <div class="info-card" style="margin-top: 20px;">
+                        <div class="card-icon purple">🌍</div>
+                        <h3>Phạm Vi Triển Khai</h3>
+                        <p>
+                            Hệ thống đã triển khai trên toàn quốc — từ Bắc vào Nam, bao phủ các KCN, 
+                            nhà máy, khu đô thị với khả năng giám sát đồng thời hàng trăm trạm.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-nav-bottom">
+            <a href="#problem" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 3: THÁCH THỨC              -->
+    <!-- =============================== -->
+    <section class="slide" id="problem" style="background: var(--bg);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">02 — Thách Thức</div>
+                <h2 class="slide-title">
+                    Vấn Đề Cần <span class="accent">Giải Quyết</span>
+                </h2>
+                <p class="slide-desc">
+                    Những khó khăn mà doanh nghiệp đang gặp phải trong việc giám sát hệ thống nước & môi trường.
+                </p>
+            </div>
+
+            <div class="two-col">
+                <div class="problem-list">
+                    <div class="problem-item">
+                        <span class="p-icon">🚗</span>
+                        <div>
+                            <h4>Giám sát thủ công, tốn chi phí</h4>
+                            <p>Nhân viên phải di chuyển đến từng trạm để kiểm tra thông số, tốn thời gian và chi phí vận hành.</p>
+                        </div>
+                    </div>
+                    <div class="problem-item">
+                        <span class="p-icon">⏰</span>
+                        <div>
+                            <h4>Phát hiện sự cố chậm trễ</h4>
+                            <p>Không có hệ thống cảnh báo tự động, sự cố xảy ra không được phát hiện kịp thời.</p>
+                        </div>
+                    </div>
+                    <div class="problem-item">
+                        <span class="p-icon">📊</span>
+                        <div>
+                            <h4>Thiếu dữ liệu thống kê</h4>
+                            <p>Không có hệ thống lưu trữ, phân tích dữ liệu lịch sử để đánh giá hiệu suất vận hành.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="problem-list">
+                    <div class="problem-item">
+                        <span class="p-icon">🏭</span>
+                        <div>
+                            <h4>Khó quản lý nhiều trạm</h4>
+                            <p>Doanh nghiệp có nhiều trạm rải rác, không thể theo dõi tổng quan tất cả trạm cùng lúc.</p>
+                        </div>
+                    </div>
+                    <div class="problem-item">
+                        <span class="p-icon">📋</span>
+                        <div>
+                            <h4>Báo cáo thủ công</h4>
+                            <p>Lập báo cáo thủ công tốn thời gian, dễ sai sót, không đáp ứng yêu cầu cơ quan quản lý.</p>
+                        </div>
+                    </div>
+                    <div class="problem-item">
+                        <span class="p-icon">🔮</span>
+                        <div>
+                            <h4>Không dự đoán được sự cố</h4>
+                            <p>Thiếu công cụ phân tích dự đoán để cảnh báo trước khi sự cố xảy ra.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="solution-highlight">
+                <h3>✅ Giải pháp: Nền tảng Navis IoT Platform</h3>
+                <p>Hệ thống giám sát IoT toàn diện — giải quyết tất cả thách thức trên với một nền tảng duy nhất.</p>
+            </div>
+        </div>
+        <div class="slide-nav-bottom">
+            <a href="#architecture" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 4: KIẾN TRÚC HỆ THỐNG     -->
+    <!-- =============================== -->
+    <section class="slide" id="architecture" style="background: var(--bg-white);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">03 — Kiến Trúc Hệ Thống</div>
+                <h2 class="slide-title">
+                    Kiến Trúc <span class="accent">Navis IoT Platform</span>
+                </h2>
+                <p class="slide-desc">
+                    Kiến trúc 4 tầng từ cảm biến hiện trường đến phần mềm người dùng — sử dụng Gateway Navis MOD.
+                </p>
+            </div>
+
+            <div class="arch-diagram">
+                <!-- Layer 1: Sensors -->
+                <div class="arch-label">TẦNG 1 — THIẾT BỊ HIỆN TRƯỜNG</div>
+                <div class="arch-row">
+                    <div class="arch-node sensor">🔬 Cảm biến<br><small>pH, EC, TSS, COD</small></div>
+                    <div class="arch-node sensor">📟 PLC<br><small>Trạng thái thiết bị</small></div>
+                    <div class="arch-node sensor">⚡ Đồng hồ điện<br><small>V, A, kW, kWh</small></div>
+                    <div class="arch-node sensor">🌊 Lưu lượng kế<br><small>Flow meter</small></div>
+                    <div class="arch-node sensor">🌡️ Nhiệt độ / Áp suất<br><small>PT100 / PT</small></div>
+                </div>
+
+                <div class="arch-arrow down">⬇️ Modbus RTU/TCP • RS485 • 4-20mA ⬇️</div>
+
+                <!-- Layer 2: Gateway -->
+                <div class="arch-label" style="margin-top: 18px;">TẦNG 2 — GATEWAY THU THẬP DỮ LIỆU</div>
+                <div class="arch-row">
+                    <div class="arch-node gateway" style="min-width: 320px;">📶 <strong>Gateway Navis MOD</strong><br><small>WiFi / Ethernet / 4G — Modbus → Cloud</small></div>
+                </div>
+
+                <div class="arch-arrow down">⬇️ HTTPS / MQTT ⬇️</div>
+
+                <!-- Layer 3: Cloud -->
+                <div class="arch-label" style="margin-top: 18px;">TẦNG 3 — ĐÁM MÂY & XỬ LÝ DỮ LIỆU</div>
+                <div class="arch-row">
+                    <div class="arch-node cloud">☁️ Cloud Server<br><small>Firebase / GCP Vietnam</small></div>
+                    <div class="arch-node cloud">🧠 AI Engine<br><small>Phân tích & Dự đoán</small></div>
+                    <div class="arch-node cloud">🔔 Alert System<br><small>Cảnh báo đa kênh</small></div>
+                </div>
+
+                <div class="arch-arrow down">⬇️ Real-time Data Stream ⬇️</div>
+
+                <!-- Layer 4: Application -->
+                <div class="arch-label" style="margin-top: 18px;">TẦNG 4 — ỨNG DỤNG NGƯỜI DÙNG</div>
+                <div class="arch-row">
+                    <div class="arch-node app">💻 Web App<br><small>Dashboard giám sát</small></div>
+                    <div class="arch-node app">📱 Mobile App<br><small>Android & iOS</small></div>
+                    <div class="arch-node app">📧 Email/Telegram<br><small>Cảnh báo tự động</small></div>
+                    <div class="arch-node app">📄 Báo cáo<br><small>Excel / PDF / ISO</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Navigation -->
+    <div class="page-nav">
+        <a href="Slide_IoT_Navis_Part1.html" class="current">Phần 1</a>
+        <a href="Slide_IoT_Navis_Part2.html">Phần 2</a>
+        <a href="Slide_IoT_Navis_Part3.html">Phần 3</a>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    const activeLink = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+        slides.forEach(slide => observer.observe(slide));
+    </script>
+</body>
+</html>

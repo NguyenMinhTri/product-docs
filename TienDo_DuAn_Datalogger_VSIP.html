@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiến Độ Dự Án - Datalogger VSIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e3a8a;
+            --accent: #0ea5e9;
+            --accent-light: #38bdf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --week1: #3b82f6;
+            --week2: #8b5cf6;
+            --week3: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--accent) 100%);
+            color: white;
+            padding: 40px 0 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .company-name {
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0.85;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .doc-label {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .meta-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: -30px auto 40px;
+            padding: 0 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            transition: box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+        }
+
+        .card-title .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Summary Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .summary-item {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .summary-item:nth-child(1)::before {
+            background: var(--primary);
+        }
+
+        .summary-item:nth-child(2)::before {
+            background: var(--accent);
+        }
+
+        .summary-item:nth-child(3)::before {
+            background: var(--success);
+        }
+
+        .summary-item:nth-child(4)::before {
+            background: var(--warning);
+        }
+
+        .summary-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Contract Table */
+        .contract-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .contract-table thead th {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .contract-table tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .contract-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .contract-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .contract-table .amount {
+            text-align: right;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+        .contract-table .total-row {
+            background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+            font-weight: 700;
+        }
+
+        .contract-table .total-row td {
+            border-bottom: none;
+        }
+
+        .included-badge {
+            display: inline-block;
+            background: #ecfdf5;
+            color: #059669;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Gantt Chart */
+        .gantt-container {
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .gantt-chart {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+        }
+
+        .gantt-chart thead th {
+            padding: 10px 6px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .gantt-chart thead th.task-header {
+            text-align: left;
+            min-width: 250px;
+            font-size: 12px;
+            color: var(--text);
+        }
+
+        .gantt-chart thead th.day-header {
+            min-width: 50px;
+            position: relative;
+        }
+
+        .gantt-chart thead th.weekend {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .gantt-chart tbody td {
+            padding: 8px 6px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+            position: relative;
+        }
+
+        .gantt-chart tbody td.task-name {
+            text-align: left;
+            padding: 10px 12px;
+            font-weight: 500;
+        }
+
+        .gantt-chart .week-label {
+            font-weight: 700;
+            font-size: 13px;
+            background: #f8fafc;
+            padding: 12px;
+        }
+
+        .gantt-bar {
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            min-width: 100%;
+            animation: fadeInScale 0.5s ease;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scaleX(0.5);
+            }
+
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        .bar-week1 {
+            background: linear-gradient(135deg, var(--week1), #60a5fa);
+        }
+
+        .bar-week2 {
+            background: linear-gradient(135deg, var(--week2), #a78bfa);
+        }
+
+        .bar-week3 {
+            background: linear-gradient(135deg, var(--week3), #34d399);
+        }
+
+        .gantt-chart .weekend-cell {
+            background: #fffbeb;
+        }
+
+        /* Week detail sections */
+        .week-section {
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .week-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+        }
+
+        .week-1 {
+            background: linear-gradient(135deg, #eff6ff, #f0f7ff);
+            border-color: #bfdbfe;
+        }
+
+        .week-1::before {
+            background: var(--week1);
+        }
+
+        .week-2 {
+            background: linear-gradient(135deg, #f5f3ff, #faf5ff);
+            border-color: #ddd6fe;
+        }
+
+        .week-2::before {
+            background: var(--week2);
+        }
+
+        .week-3 {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf9);
+            border-color: #a7f3d0;
+        }
+
+        .week-3::before {
+            background: var(--week3);
+        }
+
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .week-title {
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .week-badge {
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .badge-w1 {
+            background: var(--week1);
+        }
+
+        .badge-w2 {
+            background: var(--week2);
+        }
+
+        .badge-w3 {
+            background: var(--week3);
+        }
+
+        .week-dates {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-list li {
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .task-list li:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .task-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .task-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .num-w1 {
+            background: var(--week1);
+        }
+
+        .num-w2 {
+            background: var(--week2);
+        }
+
+        .num-w3 {
+            background: var(--week3);
+        }
+
+        .task-text {
+            flex: 1;
+        }
+
+        .task-text strong {
+            display: block;
+            margin-bottom: 2px;
+            font-size: 14px;
+        }
+
+        .task-text span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Deliverables */
+        .deliverable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .deliverable-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .deliverable-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .deliverable-item:nth-child(1) .deliverable-icon {
+            background: #dbeafe;
+        }
+
+        .deliverable-item:nth-child(2) .deliverable-icon {
+            background: #ede9fe;
+        }
+
+        .deliverable-item:nth-child(3) .deliverable-icon {
+            background: #d1fae5;
+        }
+
+        .deliverable-item:nth-child(4) .deliverable-icon {
+            background: #fef3c7;
+        }
+
+        .deliverable-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .deliverable-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Notes */
+        .notes-box {
+            background: linear-gradient(135deg, #fffbeb, #fef9c3);
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .notes-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #92400e;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notes-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .notes-box ul li {
+            padding: 5px 0;
+            font-size: 13px;
+            color: #78350f;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .notes-box ul li::before {
+            content: '•';
+            color: #d97706;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1.3;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .footer-brand {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Signature Section */
+        .signature-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+            padding-top: 20px;
+        }
+
+        .signature-block {
+            text-align: center;
+        }
+
+        .signature-block .sig-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .signature-block .sig-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+        }
+
+        .signature-block .sig-line {
+            border-top: 1px dashed var(--border);
+            padding-top: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Print */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .header {
+                padding: 30px 0 40px;
+            }
+
+            .container {
+                margin-top: -20px;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+
+            .card:hover {
+                box-shadow: none;
+            }
+
+            .task-list li:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .gantt-bar {
+                animation: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header-top {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .header-meta {
+                gap: 12px;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .signature-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-top">
+                <div class="logo-area">
+                    <div class="logo-icon" style="background:white;padding:6px;"><img
+                            src="https://omwater.vn/wp-content/uploads/2020/11/LOGO-NEW.png" alt="O&M Logo"
+                            style="width:100%;height:100%;object-fit:contain;"></div>
+                    <div>
+                        <div class="company-name">O &amp; M Technical Service</div>
+                    </div>
+                </div>
+                <div class="doc-label">📋 Tài Liệu Tiến Độ</div>
+            </div>
+            <h1>Tiến Độ Triển Khai Dự Án Datalogger</h1>
+            <div class="header-subtitle">Hệ thống thu thập, giám sát, cảnh báo số liệu quan trắc — Phần mềm NAVIS</div>
+            <div class="header-meta">
+                <div class="meta-item">
+                    <div class="meta-icon">🏭</div>
+                    <div>
+                        <div style="font-size:11px;opacity:0.7">Khách hàng</div>
+                        <div style="font-weight:600">VSIP — KCN Việt Nam Singapore</div>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-icon">📍</div>
+                    <div>
+                        <div style="font-size:11px;opacity:0.7">Địa điểm</div>
+                        <div style="font-weight:600">Nhà máy XLNT VSIP1, Bình Dương</div>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-icon">📄</div>
+                    <div>
+                        <div style="font-size:11px;opacity:0.7">Số PO</div>
+                        <div style="font-weight:600">38-26/PO/PUR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- Project Summary -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon" style="background:#dbeafe;color:var(--primary);">📌</div>
+                Tổng Quan Dự Án
+            </div>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-label">Thời gian thực hiện</div>
+                    <div class="summary-value">3 Tuần (02/03 – 20/03/2026)</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Quy mô hệ thống</div>
+                    <div class="summary-value">10 trạm Datalogger</div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-label">Bảo hành</div>
+                    <div class="summary-value">12 tháng</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contract Details -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon" style="background:#fef3c7;color:#d97706;">📋</div>
+                Chi Tiết Hạng Mục Hợp Đồng
+            </div>
+            <table class="contract-table">
+                <thead>
+                    <tr>
+                        <th style="width:50px;text-align:center">STT</th>
+                        <th>Mô tả hạng mục</th>
+                        <th style="width:80px;text-align:center">ĐVT</th>
+                        <th style="width:60px;text-align:center">SL</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center;font-weight:600">1</td>
+                        <td>Cấu hình, cài đặt thu thập dữ liệu về phần mềm giám sát, cảnh báo NAVIS (10 trạm trong thời
+                            gian 5 năm)</td>
+                        <td style="text-align:center">Package</td>
+                        <td style="text-align:center">1</td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;font-weight:600">2</td>
+                        <td>Chi phí cloud duy trì cho 10 trạm datalogger trong 3–5 năm (bao gồm phí data, phần mềm web,
+                            app)</td>
+                        <td style="text-align:center">Package</td>
+                        <td style="text-align:center">1</td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;font-weight:600">3</td>
+                        <td>Hướng dẫn và cài đặt sử dụng phần mềm NAVIS trên các nền tảng web, di động</td>
+                        <td style="text-align:center">Package</td>
+                        <td style="text-align:center">1</td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;font-weight:600">4</td>
+                        <td>Vật tư &amp; nhân công lắp đặt, cài đặt và kết nối</td>
+                        <td style="text-align:center">Package</td>
+                        <td style="text-align:center">1</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Gantt Chart -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon" style="background:#ede9fe;color:var(--week2);">📅</div>
+                Biểu Đồ Gantt — Tiến Độ 3 Tuần
+            </div>
+
+            <!-- Week headers -->
+            <div style="display:flex;margin-bottom:4px;">
+                <div style="width:220px;flex-shrink:0;"></div>
+                <div style="flex:1;display:flex;gap:2px;">
+                    <div
+                        style="flex:1;text-align:center;padding:8px 0;background:linear-gradient(135deg,#dbeafe,#eff6ff);border-radius:8px 0 0 8px;border:1px solid #bfdbfe;font-size:12px;font-weight:700;color:var(--week1);">
+                        TUẦN 1<br><span style="font-weight:400;font-size:11px;color:var(--text-secondary)">02/03 –
+                            06/03</span></div>
+                    <div
+                        style="flex:1;text-align:center;padding:8px 0;background:linear-gradient(135deg,#ede9fe,#f5f3ff);border:1px solid #ddd6fe;font-size:12px;font-weight:700;color:var(--week2);">
+                        TUẦN 2<br><span style="font-weight:400;font-size:11px;color:var(--text-secondary)">09/03 –
+                            13/03</span></div>
+                    <div
+                        style="flex:1;text-align:center;padding:8px 0;background:linear-gradient(135deg,#d1fae5,#ecfdf5);border-radius:0 8px 8px 0;border:1px solid #a7f3d0;font-size:12px;font-weight:700;color:var(--week3);">
+                        TUẦN 3<br><span style="font-weight:400;font-size:11px;color:var(--text-secondary)">16/03 –
+                            20/03</span></div>
+                </div>
+            </div>
+
+            <!-- Day labels -->
+            <div style="display:flex;margin-bottom:10px;">
+                <div
+                    style="width:220px;flex-shrink:0;font-size:11px;color:var(--text-secondary);padding:4px 0;font-weight:600;">
+                    Công việc</div>
+                <div style="flex:1;display:flex;">
+                    <div style="flex:1;display:flex;">
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T2</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T3</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T4</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T5</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T6</div>
+                    </div>
+                    <div style="flex:1;display:flex;">
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T2</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T3</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T4</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T5</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T6</div>
+                    </div>
+                    <div style="flex:1;display:flex;">
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T2</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T3</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T4</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T5</div>
+                        <div style="flex:1;text-align:center;font-size:10px;color:var(--text-secondary);">T6</div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                .g-row {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 6px
+                }
+
+                .g-label {
+                    width: 220px;
+                    flex-shrink: 0;
+                    font-size: 13px;
+                    font-weight: 500;
+                    padding-right: 12px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis
+                }
+
+                .g-track {
+                    flex: 1;
+                    height: 28px;
+                    background: #f1f5f9;
+                    border-radius: 6px;
+                    position: relative
+                }
+
+                .g-bar {
+                    position: absolute;
+                    height: 100%;
+                    border-radius: 6px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 10px;
+                    font-weight: 600
+                }
+
+                .g-bar-w1 {
+                    background: linear-gradient(135deg, var(--week1), #60a5fa)
+                }
+
+                .g-bar-w2 {
+                    background: linear-gradient(135deg, var(--week2), #a78bfa)
+                }
+
+                .g-bar-w3 {
+                    background: linear-gradient(135deg, var(--week3), #34d399)
+                }
+
+                .g-section {
+                    font-size: 13px;
+                    font-weight: 700;
+                    padding: 8px 0 4px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px
+                }
+
+                .g-grid {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    pointer-events: none
+                }
+
+                .g-grid div {
+                    flex: 1;
+                    border-right: 1px dashed #e2e8f0
+                }
+
+                .g-grid div:last-child {
+                    border-right: none
+                }
+            </style>
+
+            <!-- Week 1 -->
+            <div class="g-section" style="color:var(--week1);">Tuần 1 — Cài đặt &amp; Kết nối</div>
+
+            <div class="g-row">
+                <div class="g-label">Khảo sát &amp; chuẩn bị</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w1" style="left:0%;width:13.33%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Cài đặt lại datalogger</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w1" style="left:6.67%;width:20%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Kết nối FTP Cloud</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w1" style="left:13.33%;width:13.33%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Hiển thị lên NAVIS</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w1" style="left:20%;width:13.33%;"></div>
+                </div>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="g-section" style="color:var(--week2);margin-top:8px;">Tuần 2 — Hoàn thiện phần mềm</div>
+
+            <div class="g-row">
+                <div class="g-label">Phát triển báo cáo</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w2" style="left:33.33%;width:20%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Hoàn thiện tính năng</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w2" style="left:40%;width:20%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Kiểm thử &amp; bàn giao thử</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w2" style="left:53.33%;width:13.33%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Hướng dẫn sử dụng</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w2" style="left:60%;width:6.67%;"></div>
+                </div>
+            </div>
+
+            <!-- Week 3 -->
+            <div class="g-section" style="color:var(--week3);margin-top:8px;">Tuần 3 — Sửa lỗi &amp; Bàn giao</div>
+
+            <div class="g-row">
+                <div class="g-label">Thu thập phản hồi</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w3" style="left:66.67%;width:13.33%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Sửa lỗi &amp; cập nhật</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w3" style="left:73.33%;width:20%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Hoàn thiện tài liệu</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w3" style="left:80%;width:20%;"></div>
+                </div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">Bàn giao &amp; nghiệm thu</div>
+                <div class="g-track">
+                    <div class="g-grid">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="g-bar g-bar-w3" style="left:93.33%;width:6.67%;"></div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Week Details -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon" style="background:#d1fae5;color:var(--success);">📝</div>
+                Chi Tiết Công Việc Theo Tuần
+            </div>
+
+            <!-- Week 1 -->
+            <div class="week-section week-1">
+                <div class="week-header">
+                    <div class="week-title">
+                        <span class="week-badge badge-w1">TUẦN 1</span>
+                        Cài đặt Datalogger &amp; Kết nối hiện trường
+                    </div>
+                    <div class="week-dates">📅 02/03/2026 – 06/03/2026</div>
+                </div>
+                <ul class="task-list">
+                    <li>
+                        <div class="task-number num-w1">1</div>
+                        <div class="task-text">
+                            <strong>Khảo sát hiện trường &amp; chuẩn bị cài đặt</strong>
+                            <span>Kiểm tra kết nối mạng, nguồn điện tại các trạm datalogger hiện có tại nhà máy XLNT
+                                VSIP1. Chuẩn bị thông tin FTP Cloud mới.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w1">2</div>
+                        <div class="task-text">
+                            <strong>Cài đặt lại datalogger tại các trạm quan trắc</strong>
+                            <span>Cấu hình lại datalogger hiện có, nhập thông tin FTP Cloud mới cho 10 trạm.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w1">3</div>
+                        <div class="task-text">
+                            <strong>Kết nối FTP Cloud</strong>
+                            <span>Cấu hình datalogger truyền dữ liệu lên FTP Cloud server, kiểm tra kết nối và đồng bộ
+                                dữ liệu.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w1">4</div>
+                        <div class="task-text">
+                            <strong>Hiển thị dữ liệu lên phần mềm NAVIS</strong>
+                            <span>Cấu hình phần mềm NAVIS đọc dữ liệu từ FTP Cloud, hiển thị dashboard giám sát
+                                real-time, kiểm tra biểu đồ và cảnh báo.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="week-section week-2">
+                <div class="week-header">
+                    <div class="week-title">
+                        <span class="week-badge badge-w2">TUẦN 2</span>
+                        Hoàn thiện phần mềm &amp; Bàn giao dùng thử
+                    </div>
+                    <div class="week-dates">📅 09/03/2026 – 13/03/2026</div>
+                </div>
+                <ul class="task-list">
+                    <li>
+                        <div class="task-number num-w2">1</div>
+                        <div class="task-text">
+                            <strong>Phát triển các loại báo cáo</strong>
+                            <span>Xây dựng tính năng báo cáo theo ngày/tuần/tháng, xuất PDF, báo cáo tổng hợp nhiều
+                                trạm.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w2">2</div>
+                        <div class="task-text">
+                            <strong>Hoàn thiện các tính năng phần mềm còn thiếu</strong>
+                            <span>Bổ sung tính năng cảnh báo nâng cao, quản lý người dùng, cấu hình ngưỡng cảnh báo, các
+                                chức năng trên web và app di động.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w2">3</div>
+                        <div class="task-text">
+                            <strong>Kiểm thử toàn diện &amp; bàn giao bản dùng thử</strong>
+                            <span>Test toàn bộ luồng từ datalogger → FTP → phần mềm. Bàn giao phiên bản dùng thử cho
+                                VSIP.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w2">4</div>
+                        <div class="task-text">
+                            <strong>Hướng dẫn sử dụng cơ bản</strong>
+                            <span>Đào tạo nhân viên W&amp;S về cách sử dụng phần mềm NAVIS, xem báo cáo, quản lý cảnh
+                                báo.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Week 3 -->
+            <div class="week-section week-3">
+                <div class="week-header">
+                    <div class="week-title">
+                        <span class="week-badge badge-w3">TUẦN 3</span>
+                        Cập nhật, sửa lỗi &amp; Bàn giao chính thức
+                    </div>
+                    <div class="week-dates">📅 16/03/2026 – 20/03/2026</div>
+                </div>
+                <ul class="task-list">
+                    <li>
+                        <div class="task-number num-w3">1</div>
+                        <div class="task-text">
+                            <strong>Thu thập phản hồi từ người dùng</strong>
+                            <span>Ghi nhận ý kiến, góp ý từ nhân viên W&amp;S sau thời gian dùng thử, lập danh sách yêu
+                                cầu chỉnh sửa.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w3">2</div>
+                        <div class="task-text">
+                            <strong>Sửa lỗi &amp; cập nhật phần mềm</strong>
+                            <span>Khắc phục các lỗi phát sinh, cập nhật giao diện và tính năng theo phản hồi.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w3">3</div>
+                        <div class="task-text">
+                            <strong>Hoàn thiện tài liệu hướng dẫn</strong>
+                            <span>Biên soạn tài liệu HDSD phần mềm NAVIS (web, app), tài liệu cài đặt, bảo trì hệ thống
+                                datalogger.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="task-number num-w3">4</div>
+                        <div class="task-text">
+                            <strong>Bàn giao chính thức &amp; nghiệm thu</strong>
+                            <span>Bàn giao toàn bộ hệ thống, tài liệu, hướng dẫn vận hành. Ký biên bản nghiệm thu hoàn
+                                thành.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Deliverables -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon" style="background:#fce7f3;color:#db2777;">🎯</div>
+                Sản Phẩm Bàn Giao
+            </div>
+            <div class="deliverable-grid">
+                <div class="deliverable-item">
+                    <div class="deliverable-icon">🖥️</div>
+                    <div>
+                        <div class="deliverable-title">Phần mềm NAVIS</div>
+                        <div class="deliverable-desc">Phần mềm giám sát, cảnh báo trên nền tảng web và ứng dụng di động,
+                            hoạt động ổn định.</div>
+                    </div>
+                </div>
+                <div class="deliverable-item">
+                    <div class="deliverable-icon">📊</div>
+                    <div>
+                        <div class="deliverable-title">Hệ thống Datalogger</div>
+                        <div class="deliverable-desc">10 trạm datalogger được cài đặt, cấu hình và kết nối FTP Cloud
+                            hoàn chỉnh.</div>
+                    </div>
+                </div>
+                <div class="deliverable-item">
+                    <div class="deliverable-icon">📚</div>
+                    <div>
+                        <div class="deliverable-title">Tài liệu hướng dẫn</div>
+                        <div class="deliverable-desc">HDSD phần mềm NAVIS, tài liệu cài đặt, bảo trì và vận hành hệ
+                            thống.</div>
+                    </div>
+                </div>
+                <div class="deliverable-item">
+                    <div class="deliverable-icon">🎓</div>
+                    <div>
+                        <div class="deliverable-title">Đào tạo nhân sự</div>
+                        <div class="deliverable-desc">Hướng dẫn trực tiếp cho bộ phận W&amp;S về sử dụng và quản trị
+                            phần mềm.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="card">
+            <div class="card-title">
+                <div class="icon" style="background:#fef3c7;color:#d97706;">⚠️</div>
+                Ghi Chú &amp; Điều Kiện
+            </div>
+            <div class="notes-box">
+                <div class="notes-title">📌 Lưu ý quan trọng</div>
+                <ul>
+                    <li>Tiến độ có thể thay đổi tùy thuộc vào điều kiện thực tế tại hiện trường (nguồn điện, tín hiệu
+                        mạng, thời tiết).</li>
+                    <li>Bên VSIP cần hỗ trợ bố trí nhân sự và phương tiện tiếp cận các trạm datalogger.</li>
+
+                    <li>Thời gian bảo hành: 12 tháng kể từ ngày nghiệm thu.</li>
+                    <li>Chi phí cloud duy trì được tính cho giai đoạn 3–5 năm, bao gồm phí data, phần mềm web và app.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Signature -->
+            <div class="signature-section">
+                <div class="signature-block">
+                    <div class="sig-title">Đại diện Nhà cung cấp</div>
+                    <div class="sig-subtitle">Supplier Representative</div>
+                    <div class="sig-line">Nguyễn Minh Trí</div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">Quản lý dự án — Công ty TNHH
+                        TM DV KT SX O &amp; M</div>
+                </div>
+                <div class="signature-block">
+                    <div class="sig-title">Đại diện Bên đặt hàng</div>
+                    <div class="sig-subtitle">Buyer Representative</div>
+                    <div class="sig-line">VSIP — Bộ phận W&amp;S</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <span class="footer-brand">O &amp; M Technical Service</span> · Tài liệu tiến độ dự án · Ngày lập: 27/02/2026
+        <br>
+        Số PO: 38-26/PO/PUR · PR Ref: 417-25/PR/W&amp;S
+    </div>
+
+</body>
+
+</html>

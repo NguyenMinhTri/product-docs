@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Test Tủ Giám Sát EC-IoT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #1565C0;
+            --primary-light: #1E88E5;
+            --primary-dark: #0D47A1;
+            --success: #2E7D32;
+            --danger: #C62828;
+            --warning: #E65100;
+            --orange: #F57C00;
+            --background: #F5F7FA;
+            --surface: #FFFFFF;
+            --text-primary: #1A2B3C;
+            --text-secondary: #5F6C7B;
+            --border: #E0E6ED;
+            --accent-gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --danger-gradient: linear-gradient(135deg, #C62828 0%, #E53935 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-logo img {
+            width: 60px;
+            height: auto;
+            border-radius: 8px;
+            background: white;
+            padding: 4px;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            position: relative;
+        }
+
+        .header .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+        }
+
+        .header .company-name {
+            font-size: 11px;
+            opacity: 0.85;
+            font-weight: 400;
+            position: relative;
+        }
+
+        .header .doc-code {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        /* ===== WARNING BANNER ===== */
+        .warning-banner {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            border: 2px solid var(--orange);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .warning-banner .icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .warning-banner h3 {
+            color: var(--warning);
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .warning-banner p {
+            font-size: 13px;
+            color: #5D4037;
+        }
+
+        .danger-banner {
+            background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+            border: 2px solid var(--danger);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .danger-banner .icon {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .danger-banner h3 {
+            color: var(--danger);
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .danger-banner p {
+            font-size: 12px;
+            color: #B71C1C;
+        }
+
+        /* ===== SECTION ===== */
+        .section {
+            background: var(--surface);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .section-header {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-body {
+            padding: 12px 14px;
+        }
+
+        /* ===== OVERVIEW SECTION ===== */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .overview-card {
+            background: #F0F7FF;
+            border: 1px solid #BBDEFB;
+            border-radius: 6px;
+            padding: 8px 10px;
+        }
+
+        .overview-card h4 {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .overview-card p {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* ===== IMAGE BOX ===== */
+        .image-box {
+            background: #FAFBFC;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 0;
+            margin: 16px 0;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .image-box .caption {
+            background: #F0F4F8;
+            padding: 8px 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-style: italic;
+            border-top: 1px solid var(--border);
+        }
+
+        .image-row {
+            display: flex;
+            gap: 16px;
+            margin: 16px 0;
+            align-items: flex-start;
+        }
+
+        .image-row .image-box {
+            flex: 1;
+            margin: 0;
+        }
+
+        /* ===== STEPS ===== */
+        .steps {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #F0F2F5;
+            position: relative;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            background: var(--accent-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            box-shadow: 0 2px 6px rgba(21, 101, 192, 0.3);
+        }
+
+        .step-number.danger {
+            background: var(--danger-gradient);
+            box-shadow: 0 3px 8px rgba(198, 40, 40, 0.3);
+        }
+
+        .step-number.success {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            box-shadow: 0 3px 8px rgba(46, 125, 50, 0.3);
+        }
+
+        .step-number.orange {
+            background: linear-gradient(135deg, #E65100 0%, #F57C00 100%);
+            box-shadow: 0 3px 8px rgba(230, 81, 0, 0.3);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h3 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .step-content .sub-steps {
+            margin-top: 6px;
+            padding-left: 4px;
+        }
+
+        .step-content .sub-steps li {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+            padding-left: 8px;
+            list-style: none;
+            position: relative;
+        }
+
+        .step-content .sub-steps li::before {
+            content: '▸';
+            position: absolute;
+            left: -8px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* ===== SIGNAL TABLE ===== */
+        .signal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+
+        .signal-table th {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 6px 10px;
+            text-align: left;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .signal-table td {
+            padding: 5px 10px;
+            font-size: 12px;
+            border-bottom: 1px solid #F0F2F5;
+        }
+
+        .signal-table tr:nth-child(even) td {
+            background: #F8FAFB;
+        }
+
+        .signal-table tr:hover td {
+            background: #E3F2FD;
+        }
+
+        .signal-type {
+            display: inline-block;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .type-digital {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .type-analog {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        /* ===== CONNECTOR LINE ===== */
+        .connector {
+            width: 2px;
+            position: absolute;
+            left: 19px;
+            top: 58px;
+            bottom: -18px;
+            background: #E0E6ED;
+        }
+
+        /* ===== NOTICE BOXES ===== */
+        .notice {
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .notice .icon {
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .notice-info {
+            background: #E3F2FD;
+            border-left: 3px solid var(--primary);
+        }
+
+        .notice-warning {
+            background: #FFF8E1;
+            border-left: 3px solid #FFC107;
+        }
+
+        .notice-danger {
+            background: #FFEBEE;
+            border-left: 3px solid var(--danger);
+        }
+
+        .notice-success {
+            background: #E8F5E9;
+            border-left: 3px solid var(--success);
+        }
+
+        /* ===== TOOL PREP ===== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .tool-item {
+            background: #F0F7FF;
+            border: 1px solid #BBDEFB;
+            border-radius: 6px;
+            padding: 6px 8px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .tool-item .tool-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        .tool-item .tool-name {
+            font-weight: 500;
+        }
+
+        /* ===== WIRING DIAGRAM ===== */
+        .wiring-box {
+            background: #F0FDF4;
+            border: 1px solid #A5D6A7;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .wiring-box .label {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        /* ===== ANALOG SIM SECTION ===== */
+        .alt-method {
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFF3E0 100%);
+            border: 1px solid #FFB74D;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 8px 0;
+        }
+
+        .alt-method h4 {
+            color: var(--warning);
+            font-size: 12px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .footer .company {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* ===== CHECK STATUS ===== */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin: 6px 0;
+        }
+
+        .status-item {
+            text-align: center;
+            padding: 6px 4px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: #FAFBFC;
+        }
+
+        .status-item .led {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin: 0 auto 3px;
+            border: 2px solid #ccc;
+        }
+
+        .led-off {
+            background: #E0E0E0;
+        }
+
+        .led-on {
+            background: #4CAF50;
+            border-color: #2E7D32 !important;
+            box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+        }
+
+        .status-item .tag-name {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* ===== PRINT ===== */
+        @page {
+            size: A4;
+            margin: 10mm 12mm;
+        }
+
+        @media print {
+            body {
+                background: white;
+                font-size: 10pt;
+                line-height: 1.4;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                margin-bottom: 6px;
+            }
+
+            .step {
+                break-inside: avoid;
+            }
+
+            .image-box img {
+                max-height: 280px !important;
+            }
+
+            .header,
+            .section-header,
+            .step-number,
+            .signal-table th,
+            .signal-table tr:nth-child(even) td,
+            .danger-banner,
+            .notice,
+            .alt-method,
+            .overview-card,
+            .tool-item,
+            .status-item,
+            .wiring-box {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-logo">
+                <img src="images/ec-iot-test/LOGO-omwater.png" alt="OM Logo">
+            </div>
+            <div>
+                <h1>Hướng Dẫn Test Tủ Giám Sát EC-IoT</h1>
+                <div class="subtitle">Quy trình kiểm tra chức năng tủ EC-IoT trước khi xuất xưởng</div>
+                <div class="company-name">CÔNG TY TNHH TM DV KT SX O & M</div>
+                <div class="doc-code">Mã tủ: EC-IoT | PLC: XINJE | Gateway: NavisMod NM03</div>
+            </div>
+        </div>
+
+        <!-- SAFETY WARNING -->
+        <div class="danger-banner">
+            <div class="icon">⚡</div>
+            <div>
+                <h3>CẢNH BÁO AN TOÀN ĐIỆN</h3>
+                <p>Tủ nhận nguồn <strong>220VAC</strong> đầu vào, bên trong chuyển đổi ra <strong>24VDC</strong> để cấp
+                    cho 8 dây tín hiệu output.
+                    <strong>PHẢI kiểm tra tránh chập mạch trước khi cấp nguồn.</strong> Tuyệt đối không để 220VAC và
+                    24VDC chập nhau.
+                    Đảm bảo dây 0V đầu ra nguồn 24V đã được quấn keo cách điện.
+                </p>
+                <p style="margin-top:6px;"><strong>⚠ Lưu ý phân biệt nguồn thiết bị:</strong></p>
+                <ul style="margin:4px 0 0 16px; font-size:12px; line-height:1.6;">
+                    <li><strong>Chỉ PLC</strong> sử dụng nguồn <strong>220VAC</strong> trực tiếp</li>
+                    <li><strong>Gateway, DAM3102, cảm biến</strong> đều sử dụng nguồn <strong>24VDC</strong> — chú ý đấu
+                        dây đúng nguồn</li>
+                    <li><strong>Dây tín hiệu Modbus RS485</strong> (A+/B-) phải đi riêng, <strong>không được chập vào
+                            đường 24VDC hoặc 220VAC</strong></li>
+                    <li><strong>Dây tín hiệu Analog</strong> (4-20mA) cũng <strong>không được chập vào 220VAC hoặc 24VDC</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TỔNG QUAN TỦ -->
+        <div class="section">
+            <div class="section-header">🔧 Tổng Quan Tủ EC-IoT</div>
+            <div class="section-body">
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <h4>CB Bảo vệ</h4>
+                        <p>CHINT (cắt/đóng nguồn 220VAC)</p>
+                    </div>
+                    <div class="overview-card">
+                        <h4>Nguồn</h4>
+                        <p>Meanwell 24VDC 2.5A</p>
+                    </div>
+                    <div class="overview-card">
+                        <h4>PLC</h4>
+                        <p>XINJE XD3 (220V, PNP Input)</p>
+                    </div>
+                    <div class="overview-card">
+                        <h4>Gateway IoT</h4>
+                        <p>NavisMod NM03 (Modbus Master, 4G)</p>
+                    </div>
+                    <div class="overview-card">
+                        <h4>Bộ chuyển đổi Analog</h4>
+                        <p>DAM3102 (4-20mA → Modbus)</p>
+                    </div>
+                </div>
+
+                <!-- NGUYÊN LÝ HOẠT ĐỘNG -->
+                <div style="background:#F0F7FF; border:1px solid #BBDEFB; border-radius:6px; padding:10px 12px; margin:10px 0 8px;">
+                    <h4 style="font-size:12px; color:var(--primary); margin-bottom:6px;">⚙️ Nguyên lý hoạt động</h4>
+                    <p style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin-bottom:6px;">
+                        Đây là <strong>tủ giám sát các tín hiệu của máy RO</strong> (hệ thống lọc nước thẩm thấu ngược). 
+                        Gateway NavisMod NM03 đóng vai trò <strong>Modbus Master</strong>, giao tiếp qua RS485 để:
+                    </p>
+                    <ul style="margin:0 0 0 16px; font-size:12px; line-height:1.7; color:var(--text-secondary);">
+                        <li>Đọc <strong>PLC XINJE</strong> (Modbus Slave) → giám sát <strong>8 tín hiệu ON/OFF</strong> (bơm, công tắc, phao, alarm)</li>
+                        <li>Đọc <strong>DAM3102</strong> (Modbus Slave) → giám sát <strong>cảm biến EC</strong> (4-20mA → giá trị µS/cm)</li>
+                    </ul>
+                    <p style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin-top:6px;">
+                        Dữ liệu được Gateway đẩy lên <strong>Cloud qua 4G</strong> → hiển thị trên <strong>App IoT</strong> theo thời gian thực.
+                    </p>
+                </div>
+                <div class="image-box" style="margin-top: 16px;">
+                    <img src="images/ec-iot-test/tu-ec-iot.jpg"
+                        alt="Hình ảnh tổng quan bên trong tủ EC-IoT: PLC XINJE, Gateway NavisMod NM03, Nguồn CHNT 24VDC, Module DAM3102"
+                        onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='flex';">
+                    <div class="placeholder"
+                        style="display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px; color:#90A4AE; gap:8px;">
+                        <div style="font-size:48px;">📷</div>
+                        <div style="font-size:13px; font-weight:500;">Hình 3: Bên trong tủ EC-IoT</div>
+                        <div style="font-size:11px;">PLC XINJE · NavisMod NM03 · Nguồn CHNT 24VDC · DAM3102</div>
+                        <div style="font-size:11px; color:#B0BEC5;">Lưu ảnh tủ vào:
+                            <code>images/ec-iot-test/tu-ec-iot.jpg</code>
+                        </div>
+                    </div>
+                    <div class="caption">Hình 3: Bên trong tủ EC-IoT — PLC XINJE, Gateway NavisMod NM03, Nguồn CHNT
+                        MDR-60-24, Module DAM3102</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BẢNG TÍN HIỆU -->
+        <div class="section">
+            <div class="section-header">📡 Bảng Tín Hiệu Output Tủ EC-IoT</div>
+            <div class="section-body">
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+                    Tủ EC-IoT nhận nguồn <strong>220VAC</strong>, chuyển đổi ra <strong>24VDC</strong> và xuất ra ngoài
+                    gồm:
+                    <strong>8 tín hiệu ON/OFF</strong> (digital) và <strong>1 tín hiệu EC analog</strong> (4-20mA).
+                    PLC đấu kiểu <strong>PNP</strong> — test bằng cách đưa đầu dây <strong>+24VDC</strong> (output từ
+                    tủ) chạm vào đầu cos tag
+                    tương ứng.
+                </p>
+                <table class="signal-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tag Name</th>
+                            <th>Loại</th>
+                            <th>Mô tả</th>
+                            <th>Nhóm trên IoT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>Bơm RO1,2</strong></td>
+                            <td><span class="signal-type type-digital">Digital</span></td>
+                            <td>Trạng thái bơm RO 1,2</td>
+                            <td>Trạng Thái Bơm</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>Bơm RO3,4</strong></td>
+                            <td><span class="signal-type type-digital">Digital</span></td>
+                            <td>Trạng thái bơm RO 3,4</td>
+                            <td>Trạng Thái Bơm</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>Áp cao</strong></td>
+                            <td><span class="signal-type type-digital">Digital</span></td>
+                            <td>Công tắc áp suất cao</td>
+                            <td>Trạng Thái Công Tắc</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>Áp thấp</strong></td>
+                            <td><span class="signal-type type-digital">Digital</span></td>
+                            <td>Công tắc áp suất thấp</td>
+                            <td>Trạng Thái Công Tắc</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>Bồn TG Đầy</strong></td>
+                            <td><span class="signal-type type-digital">Digital</span></td>
+                            <td>Phao bồn trung gian đầy</td>
+                            <td>Trạng Thái Bồn</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td><strong>Bồn TG Cạn</strong></td>
+                            <td><span class="signal-type type-digital">Digital</span></td>
+                            <td>Phao bồn trung gian cạn</td>
+                            <td>Trạng Thái Bồn</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td><strong>EC High Alarm</strong></td>
+                            <td><span class="signal-type type-digital">Digital</span></td>
+                            <td>Cảnh báo EC vượt ngưỡng</td>
+                            <td>Alarm</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td><strong>Phát hiện rò rỉ nước</strong></td>
+                            <td><span class="signal-type type-digital">Digital</span></td>
+                            <td>Cảm biến phát hiện rò rỉ</td>
+                            <td>Alarm</td>
+                        </tr>
+                        <tr style="background: #FFF8E1;">
+                            <td>9</td>
+                            <td><strong>EC (µS/cm)</strong></td>
+                            <td><span class="signal-type type-analog">Analog</span></td>
+                            <td>Giá trị EC từ cảm biến (4-20mA)</td>
+                            <td>Sensor</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- IoT Screenshots -->
+                <div class="image-row">
+                    <div class="image-box">
+                        <img src="images/ec-iot-test/iot-screen-1.png"
+                            alt="Giao diện IoT phần 1: Sensor EC, Trạng Thái Bơm, Trạng Thái Công Tắc"
+                            style="max-height:450px; object-fit:contain;"
+                            onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='flex';">
+                        <div class="placeholder"
+                            style="display:none; flex-direction:column; align-items:center; justify-content:center; padding:30px; color:#90A4AE; gap:6px;">
+                            <div style="font-size:36px;">📱</div>
+                            <div style="font-size:12px; font-weight:500;">Hình 1: Giao diện IoT (phần trên)</div>
+                            <div style="font-size:11px;">EC Sensor · Bơm · Công tắc</div>
+                            <div style="font-size:10px; color:#B0BEC5;"><code>images/ec-iot-test/iot-screen-1.png</code>
+                            </div>
+                        </div>
+                        <div class="caption">Hình 1: EC Sensor, Trạng Thái Bơm, Công Tắc</div>
+                    </div>
+                    <div class="image-box">
+                        <img src="images/ec-iot-test/iot-screen-2.png" alt="Giao diện IoT phần 2: Trạng Thái Bồn, Alarm"
+                            style="max-height:450px; object-fit:contain;"
+                            onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='flex';">
+                        <div class="placeholder"
+                            style="display:none; flex-direction:column; align-items:center; justify-content:center; padding:30px; color:#90A4AE; gap:6px;">
+                            <div style="font-size:36px;">📱</div>
+                            <div style="font-size:12px; font-weight:500;">Hình 2: Giao diện IoT (phần dưới)</div>
+                            <div style="font-size:11px;">Bồn · Alarm</div>
+                            <div style="font-size:10px; color:#B0BEC5;"><code>images/ec-iot-test/iot-screen-2.png</code>
+                            </div>
+                        </div>
+                        <div class="caption">Hình 2: Trạng Thái Bồn, Alarm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DỤNG CỤ CẦN CHUẨN BỊ -->
+        <div class="section">
+            <div class="section-header">🧰 Dụng Cụ Cần Chuẩn Bị</div>
+            <div class="section-body">
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-icon">🔌</div>
+                        <div class="tool-name">Đồng hồ VOM</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-icon">💻</div>
+                        <div class="tool-name">Máy tính + Cáp nạp PLC</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-icon">📶</div>
+                        <div class="tool-name">SIM 4G (data)</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-icon">🔧</div>
+                        <div class="tool-name">Keo cách điện</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-icon">📱</div>
+                        <div class="tool-name">Điện thoại (App IoT)</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-icon">🔬</div>
+                        <div class="tool-name">Cảm biến EC / Bộ giả lập</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CÁC BƯỚC TEST -->
+        <div class="section">
+            <div class="section-header">📝 Các Bước Test Tủ EC-IoT</div>
+            <div class="section-body">
+                <div class="steps">
+
+                    <!-- BƯỚC 1 -->
+                    <div class="step">
+                        <div class="step-number danger">1</div>
+                        <div class="step-content">
+                            <h3>Đo kiểm tra điện trước khi cấp nguồn</h3>
+                            <p>Dùng đồng hồ VOM kiểm tra đảm bảo:</p>
+                            <ul class="sub-steps">
+                                <li>Dây <strong>220VAC</strong> (Nóng - Nguội) đo phải đúng điện áp</li>
+                                <li>Dây <strong>24VDC output</strong> không bị chập, không hở mạch</li>
+                                <li><strong style="color:#C62828;">220VAC và 24VDC không được chập nhau</strong> — kiểm
+                                    tra cách điện giữa 2 hệ thống nguồn</li>
+                                <li><strong style="color:#C62828;">PHẢI kiểm tra tránh chập trước khi cấp
+                                        nguồn!</strong></li>
+                            </ul>
+                            <div class="notice notice-danger">
+                                <span class="icon">⚠️</span>
+                                <span>Nếu phát hiện chập mạch hoặc điện áp bất thường → <strong>DỪNG NGAY</strong>, kiểm
+                                    tra lại đấu nối trước khi tiếp tục.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 2 -->
+                    <div class="step">
+                        <div class="step-number orange">2</div>
+                        <div class="step-content">
+                            <h3>Quấn keo cách điện dây 0V nguồn 24VDC</h3>
+                            <p>Lấy keo cách điện quấn kín đầu dây <strong>0V (GND)</strong> của nguồn 24VDC:</p>
+                            <ul class="sub-steps">
+                                <li>Xác định dây <strong>0V đầu ra</strong> của nguồn CHNT MDR-60-24 (cực âm, dây màu
+                                    đen/xanh)</li>
+                                <li>Quấn keo cách điện chặt quanh đầu cos/đầu nối dây 0V</li>
+                                <li>Mục đích: <strong>Khi cấp nguồn, 2 đầu +24V và 0V không được chạm nhau</strong></li>
+                            </ul>
+                            <div class="notice notice-warning">
+                                <span class="icon">💡</span>
+                                <span>Đây là sợi dây tín hiệu ra ngoài tủ. Vì PLC input kiểu PNP nên ta chỉ cần dùng đầu
+                                    <strong>+24V</strong> để test — đầu 0V phải được cách ly an toàn.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 3 -->
+                    <div class="step">
+                        <div class="step-number danger">3</div>
+                        <div class="step-content">
+                            <h3>Cấp điện 220VAC cho tủ</h3>
+                            <p>Cắm phích điện 220VAC vào tủ và kiểm tra:</p>
+                            <ul class="sub-steps">
+                                <li>Đèn <strong>DC OK</strong> trên nguồn CHNT sáng xanh → Nguồn 24V OK</li>
+                                <li>PLC XINJE khởi động, đèn <strong>RUN</strong> sáng (nếu đã có chương trình)</li>
+                                <li>Gateway NavisMod NM03 có đèn LED sáng</li>
+                                <li>Module DAM3102 có đèn báo nguồn</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 4 -->
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Nạp chương trình PLC</h3>
+                            <p>Kết nối máy tính với PLC XINJE qua cáp lập trình:</p>
+                            <ul class="sub-steps">
+                                <li>Mở phần mềm <strong>XDPPro</strong> trên máy tính</li>
+                                <li>Chọn đúng model PLC (VD: XD3-16T-E)</li>
+                                <li>Nạp chương trình (file .xdp) vào PLC</li>
+                                <li>Kiểm tra PLC chuyển sang chế độ <strong>RUN</strong> sau khi nạp xong</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 5 -->
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Cắm SIM 4G cho Gateway</h3>
+                            <p>Lắp SIM 4G (đã có gói data) vào khe SIM trên Gateway NavisMod NM03:</p>
+                            <ul class="sub-steps">
+                                <li>Tắt nguồn gateway trước khi cắm SIM (hoặc cắm khi tủ chưa cấp nguồn)</li>
+                                <li>Đẩy SIM vào đúng chiều, đảm bảo khớp khe</li>
+                                <li>Cấp lại nguồn, đợi Gateway kết nối mạng (đèn mạng nhấp nháy → sáng đều)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 6 -->
+                    <div class="step">
+                        <div class="step-number success">6</div>
+                        <div class="step-content">
+                            <h3>Dán & Scan mã QR — Bắt đầu test</h3>
+                            <p>Dán mã QR lên tủ và sử dụng App IoT trên điện thoại để quét:</p>
+                            <ul class="sub-steps">
+                                <li>Dán nhãn mã QR (VD: <strong>A-TPN-314</strong>) lên mặt trước tủ</li>
+                                <li>Mở App IoT → Scan mã QR</li>
+                                <li>Xác nhận thiết bị hiển thị đúng trên giao diện App (tên trạm, mã tủ)</li>
+                                <li>Kiểm tra trạng thái kết nối: <span style="color:#2E7D32; font-weight:600;">● Hoạt
+                                        động</span></li>
+                            </ul>
+                            <div class="notice notice-success">
+                                <span class="icon">✅</span>
+                                <span>Khi App hiển thị <strong>"Hoạt động"</strong> (đèn xanh) — Gateway đã kết nối
+                                    thành công lên Cloud. Sẵn sàng test tín hiệu.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 7 -->
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <h3>Test 8 tín hiệu Digital Input (ON/OFF)</h3>
+                            <p>Kiểm tra từng tín hiệu bằng cách <strong>chạm đầu +24V vào đầu cos tag</strong> tương
+                                ứng:</p>
+
+                            <div class="notice notice-info" style="margin: 12px 0;">
+                                <span class="icon">🔌</span>
+                                <div>
+                                    <strong>Cách test (PNP):</strong> Lấy đầu dây <strong>+24V</strong> từ nguồn tủ,
+                                    chạm vào từng đầu cos tag signal.
+                                    Khi chạm → đèn input PLC sáng + trạng thái trên App IoT chuyển ON (sáng xanh).
+                                </div>
+                            </div>
+
+                            <p style="margin:12px 0; font-weight:600;">Thực hiện lần lượt cho từng tag:</p>
+
+                            <div class="status-grid">
+                                <div class="status-item">
+                                    <div class="led led-off"></div>
+                                    <div class="tag-name">Bơm RO1,2</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="led led-off"></div>
+                                    <div class="tag-name">Bơm RO3,4</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="led led-off"></div>
+                                    <div class="tag-name">Áp cao</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="led led-off"></div>
+                                    <div class="tag-name">Áp thấp</div>
+                                </div>
+                            </div>
+                            <div class="status-grid">
+                                <div class="status-item">
+                                    <div class="led led-off"></div>
+                                    <div class="tag-name">Bồn TG Đầy</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="led led-off"></div>
+                                    <div class="tag-name">Bồn TG Cạn</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="led led-off"></div>
+                                    <div class="tag-name">EC High Alarm</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="led led-off"></div>
+                                    <div class="tag-name">Rò rỉ nước</div>
+                                </div>
+                            </div>
+
+                            <p style="margin-top: 12px; font-size: 13px;"><strong>Cho mỗi tag, kiểm tra:</strong></p>
+                            <ul class="sub-steps">
+                                <li>Chạm +24V vào đầu cos tag → <strong>Đèn input PLC sáng</strong></li>
+                                <li>Trên App IoT → Trạng thái tương ứng chuyển <strong>ON (sáng xanh ✅)</strong></li>
+                                <li>Tháo dây +24V ra → Trạng thái trên IoT chuyển về <strong>OFF (xám)</strong></li>
+                                <li>Đúng tên tag trên App khớp với tên đầu cos</li>
+                            </ul>
+
+                            <div class="notice notice-danger">
+                                <span class="icon">❌</span>
+                                <span>Nếu tên tag trên IoT <strong>không khớp</strong> với tên đầu cos → kiểm tra lại
+                                    đấu dây input PLC hoặc chương trình PLC.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 8 -->
+                    <div class="step">
+                        <div class="step-number orange">8</div>
+                        <div class="step-content">
+                            <h3>Test tín hiệu Analog EC</h3>
+                            <p>Kiểm tra tín hiệu EC analog (4-20mA) hiển thị lên App IoT:</p>
+
+                            <!-- Cách 1: Cảm biến thật -->
+                            <div
+                                style="background: #E8F5E9; border-radius: 8px; padding: 14px; margin: 12px 0; border-left: 4px solid #2E7D32;">
+                                <h4 style="color: #2E7D32; font-size: 14px; margin-bottom: 8px;">✅ Cách 1: Dùng cảm biến
+                                    EC thật</h4>
+                                <ul class="sub-steps">
+                                    <li>Kết nối cảm biến EC vào module DAM3102 (đúng cực +/-)</li>
+                                    <li>Nhúng đầu cảm biến vào <strong>nước</strong></li>
+                                    <li>Theo dõi giá trị EC (µS/cm) trên App IoT → phải <strong>thay đổi (nhảy
+                                            số)</strong></li>
+                                    <li>Thử nhúng vào nước có muối để thấy giá trị EC tăng</li>
+                                </ul>
+                            </div>
+
+                            <!-- Cách 2: Bộ giả lập -->
+                            <div class="alt-method">
+                                <h4>🔧 Cách 2: Dùng bộ giả lập Analog 4-20mA (khi không có cảm biến EC)</h4>
+                                <p style="font-size: 13px; margin-bottom: 12px;">
+                                    Sử dụng bộ phát tín hiệu dòng <strong>JS-VISG-M-S</strong> (Voltage & Current Signal
+                                    Generator) — loại <strong>2 dây analog riêng</strong>.
+                                </p>
+
+                                <div class="image-box" style="margin: 12px 0; border-color: #FFB74D;">
+                                    <img src="images/ec-iot-test/analog-simulator.png"
+                                        alt="Bộ giả lập analog 4-20mA JS-VISG-M-S"
+                                        style="max-height:350px; object-fit:contain;"
+                                        onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='flex';">
+                                    <div class="placeholder"
+                                        style="display:none; flex-direction:column; align-items:center; justify-content:center; padding:30px; color:#90A4AE; gap:6px;">
+                                        <div style="font-size:36px;">🔧</div>
+                                        <div style="font-size:12px; font-weight:500;">Hình 4: Bộ giả lập Analog 4-20mA
+                                        </div>
+                                        <div style="font-size:11px;">JS-VISG-M-S · DC0-10V / 0-22mA</div>
+                                        <div style="font-size:10px; color:#B0BEC5;">
+                                            <code>images/ec-iot-test/analog-simulator.png</code>
+                                        </div>
+                                    </div>
+                                    <div class="caption">Hình 4: Bộ giả lập tín hiệu Analog JS-VISG-M-S (DC 0-10V /
+                                        0-22mA)</div>
+                                </div>
+
+                                <p style="font-size:13px; font-weight:600; margin-bottom:8px;">Sơ đồ đấu nối bộ giả lập
+                                    (loại 2 dây):</p>
+                                <div class="wiring-box">
+                                    <div class="label">📌 Đấu nối bộ giả lập → Module DAM3102</div>
+                                    <pre style="margin:0;">
+┌──────────────────────┐     ┌──────────────────────┐
+│  BỘ GIẢ LẬP          │     │  MODULE DAM3102       │
+│  JS-VISG-M-S         │     │  (Analog Input)       │
+│                      │     │                      │
+│  AIo  (Analog Out) ●──┼───┼──● 1+  (Input +)     │
+│  GND  (Mass)        ●──┼───┼──● 1-  (Input -)     │
+│                      │     │                      │
+└──────────────────────┘     └──────────────────────┘
+
+⚙️ Cài đặt bộ giả lập:
+  • Chuyển MODE → Current (dòng điện mA)
+  • Vặn núm xoay để thay đổi giá trị 4mA → 20mA
+  • 4mA  = giá trị EC thấp nhất (0 µS/cm)
+  • 20mA = giá trị EC cao nhất (full scale)</pre>
+                                </div>
+
+                                <ul class="sub-steps">
+                                    <li>Bật bộ giả lập (công tắc ON), chọn chế độ <strong>Current</strong> (dòng mA)
+                                    </li>
+                                    <li>Đấu 2 dây ra dòng từ bộ giả lập vào input AI+/AI- của DAM3102</li>
+                                    <li>Vặn núm xoay từ <strong>4mA → 20mA</strong> từ từ</li>
+                                    <li>Quan sát trên App IoT: giá trị <strong>EC (µS/cm) phải nhảy số</strong> tương
+                                        ứng</li>
+                                    <li>Test ở các mức: <strong>4mA</strong> (min), <strong>12mA</strong> (giữa),
+                                        <strong>20mA</strong> (max)
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="notice notice-info">
+                                <span class="icon">📝</span>
+                                <span>Giá trị EC trên IoT phải <strong>thay đổi mượt mà</strong> khi vặn núm xoay bộ giả
+                                    lập. Nếu không thay đổi → kiểm tra đấu nối DAM3102 hoặc cấu hình Modbus.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BƯỚC 9 -->
+                    <div class="step">
+                        <div class="step-number success">9</div>
+                        <div class="step-content">
+                            <h3>Kết thúc test — Tháo SIM</h3>
+                            <p>Sau khi hoàn tất tất cả các bước test:</p>
+                            <ul class="sub-steps">
+                                <li>Xác nhận tất cả <strong>8 tín hiệu digital</strong> đều khớp trên IoT</li>
+                                <li>Xác nhận <strong>giá trị EC analog</strong> nhảy số đúng trên IoT</li>
+                                <li><strong>Tháo SIM 4G</strong> ra khỏi Gateway (để dành cho tủ tiếp theo)</li>
+                                <li>Ngắt nguồn 220VAC</li>
+                                <li>Ghi chú kết quả test: <strong>PASS ✅</strong> hoặc <strong>FAIL ❌</strong> (kèm lỗi)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- BẢNG CHECKLIST -->
+        <div class="section">
+            <div class="section-header">✅ Bảng Kiểm Tra Kết Quả Test</div>
+            <div class="section-body">
+                <table class="signal-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Hạng mục kiểm tra</th>
+                            <th style="width:80px; text-align:center;">Kết quả</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Đo điện 220V / 24V không chập</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Quấn keo dây 0V</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Cấp nguồn 220V — PLC + Gateway sáng đèn</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Nạp code PLC thành công</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Cắm SIM — Gateway kết nối mạng</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Scan QR — Hiện trạng thái "Hoạt động"</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>7a</td>
+                            <td>Bơm RO1,2 — Khớp trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>7b</td>
+                            <td>Bơm RO3,4 — Khớp trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>7c</td>
+                            <td>Áp cao — Khớp trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>7d</td>
+                            <td>Áp thấp — Khớp trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>7e</td>
+                            <td>Bồn TG Đầy — Khớp trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>7f</td>
+                            <td>Bồn TG Cạn — Khớp trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>7g</td>
+                            <td>EC High Alarm — Khớp trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>7h</td>
+                            <td>Phát hiện rò rỉ nước — Khớp trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                        <tr style="background: #FFF8E1;">
+                            <td>8</td>
+                            <td>EC Analog — Giá trị nhảy trên IoT</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td>CB thật / Giả lập 4-20mA</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Tháo SIM, ngắt nguồn</td>
+                            <td style="text-align:center;">☐ Đạt</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <p style="font-size: 13px; color: var(--text-secondary);">Người test:</p>
+                        <div style="border-bottom: 1px solid #ccc; margin-top: 30px; width: 80%;"></div>
+                    </div>
+                    <div>
+                        <p style="font-size: 13px; color: var(--text-secondary);">Ngày test:</p>
+                        <div style="border-bottom: 1px solid #ccc; margin-top: 30px; width: 80%;"></div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <p style="font-size: 13px; color: var(--text-secondary);">Kết luận:</p>
+                    <div
+                        style="border: 1px solid var(--border); border-radius: 8px; min-height: 60px; margin-top: 8px; padding: 12px;">
+                        <span style="color:#ccc; font-size:13px;">Ghi chú kết quả test...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p class="company">CÔNG TY TNHH TM DV KT SX O & M</p>
+            <p>Tài liệu nội bộ — Hướng dẫn test tủ giám sát EC-IoT</p>
+        </div>
+
+    </div>
+</body>
+
+</html>

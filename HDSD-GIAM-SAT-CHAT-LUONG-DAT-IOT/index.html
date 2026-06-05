@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Sử Dụng - Bộ Giám Sát Chất Lượng Đất IoT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #4CAF50;
+            --primary-dark: #1B5E20;
+            --secondary: #1565C0;
+            --secondary-light: #1976D2;
+            --accent: #FF6F00;
+            --background: #FFFFFF;
+            --surface: #FFFFFF;
+            --text-primary: #1A2B3C;
+            --text-secondary: #5F6C7B;
+            --border: #E4E8EC;
+            --accent-gradient: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+            --blue-gradient: linear-gradient(135deg, #1565C0 0%, #1976D2 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 24px;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-radius: 16px;
+            border: 2px solid var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            flex-shrink: 0;
+        }
+
+        .header-logo img {
+            width: 70px;
+            height: auto;
+        }
+
+        .header-icon {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            background: var(--accent-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header-text h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+
+        .header-text .subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .section h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 14px 0 8px;
+        }
+
+        /* Spec Cards Grid */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .spec-card {
+            background: #F1F8E9;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .spec-card .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .spec-card .value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* Steps Grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .step-card {
+            background: #F8FAFB;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+        }
+
+        .step-card::after {
+            content: '→';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .step-card:last-child::after {
+            display: none;
+        }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-gradient);
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .step-card .title {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .step-card .desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* App Download Banner */
+        .app-download {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--blue-gradient);
+            padding: 20px 24px;
+            border-radius: 12px;
+            color: white;
+            margin: 12px 0;
+        }
+
+        .app-download-text {
+            flex: 1;
+        }
+
+        .app-download h3 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .app-download p {
+            opacity: 0.9;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .app-download .store-badges {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .app-download .store-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .app-download img {
+            max-width: 200px;
+            border-radius: 8px;
+        }
+
+        /* QR Section */
+        .qr-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px dashed var(--accent);
+            margin: 12px 0;
+        }
+
+        .qr-image {
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .qr-image img {
+            width: 140px;
+            height: 140px;
+            border-radius: 8px;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-image .qr-label {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .qr-info {
+            flex: 1;
+        }
+
+        .qr-info h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #E65100;
+            margin-bottom: 8px;
+        }
+
+        .qr-info p {
+            font-size: 12px;
+            color: #BF360C;
+            margin-bottom: 4px;
+        }
+
+        .qr-steps {
+            list-style: none;
+            padding: 0;
+            counter-reset: qr-step;
+        }
+
+        .qr-steps li {
+            padding-left: 28px;
+            position: relative;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: #4E342E;
+        }
+
+        .qr-steps li::before {
+            counter-increment: qr-step;
+            content: counter(qr-step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Screenshots Layout */
+        .screenshots-row {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            margin: 14px 0;
+            justify-content: center;
+        }
+
+        .screenshots-row .screenshot-item {
+            text-align: center;
+            flex: 1;
+            max-width: 260px;
+        }
+
+        .screenshots-row img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+
+        .screenshot-caption {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .screenshot-single {
+            text-align: center;
+            margin: 14px 0;
+        }
+
+        .screenshot-single img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+
+        /* Feature Cards Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .feature-card {
+            background: #F1F8E9;
+            padding: 14px 12px;
+            border-radius: 10px;
+            border: 1px solid #C8E6C9;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .feature-card h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: var(--primary-dark);
+        }
+
+        .feature-card p {
+            font-size: 10px;
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        /* Alert Box */
+        .alert {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 4px solid #EA580C;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-icon {
+            font-size: 20px;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: #EA580C;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .alert p {
+            color: #9A3412;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        /* Info tip */
+        .info-tip {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            border-left: 4px solid var(--secondary);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .info-tip .tip-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .info-tip p {
+            color: #0D47A1;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        /* Numbered list ordered */
+        ol.guide-steps {
+            padding-left: 0;
+            counter-reset: guide-step;
+            list-style: none;
+        }
+
+        ol.guide-steps li {
+            position: relative;
+            padding-left: 32px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            counter-increment: guide-step;
+        }
+
+        ol.guide-steps li::before {
+            content: counter(guide-step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 22px;
+            height: 22px;
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        ol.guide-steps li strong {
+            color: var(--primary-dark);
+        }
+
+        /* Two Column */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            align-items: start;
+        }
+
+        /* Link Box */
+        .link-box {
+            display: inline-block;
+            background: #E8F5E9;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 16px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 16px;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                font-size: 11pt;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            .section {
+                break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+
+            .app-download,
+            .header-row,
+            .qr-section {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .feature-card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .specs-grid,
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-card::after {
+                display: none;
+            }
+
+            .screenshots-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .qr-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .app-download {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header-row">
+            <div class="header-icon">🌱</div>
+            <div class="header-text">
+                <h1>HƯỚNG DẪN SỬ DỤNG</h1>
+                <p class="subtitle">Bộ Giám Sát Chất Lượng Đất IoT — Navis Smart Industry</p>
+            </div>
+        </div>
+
+        <!-- Section 1: Giới thiệu sản phẩm -->
+        <div class="section">
+            <h2><span class="section-number">1</span>Giới Thiệu Sản Phẩm</h2>
+            <p style="font-size: 13px; margin-bottom: 12px;">
+                Bộ giám sát chất lượng đất IoT giúp theo dõi các thông số quan trọng của đất
+                <strong>theo thời gian thực</strong>, hỗ trợ giám sát và quản lý chất lượng đất từ xa
+                qua ứng dụng điện thoại và máy tính.
+            </p>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="label">Độ ẩm đất</div>
+                    <div class="value">Humidity (%)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">Nhiệt độ đất</div>
+                    <div class="value">Temperature (°C)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">Độ dẫn điện</div>
+                    <div class="value">EC (μS/cm)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">Độ pH</div>
+                    <div class="value">pH (0–14)</div>
+                </div>
+            </div>
+            <ul style="margin-top: 12px;">
+                <li>Giám sát real-time 24/7, dữ liệu cập nhật liên tục</li>
+                <li>Cảnh báo ngay khi thông số vượt ngưỡng cho phép</li>
+                <li>Lưu trữ dữ liệu lịch sử, xem biểu đồ xu hướng</li>
+                <li>Hỗ trợ đa nền tảng: iOS, Android, Web</li>
+            </ul>
+        </div>
+
+        <!-- Section 2: Tải App -->
+        <div class="section">
+            <h2><span class="section-number">2</span>Tải Ứng Dụng Navis</h2>
+
+            <div class="app-download">
+                <div class="app-download-text">
+                    <h3>📲 NAVIS - SMART INDUSTRY</h3>
+                    <p>Ứng dụng giám sát thông minh, an toàn & tiện lợi</p>
+                    <div class="store-badges">
+                        <span class="store-badge">🍎 App Store (iOS)</span>
+                        <span class="store-badge">🤖 Google Play (Android)</span>
+                    </div>
+                    <p style="margin-top: 8px;">🌐 <a href="https://navis.iotdaiviet.com"
+                            style="color: white; text-decoration: underline;">navis.iotdaiviet.com</a></p>
+                </div>
+            </div>
+
+            <h3>Cách tải App</h3>
+            <ol class="guide-steps">
+                <li>Mở <strong>App Store</strong> (iPhone) hoặc <strong>Google Play</strong> (Android) trên điện thoại
+                </li>
+                <li>Tìm kiếm từ khóa: <strong>"Navis Smart Industry"</strong> hoặc <strong>"Navis"</strong></li>
+                <li>Nhấn <strong>Tải về / Install</strong> và đợi cài đặt hoàn tất</li>
+                <li>Mở ứng dụng <strong>Navis</strong> trên màn hình chính</li>
+            </ol>
+        </div>
+
+        <!-- Section 3: Đăng ký / Đăng nhập -->
+        <div class="section">
+            <h2><span class="section-number">3</span>Đăng Ký & Đăng Nhập</h2>
+
+            <div class="two-col">
+                <div>
+                    <h3>Đăng ký tài khoản mới</h3>
+                    <ol class="guide-steps">
+                        <li>Mở ứng dụng Navis, nhấn <strong>"Đăng ký"</strong> ở góc dưới bên trái</li>
+                        <li>Nhập <strong>số điện thoại</strong> hoặc chọn đăng ký bằng <strong>Email / Google /
+                                Apple</strong></li>
+                        <li>Xác nhận OTP (nếu đăng ký bằng SĐT) hoặc xác thực tài khoản</li>
+                        <li>Hoàn tất đăng ký và đăng nhập vào hệ thống</li>
+                    </ol>
+
+                    <h3>Đăng nhập</h3>
+                    <p style="font-size: 13px;">Hỗ trợ nhiều phương thức đăng nhập:</p>
+                    <ul style="margin-top: 6px;">
+                        <li>Đăng nhập bằng <strong>Số điện thoại (SĐT)</strong></li>
+                        <li>Đăng nhập bằng <strong>Email</strong></li>
+                        <li>Đăng nhập bằng <strong>Google</strong></li>
+                        <li>Đăng nhập bằng <strong>Apple</strong></li>
+                    </ul>
+                </div>
+                <div class="screenshot-single">
+                    <img src="images/app_login.png" alt="Giao diện đăng nhập Navis" style="max-height: 380px;">
+                    <div class="screenshot-caption">Giao diện đăng nhập / đăng ký</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Scan QR -->
+        <div class="section">
+            <h2><span class="section-number">4</span>Quét Mã QR Để Thêm Thiết Bị</h2>
+
+            <div class="qr-section">
+                <div class="qr-image">
+                    <img src="images/qr_code.png" alt="Mã QR thiết bị">
+                    <div class="qr-label">Mã QR dán trên thiết bị</div>
+                </div>
+                <div class="qr-info">
+                    <h4>📷 Hướng dẫn quét mã QR</h4>
+                    <ol class="qr-steps">
+                        <li>Đăng nhập vào ứng dụng <strong>Navis</strong></li>
+                        <li>Nhấn vào biểu tượng <strong>Scan QR</strong> (📷) ở góc trên bên phải màn hình chính</li>
+                        <li>Hướng camera vào <strong>mã QR</strong> được dán trên thiết bị giám sát</li>
+                        <li>Ứng dụng sẽ tự động nhận diện và <strong>thêm thiết bị</strong> vào tài khoản</li>
+                        <li>Dữ liệu cảm biến sẽ hiển thị <strong>ngay lập tức</strong> trên màn hình</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="info-tip">
+                <span class="tip-icon">💡</span>
+                <p><strong>Mẹo:</strong> Mỗi bộ giám sát đất IoT có một mã QR riêng, được dán ngay trên thân thiết bị.
+                    Bạn chỉ cần quét một lần để kết nối, sau đó thiết bị sẽ tự động hiển thị trên app.</p>
+            </div>
+        </div>
+
+        <!-- Section 5: Giao diện giám sát -->
+        <div class="section">
+            <h2><span class="section-number">5</span>Giao Diện Giám Sát</h2>
+
+            <p style="font-size: 13px; margin-bottom: 12px;">Sau khi quét QR thành công, ứng dụng sẽ
+                hiển thị giao diện giám sát với các thông số đất theo thời gian thực:</p>
+
+            <div class="two-col">
+                <div>
+                    <h3>Các thông số hiển thị</h3>
+                    <ul>
+                        <li><strong>HUMIDITY</strong> — Độ ẩm đất (%), kèm cảnh báo thấp/cao</li>
+                        <li><strong>TEMPERATURE</strong> — Nhiệt độ đất (°C)</li>
+                        <li><strong>EC</strong> — Độ dẫn điện (μS/cm), đánh giá dinh dưỡng đất</li>
+                        <li><strong>PH</strong> — Độ pH, kèm ngưỡng cảnh báo thấp/cao</li>
+                    </ul>
+
+                    <div class="info-tip" style="margin-top: 12px;">
+                        <span class="tip-icon">📌</span>
+                        <p><strong>CB THẤP / CB CAO</strong> là ngưỡng cảnh báo thấp và cao.
+                            Khi giá trị vượt ngưỡng, hệ thống sẽ gửi thông báo cảnh báo đến điện thoại.</p>
+                    </div>
+
+                    <p style="font-size: 12px; margin-top: 10px; color: var(--text-secondary);">
+                        Nhấn <strong>"XEM TẤT CẢ"</strong> để xem chi tiết biểu đồ từng thông số.
+                    </p>
+                </div>
+                <div class="screenshot-single">
+                    <img src="images/app_dashboard.png" alt="Giao diện giám sát đất" style="max-height: 380px;">
+                    <div class="screenshot-caption">Màn hình giám sát - Soil Sensor</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Xem biểu đồ -->
+        <div class="section">
+            <h2><span class="section-number">6</span>Xem Biểu Đồ & Lịch Sử Dữ Liệu</h2>
+
+            <div class="two-col">
+                <div>
+                    <h3>Hướng dẫn xem biểu đồ</h3>
+                    <ol class="guide-steps">
+                        <li>Trên giao diện giám sát, nhấn vào <strong>thông số cần xem</strong> (VD: Temperature)</li>
+                        <li>Biểu đồ lịch sử sẽ hiển thị theo <strong>khoảng thời gian</strong> được chọn</li>
+                        <li>Xem giá trị <strong>MAX, MIN, AVG</strong> ở phía dưới biểu đồ</li>
+                        <li>Nhấn vào <strong>📅 chọn ngày</strong> để thay đổi khoảng thời gian xem</li>
+                    </ol>
+
+                    <h3>Thông tin trên biểu đồ</h3>
+                    <ul>
+                        <li><strong>Giá trị trực tiếp</strong> — Số liệu thời gian thực</li>
+                        <li><strong>Ngưỡng Cao / Thấp</strong> — Giới hạn cảnh báo</li>
+                        <li><strong>Hi-Limit / Lo-Limit</strong> — Đường giới hạn trên biểu đồ</li>
+                        <li><strong>MAX / MIN / AVG</strong> — Thống kê min, max, trung bình</li>
+                    </ul>
+                </div>
+                <div class="screenshot-single">
+                    <img src="images/app_chart.png" alt="Biểu đồ nhiệt độ" style="max-height: 380px;">
+                    <div class="screenshot-caption">Biểu đồ nhiệt độ đất theo thời gian</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: Tính năng chính -->
+        <div class="section">
+            <h2><span class="section-number">7</span>Tính Năng Chính</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌡️</div>
+                    <h4>Giám sát đất</h4>
+                    <p>pH, EC, Nhiệt độ, Độ ẩm</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Biểu đồ</h4>
+                    <p>Lịch sử trực quan</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h4>Xuất báo cáo</h4>
+                    <p>Export Excel / PDF</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4>Cảnh báo</h4>
+                    <p>Vượt ngưỡng tức thì</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h4>Phân quyền</h4>
+                    <p>Nhiều người dùng</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h4>Lưu tự động</h4>
+                    <p>2-5 phút/lần</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Mất kết nối</h4>
+                    <p>Thông báo ngay</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Đa nền tảng</h4>
+                    <p>iOS, Android, Web</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: Tóm tắt quy trình -->
+        <div class="section">
+            <h2><span class="section-number">8</span>Tóm Tắt Quy Trình Sử Dụng</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="title">Tải App Navis</div>
+                    <div class="desc">Tải từ App Store hoặc Google Play</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="title">Đăng ký / Đăng nhập</div>
+                    <div class="desc">Bằng SĐT, Email, Google hoặc Apple</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="title">Quét mã QR</div>
+                    <div class="desc">Scan QR trên thiết bị để kết nối</div>
+                </div>
+            </div>
+            <div class="steps-grid" style="margin-top: 12px;">
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <div class="title">Giám sát</div>
+                    <div class="desc">Xem dữ liệu đất real-time</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">5</div>
+                    <div class="title">Xem biểu đồ</div>
+                    <div class="desc">Theo dõi xu hướng & lịch sử</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">6</div>
+                    <div class="title">Nhận cảnh báo</div>
+                    <div class="desc">Thông báo khi vượt ngưỡng</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert -->
+        <div class="alert">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+                <div class="alert-title">Lưu Ý Quan Trọng</div>
+                <p>Thiết bị cần được kết nối nguồn điện và mạng (Ethernet/4G/WiFi) ổn định để đảm bảo truyền dữ liệu
+                    liên tục.
+                    Nếu mất kết nối, ứng dụng sẽ thông báo ngay.</p>
+            </div>
+        </div>
+
+        <!-- Section 9: Phần mềm web -->
+        <div class="section">
+            <h2><span class="section-number">9</span>Truy Cập Trên Máy Tính (Web)</h2>
+
+            <div class="two-col">
+                <div>
+                    <p style="margin-bottom: 8px; font-size: 13px;">
+                        Ngoài ứng dụng điện thoại, bạn có thể giám sát trên máy tính thông qua trình duyệt web:
+                    </p>
+                    <div class="link-box">🖥️ <a href="https://datalogger.iotdaiviet.com">datalogger.iotdaiviet.com</a>
+                    </div>
+
+                    <h3>Cách đăng nhập trên máy tính</h3>
+                    <ol class="guide-steps">
+                        <li>Truy cập <strong>datalogger.iotdaiviet.com</strong> trên trình duyệt</li>
+                        <li>Giao diện sẽ hiển thị <strong>mã QR đăng nhập</strong></li>
+                        <li>Mở App <strong>Navis</strong> trên điện thoại, quét mã QR để đăng nhập</li>
+                        <li>Giao diện giám sát sẽ hiển thị tương tự trên điện thoại</li>
+                    </ol>
+                </div>
+                <div>
+                    <div class="info-tip">
+                        <span class="tip-icon">💡</span>
+                        <p><strong>Lưu ý:</strong> Hoàn thành cài đặt và đăng nhập trên điện thoại trước khi sử dụng
+                            phiên bản Web.
+                            Tài khoản trên điện thoại dùng để xác thực đăng nhập Web.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <strong>NAVIS — SMART INDUSTRY</strong> | Hỗ trợ: <a href="https://iotdaiviet.com">iotdaiviet.com</a>
+            <br>
+            <span style="font-size: 11px; color: #999;">© 2026 Đại Việt IoT. All rights reserved.</span>
+        </div>
+    </div>
+</body>
+
+</html>

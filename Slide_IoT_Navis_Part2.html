@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Pháp IoT Giám Sát Đa Trạm — Navis IoT Platform | Phần 2: Tính Năng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d7c3d;
+            --primary-light: #15a050;
+            --primary-pale: #e8f7ee;
+            --accent: #1a6fb5;
+            --accent-light: #2196F3;
+            --accent-pale: #e3f2fd;
+            --purple: #7c3aed;
+            --purple-pale: #f0e7ff;
+            --orange: #e67e22;
+            --red: #e74c3c;
+            --bg: #f8fafb;
+            --bg-white: #ffffff;
+            --bg-section: #f1f5f8;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 80px 60px;
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        /* NAV */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary);
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .nav-brand img {
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .nav-brand .logo-divider {
+            width: 1px;
+            height: 28px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #fff;
+            background: var(--primary);
+        }
+
+        .nav-page-indicator {
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 4px 12px;
+            background: var(--bg-section);
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* CONTENT */
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-header {
+            margin-bottom: 36px;
+        }
+
+        .slide-number {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .slide-title {
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .slide-title .accent {
+            color: var(--primary);
+        }
+
+        .slide-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            max-width: 650px;
+            line-height: 1.6;
+        }
+
+        /* SCREENSHOT */
+        .screenshot-container {
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            transition: transform 0.4s ease;
+            cursor: pointer;
+        }
+
+        .screenshot-container:hover {
+            transform: scale(1.02);
+        }
+
+        .screenshot-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .screenshot-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(15, 23, 42, 0.9));
+            padding: 36px 20px 14px;
+        }
+
+        .screenshot-label h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .screenshot-label p {
+            font-size: 11px;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        .screenshot-container .zoom-hint {
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(0,0,0,0.5); color: #fff; font-size: 11px; font-weight: 600;
+            padding: 4px 10px; border-radius: 6px; opacity: 0; transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .screenshot-container:hover .zoom-hint { opacity: 1; }
+
+        /* LIGHTBOX */
+        .lightbox {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 9999; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center; cursor: zoom-out;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img {
+            max-width: 92vw; max-height: 90vh; border-radius: 12px;
+            box-shadow: 0 16px 60px rgba(0,0,0,0.5); animation: lbIn 0.3s ease;
+        }
+        .lightbox .lb-close {
+            position: absolute; top: 24px; right: 32px;
+            font-size: 32px; color: #fff; cursor: pointer;
+            width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.1); border-radius: 50%; transition: background 0.3s;
+        }
+        .lightbox .lb-close:hover { background: rgba(255,255,255,0.25); }
+        @keyframes lbIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+
+        /* STAT CARDS */
+        .sf-card {
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);
+            transition: all 0.4s; position: relative; overflow: hidden;
+        }
+        .sf-card::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .sf-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+        .sf-card:hover::after { opacity: 1; }
+        .sf-card .sf-icon { font-size: 28px; margin-bottom: 12px; }
+        .sf-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+        .sf-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+        .sf-card .sf-list { list-style: none; margin-top: 10px; }
+        .sf-card .sf-list li {
+            font-size: 13px; color: var(--text-secondary); padding: 4px 0;
+            border-bottom: 1px solid var(--border); line-height: 1.5;
+        }
+        .sf-card .sf-list li:last-child { border-bottom: none; }
+        .sf-card .sf-list li strong { color: var(--primary); }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            align-items: center;
+        }
+
+        .two-col.reverse {
+            direction: rtl;
+        }
+
+        .two-col.reverse>* {
+            direction: ltr;
+        }
+
+        /* FEATURE LIST */
+        .feature-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+        }
+
+        .feature-item .f-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .feature-item h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 3px;
+        }
+
+        .feature-item p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* FEATURE GRID */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .feat-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+
+        .feat-card:hover::before {
+            opacity: 1;
+        }
+
+        .feat-card .fc-icon {
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+
+        .feat-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .feat-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* HIGHLIGHT BOX */
+        .highlight-box {
+            background: var(--primary-pale);
+            border: 1px solid rgba(13, 124, 61, 0.2);
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .highlight-box .hb-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .highlight-box h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .highlight-box p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* SCROLL NAV */
+        .slide-nav-bottom {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .scroll-arrow {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: var(--bg-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            text-decoration: none;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .scroll-arrow:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0)
+            }
+
+            40% {
+                transform: translateY(6px)
+            }
+
+            60% {
+                transform: translateY(3px)
+            }
+        }
+
+        /* PAGE NAV */
+        .page-nav {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            gap: 6px;
+        }
+
+        .page-nav a {
+            padding: 8px 16px;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .page-nav a:hover,
+        .page-nav a.current {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 60px 30px;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .slide-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 50px 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-bar {
+                padding: 8px 16px;
+            }
+
+            .nav-brand img {
+                height: 28px;
+            }
+        }
+
+        @media print {
+            html { scroll-snap-type: none; }
+            body { overflow: visible; }
+            .slide {
+                min-height: auto; page-break-after: always; page-break-inside: avoid;
+                padding: 40px; scroll-snap-align: none;
+                height: auto; overflow: visible;
+            }
+            .nav-bar, .page-nav, .slide-nav-bottom { display: none !important; }
+            .lightbox { display: none !important; }
+            .screenshot-container:hover, .feature-item:hover, .feat-card:hover, .sf-card:hover { transform: none; box-shadow: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV BAR -->
+    <nav class="nav-bar">
+        <div class="nav-brand">
+            <img src="LOGO-omwater.png" alt="O&M Water Logo">
+            <div class="logo-divider"></div>
+            <img src="navis-logo.png" alt="Navis IoT Logo">
+        </div>
+        <div class="nav-links">
+            <a href="#dashboard">Dashboard</a>
+            <a href="#map-monitoring">Bản đồ</a>
+            <a href="#multi-station">Đa trạm</a>
+            <a href="#alert-system">Cảnh báo</a>
+            <a href="#statistics">Thống kê</a>
+        </div>
+        <div class="nav-page-indicator">Phần 2 / 3</div>
+    </nav>
+
+    <!-- =============================== -->
+    <!-- SLIDE 5: DASHBOARD GIÁM SÁT     -->
+    <!-- =============================== -->
+    <section class="slide" id="dashboard" style="background: var(--bg-white);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">04 — Dashboard Giám Sát</div>
+                <h2 class="slide-title">
+                    Dashboard <span class="accent">Giám Sát Thời Gian Thực</span>
+                </h2>
+                <p class="slide-desc">
+                    Giao diện trực quan hiển thị toàn bộ thông số cảm biến, biểu đồ xu hướng,
+                    trạng thái thiết bị và điều khiển từ xa.
+                </p>
+            </div>
+
+            <div class="two-col">
+                <div class="screenshot-container">
+                    <img src="navis-dashboard-sensors.png" alt="Navis Dashboard - Giám sát cảm biến và biểu đồ">
+                    <div class="screenshot-label">
+                        <h4>📊 Dashboard chính — Cảm biến & Biểu đồ</h4>
+                        <p>Phần mềm Navis IoT — Giao diện thực tế đang vận hành</p>
+                    </div>
+                </div>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="f-icon">🔬</span>
+                        <div>
+                            <h4>Thông Số Cảm Biến Real-time</h4>
+                            <p>Hiển thị pH, EC, áp suất, lưu lượng, nhiệt độ — cập nhật tự động mỗi giây.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">📈</span>
+                        <div>
+                            <h4>Biểu Đồ Xu Hướng</h4>
+                            <p>Line chart & bar chart thời gian thực. Zoom, lọc theo khoảng thời gian tùy chọn.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">🎛️</span>
+                        <div>
+                            <h4>Điều Khiển Từ Xa</h4>
+                            <p>Bật/tắt bơm, van, thiết bị từ web. Có khóa bảo mật và xác nhận thao tác.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">🏭</span>
+                        <div>
+                            <h4>Sơ Đồ P&ID Mô Phỏng</h4>
+                            <p>Hiển thị sơ đồ nguyên lý hoạt động, trạng thái thiết bị trực quan trên sơ đồ P&ID.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">📊</span>
+                        <div>
+                            <h4>Thống Kê & Xuất Báo Cáo</h4>
+                            <p>Xuất Excel / ISO / PDF. Tự động tổng lưu lượng, trung bình, min/max.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-nav-bottom">
+            <a href="#water-quality" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 6: GIÁM SÁT CHẤT LƯỢNG NƯỚC -->
+    <!-- =============================== -->
+    <section class="slide" id="water-quality" style="background: var(--bg);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">05 — Giám Sát Chất Lượng Nước</div>
+                <h2 class="slide-title">
+                    Giám Sát <span class="accent">Chất Lượng Nước & Cảnh Báo Ngưỡng</span>
+                </h2>
+                <p class="slide-desc">
+                    Theo dõi chất lượng nước sạch, nước thải với cảnh báo tự động khi vượt ngưỡng.
+                </p>
+            </div>
+
+            <div class="two-col reverse">
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="f-icon">💧</span>
+                        <div>
+                            <h4>Đa Thông Số Chất Lượng Nước</h4>
+                            <p>Giám sát đồng thời: Độ tinh khiết (µS/cm), TDS, pH, Nhiệt độ — ngưỡng High/Low Alarm.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">⚠️</span>
+                        <div>
+                            <h4>Cảnh Báo Vượt Ngưỡng Cao</h4>
+                            <p>Tự động phát hiện vượt ngưỡng, hiển thị "VƯỢT NGƯỠNG CAO" với indicator đỏ nổi bật.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">🔄</span>
+                        <div>
+                            <h4>Trạng Thái Bơm & Phao</h4>
+                            <p>Giám sát ON/OFF bơm lọc thô, bơm RO, báo động cạn bồn — điều khiển từ xa.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">📉</span>
+                        <div>
+                            <h4>Biểu Đồ Lịch Sử Liên Tục</h4>
+                            <p>Xem lịch sử: Hôm nay, 3 ngày, 7 ngày, Tháng. Đường ngưỡng alarm rõ ràng.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="screenshot-container">
+                    <img src="navis-water-quality.png" alt="Navis - Giám sát chất lượng nước sạch">
+                    <div class="screenshot-label">
+                        <h4>💧 Giám sát nước sạch — Cảnh báo vượt ngưỡng</h4>
+                        <p>Phần mềm Navis IoT — Độ sạch nước nấu ăn</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <span class="hb-icon">🛡️</span>
+                <div>
+                    <h4>Cảnh Báo Đa Kênh Tự Động</h4>
+                    <p>Khi vượt ngưỡng, hệ thống gửi cảnh báo qua: Web notification, Email, Telegram, SMS — đảm bảo nắm
+                        tình hình ngay lập tức.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-nav-bottom">
+            <a href="#map-monitoring" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 7: GIÁM SÁT BẢN ĐỒ       -->
+    <!-- =============================== -->
+    <section class="slide" id="map-monitoring" style="background: var(--bg-white);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">06 — Giám Sát Bản Đồ</div>
+                <h2 class="slide-title">
+                    Bản Đồ <span class="accent">Giám Sát Trạm Toàn Quốc</span>
+                </h2>
+                <p class="slide-desc">
+                    Chỉ cần mở 1 phần mềm — bạn có ngay tổng quan toàn bộ hệ thống trên bản đồ. Nhận biết tức thì trạm nào đang lỗi, trạm nào hoạt động bình thường.
+                </p>
+            </div>
+
+            <div class="two-col">
+                <div class="screenshot-container">
+                    <img src="navis-map-monitoring.png" alt="Navis - Bản đồ giám sát đa trạm toàn quốc">
+                    <div class="screenshot-label">
+                        <h4>🗺️ Bản đồ — 177+ trạm trên toàn quốc</h4>
+                        <p>Phần mềm Navis IoT — Click vào trạm xem chi tiết</p>
+                    </div>
+                </div>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="f-icon">🚀</span>
+                        <div>
+                            <h4>1 Phần Mềm — Quản Lý Tất Cả</h4>
+                            <p>Mở lên là có <strong style="color:var(--primary)">tổng quan nhanh chóng</strong> toàn bộ trạm — không cần gọi điện, không cần di chuyển, biết ngay tình trạng từng trạm.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">🟢</span>
+                        <div>
+                            <h4>Trạng Thái Trực Quan — Nhìn Là Biết</h4>
+                            <p>🟢 Xanh = Bình thường | 🔴 Đỏ = Lỗi | 🟡 Vàng = Cảnh báo. Không cần chuyên môn, ai nhìn cũng hiểu.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">📍</span>
+                        <div>
+                            <h4>Click Xem Thông Tin Realtime</h4>
+                            <p>Click vào trạm → <strong>hiển thị ngay</strong> giá trị cảm biến, thời gian cập nhật, trạng thái alarm — dữ liệu thời gian thực.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">📊</span>
+                        <div>
+                            <h4>Quản Lý Hàng Trăm Trạm Tập Trung</h4>
+                            <p><strong style="color:var(--primary)">177 trạm hoạt động</strong>, <strong style="color:var(--red)">15 trạm lỗi</strong>, <strong>349 thiết bị</strong> — tổng quan trong 1 giây, quản lý tập trung trên 1 màn hình.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-nav-bottom">
+            <a href="#multi-station" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 8: GIÁM SÁT ĐA TRẠM      -->
+    <!-- =============================== -->
+    <section class="slide" id="multi-station" style="background: var(--bg);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">07 — Giám Sát Đa Trạm</div>
+                <h2 class="slide-title">
+                    <span class="accent">1 Phần Mềm</span> — Quản Lý Tất Cả Trạm
+                </h2>
+                <p class="slide-desc">
+                    Mở lên là có thông tin tổng quan nhanh chóng của tất cả thiết bị. Không cần chạy ra trạm, không cần gọi điện — IoT giúp bạn quản lý hàng trăm trạm chỉ trên 1 màn hình.
+                </p>
+            </div>
+
+            <div class="screenshot-container" style="margin-bottom: 28px;">
+                <img src="navis-multi-station.png" alt="Navis - Giao diện giám sát nhiều trạm">
+                <div class="screenshot-label">
+                    <h4>📋 Grid View — Tổng quan nhanh tất cả trạm trên 1 màn hình</h4>
+                    <p>Phần mềm Navis IoT — Mỗi card là một trạm giám sát realtime</p>
+                </div>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feat-card">
+                    <div class="fc-icon">⚡</div>
+                    <h4>Tổng Quan Tức Thì</h4>
+                    <p><strong style="color:var(--primary)">Mở phần mềm = biết ngay</strong> tất cả trạm đang hoạt động hay lỗi, không mất thời gian tìm kiếm.</p>
+                </div>
+                <div class="feat-card">
+                    <div class="fc-icon">🔄</div>
+                    <h4>Dữ Liệu Realtime</h4>
+                    <p>Tự động cập nhật liên tục — cảm biến, trạng thái thiết bị luôn <strong style="color:var(--primary)">mới nhất</strong>, không cần refresh.</p>
+                </div>
+                <div class="feat-card">
+                    <div class="fc-icon">🔍</div>
+                    <h4>Tra Cứu Nhanh</h4>
+                    <p>Click vào bất kỳ trạm nào → <strong>xem ngay</strong> biểu đồ, lịch sử, điều khiển — tra cứu trong vài giây.</p>
+                </div>
+                <div class="feat-card">
+                    <div class="fc-icon">💰</div>
+                    <h4>Tiết Kiệm Chi Phí Vận Hành</h4>
+                    <p>Giảm nhân lực kiểm tra, giảm thời gian di chuyển — <strong style="color:var(--primary)">quản lý từ xa, hiệu quả gấp bội</strong>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-nav-bottom">
+            <a href="#alert-system" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 9: HỆ THỐNG CẢNH BÁO     -->
+    <!-- =============================== -->
+    <section class="slide" id="alert-system" style="background: var(--bg-white);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">08 — Hệ Thống Cảnh Báo</div>
+                <h2 class="slide-title">
+                    Cảnh Báo <span class="accent">Thông Minh & Đa Kênh</span>
+                </h2>
+                <p class="slide-desc">
+                    Phát hiện sự cố ngay lập tức và gửi cảnh báo đa kênh — không bỏ sót bất kỳ sự cố nào.
+                </p>
+            </div>
+
+            <div class="two-col">
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="f-icon">🚨</span>
+                        <div>
+                            <h4>Alarm Real-time</h4>
+                            <p>"EC High Alarm" — cảnh báo vàng nổi bật, trạng thái ON/OFF rõ ràng trên dashboard.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">⏱️</span>
+                        <div>
+                            <h4>Delay Timer Thông Minh</h4>
+                            <p>Cấu hình thời gian trễ cho từng alarm — tránh cảnh báo giả khi dao động tạm thời.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">📲</span>
+                        <div>
+                            <h4>Cảnh Báo Đa Kênh</h4>
+                            <p>📧 Email, 💬 Telegram, 📱 Push Notification, 📨 SMS — cấu hình linh hoạt.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="f-icon">📊</span>
+                        <div>
+                            <h4>Lịch Sử Cảnh Báo</h4>
+                            <p>Lưu đầy đủ lịch sử alarm: thời gian, thông số, giá trị — phục vụ phân tích & báo cáo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="screenshot-container">
+                    <img src="navis-alarm-detail.png" alt="Navis - Hệ thống cảnh báo chi tiết">
+                    <div class="screenshot-label">
+                        <h4>🚨 Alarm — EC High Alarm đang kích hoạt</h4>
+                        <p>Phần mềm Navis IoT — Cảnh báo, bơm, biểu đồ EC</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <span class="hb-icon">🛡️</span>
+                <div>
+                    <h4>Cảnh Báo Tự Động — Không Bỏ Sót Sự Cố</h4>
+                    <p>Hệ thống tự động phát hiện bất thường và gửi cảnh báo qua nhiều kênh cùng lúc — đảm bảo người quản lý <strong style="color:var(--primary)">nắm bắt tình hình ngay lập tức</strong>, dù đang ở bất kỳ đâu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 10: THỐNG KÊ HOẠT ĐỘNG    -->
+    <!-- =============================== -->
+    <section class="slide" id="statistics" style="background: var(--bg);">
+        <div class="slide-content">
+            <div class="slide-header">
+                <div class="slide-number">09 — Thống Kê Hoạt Động</div>
+                <h2 class="slide-title">
+                    Biểu Đồ Bật/Tắt & <span class="accent">Thống Kê Nâng Cao</span>
+                </h2>
+                <p class="slide-desc">
+                    Dữ liệu ON/OFF thiết bị được thu thập từ Gateway Navis MOD — tự động phân tích 
+                    thời gian hoạt động, phân bổ giờ điện, tối ưu chi phí vận hành.
+                </p>
+            </div>
+
+            <div class="two-col">
+                <div class="screenshot-container" onclick="openLightbox(this)">
+                    <img src="navis-statistics-activity.png" alt="Navis - Thống kê ON/OFF & Heatmap hoạt động 24h">
+                    <div class="screenshot-label">
+                        <h4>📊 Thống kê ON/OFF — Biểu đồ & Heatmap hoạt động</h4>
+                        <p>Phần mềm Navis IoT — Dữ liệu thu thập từ Gateway Navis MOD</p>
+                    </div>
+                    <div class="zoom-hint">🔍 Nhấn để phóng to</div>
+                </div>
+
+                <div>
+                    <div class="sf-card" style="margin-bottom:14px;">
+                        <div class="sf-icon">📊</div>
+                        <h3>Biểu Đồ Bật/Tắt Theo Ngày</h3>
+                        <p>Biểu đồ bar chart ON/OFF theo ngày, tổng thời gian bật và số lần bật — giúp quản lý đánh giá hiệu suất thiết bị.</p>
+                        <ul class="sf-list">
+                            <li>📈 <strong>Bật TB/ngày</strong> — Thời gian bật trung bình mỗi ngày</li>
+                            <li>📊 <strong>Đỉnh / Đáy</strong> — Ngày hoạt động nhiều nhất & ít nhất</li>
+                            <li>⏱️ <strong>Tổng ON / OFF</strong> — Tổng thời gian kèm số lần bật</li>
+                        </ul>
+                    </div>
+                    <div class="sf-card" style="margin-bottom:14px;">
+                        <div class="sf-icon">🕐</div>
+                        <h3>Phân Bổ Hoạt Động 24h & Giờ Điện</h3>
+                        <p>Heatmap hoạt động theo giờ — phân loại giờ thấp điểm / bình thường / cao điểm. Giúp tối ưu lịch vận hành để <strong style="color:var(--primary)">tiết kiệm chi phí điện năng</strong>.</p>
+                    </div>
+                    <div class="sf-card">
+                        <div class="sf-icon">📄</div>
+                        <h3>Xuất Báo Cáo Excel / ISO / QCVN</h3>
+                        <p>Tự động tổng hợp báo cáo số liệu thống kê, lên lịch gửi qua email — giảm thời gian lập báo cáo thủ công.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <span class="hb-icon">💰</span>
+                <div>
+                    <h4>Lợi Ích Thống Kê Thiết Bị</h4>
+                    <p>Biết chính xác thiết bị nào chạy bao lâu, bao nhiêu lần/ngày, giờ cao điểm nào — giúp <strong style="color:var(--primary)">giảm 15-30% chi phí điện năng</strong>, lên lịch bảo trì đúng thời điểm, phát hiện sớm thiết bị hoạt động bất thường.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lb-close" onclick="closeLightbox()">✕</div>
+        <img id="lightbox-img" src="" alt="Phóng to ảnh">
+    </div>
+
+    <!-- Page Navigation -->
+    <div class="page-nav">
+        <a href="Slide_IoT_Navis_Part1.html">Phần 1</a>
+        <a href="Slide_IoT_Navis_Part2.html" class="current">Phần 2</a>
+        <a href="Slide_IoT_Navis_Part3.html">Phần 3</a>
+    </div>
+
+    <script>
+        // Nav observer
+        const slides = document.querySelectorAll('.slide');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    const activeLink = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+        slides.forEach(slide => observer.observe(slide));
+
+        // Lightbox zoom
+        function openLightbox(container) {
+            const img = container.querySelector('img');
+            if (img) {
+                document.getElementById('lightbox-img').src = img.src;
+                document.getElementById('lightbox').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+        // Add click handler + zoom hint to all screenshot containers
+        document.querySelectorAll('.screenshot-container').forEach(container => {
+            if (!container.getAttribute('onclick')) {
+                container.setAttribute('onclick', 'openLightbox(this)');
+            }
+            if (!container.querySelector('.zoom-hint')) {
+                const hint = document.createElement('div');
+                hint.className = 'zoom-hint';
+                hint.textContent = '🔍 Nhấn để phóng to';
+                container.appendChild(hint);
+            }
+        });
+
+    </script>
+</body>
+
+</html>

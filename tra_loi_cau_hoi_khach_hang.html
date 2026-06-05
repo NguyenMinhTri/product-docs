@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Đáp Kỹ Thuật — Navis Smart Industry</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #1A237E;
+            --primary-light: #3949AB;
+            --primary-lighter: #E8EAF6;
+            --accent: #00BFA5;
+            --accent-dark: #00897B;
+            --bg: #F5F7FA;
+            --card-bg: #FFFFFF;
+            --text: #263238;
+            --text-light: #546E7A;
+            --text-lighter: #90A4AE;
+            --border: #E0E0E0;
+            --success: #2E7D32;
+            --success-bg: #E8F5E9;
+            --warning: #E65100;
+            --warning-bg: #FFF3E0;
+            --danger: #C62828;
+            --danger-bg: #FFEBEE;
+            --info: #1565C0;
+            --info-bg: #E3F2FD;
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --shadow-hover: 0 4px 20px rgba(0,0,0,0.12);
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #283593 50%, var(--primary-light) 100%);
+            color: white;
+            padding: 48px 24px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.85;
+            position: relative;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-top: 16px;
+            position: relative;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        /* ===== SYSTEM DIAGRAM ===== */
+        .diagram-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+        .diagram-section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .diagram-svg {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* ===== SECTION ===== */
+        .section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        .section:hover { box-shadow: var(--shadow-hover); }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 18px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+            transition: opacity 0.2s;
+        }
+        .section-header:hover { opacity: 0.92; }
+        .section-header .icon { font-size: 22px; }
+        .section-header h2 { font-size: 17px; font-weight: 700; flex: 1; }
+        .section-header .toggle {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+            font-weight: 300;
+        }
+        .section.collapsed .toggle { transform: rotate(-90deg); }
+        .section-body {
+            padding: 24px;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            overflow: hidden;
+        }
+        .section.collapsed .section-body {
+            max-height: 0;
+            padding: 0 24px;
+        }
+
+        /* ===== QA ITEMS ===== */
+        .qa-item {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .qa-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        .qa-question {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+        .qa-question .q-num {
+            background: var(--primary);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        .qa-answer { color: var(--text); padding-left: 0; }
+        .qa-answer p { margin-bottom: 10px; }
+
+        /* ===== TABLE ===== */
+        .qa-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 14px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .qa-table th {
+            background: var(--primary-lighter);
+            color: var(--primary);
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+        .qa-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #F0F0F0;
+            vertical-align: top;
+        }
+        .qa-table tr:last-child td { border-bottom: none; }
+        .qa-table tr:nth-child(even) td { background: #FAFBFC; }
+        .qa-table .yes { color: var(--success); font-weight: 600; }
+        .qa-table .no { color: var(--danger); font-weight: 600; }
+        .qa-table .partial { color: var(--warning); font-weight: 600; }
+
+        /* ===== NOTE BOX ===== */
+        .note {
+            background: var(--info-bg);
+            border-left: 4px solid var(--info);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+            font-size: 14px;
+            color: #1A237E;
+        }
+        .note.warning {
+            background: var(--warning-bg);
+            border-color: var(--warning);
+            color: #BF360C;
+        }
+        .note.success {
+            background: var(--success-bg);
+            border-color: var(--success);
+            color: #1B5E20;
+        }
+
+        /* ===== SPEC TABLE ===== */
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .spec-table th {
+            background: var(--primary);
+            color: white;
+            padding: 10px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .spec-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+        .spec-table td:first-child {
+            font-weight: 500;
+            color: var(--text);
+            width: 200px;
+        }
+        .spec-table tr:nth-child(even) td { background: #FAFBFC; }
+
+        /* ===== CHECK LIST ===== */
+        .check-list { list-style: none; padding: 0; margin: 8px 0; }
+        .check-list li {
+            padding: 6px 0 6px 28px;
+            position: relative;
+            font-size: 14px;
+        }
+        .check-list li::before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            top: 6px;
+        }
+        .check-list li.no::before { content: '❌'; }
+        .check-list li.warn::before { content: '⚠️'; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .footer .contact {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .footer .contact span { display: flex; align-items: center; gap: 6px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 22px; }
+            .section-body { padding: 16px; }
+            .qa-table { font-size: 13px; }
+            .qa-table th, .qa-table td { padding: 8px 10px; }
+            .footer .contact { flex-direction: column; align-items: center; gap: 8px; }
+        }
+
+        @media print {
+            .section.collapsed .section-body { max-height: none; padding: 24px; }
+            .toggle { display: none; }
+            .header { padding: 24px; }
+            body { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <h1>GIẢI ĐÁP CÁC CÂU HỎI KỸ THUẬT</h1>
+    <div class="subtitle">Nền tảng Giám sát IoT Công nghiệp — Navis Smart Industry</div>
+    <div class="badge">📋 Tài liệu kỹ thuật &nbsp;•&nbsp; Đại Việt IoT</div>
+</div>
+
+<div class="container">
+
+<!-- ===== SƠ ĐỒ HỆ THỐNG ===== -->
+<div class="diagram-section">
+    <h2>📐 SƠ ĐỒ KIẾN TRÚC HỆ THỐNG</h2>
+    <svg class="diagram-svg" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background -->
+        <defs>
+            <linearGradient id="gw-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1A237E;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#3949AB;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="cloud-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00897B;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#00BFA5;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="app-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#E65100;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#FF8F00;stop-opacity:1" />
+            </linearGradient>
+            <filter id="shadow-f">
+                <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.15"/>
+            </filter>
+        </defs>
+
+        <!-- ===== TẦNG 1: THIẾT BỊ HIỆN TRƯỜNG ===== -->
+        <text x="450" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#1A237E">TẦNG 1 — THIẾT BỊ HIỆN TRƯỜNG</text>
+
+        <!-- Sensor box -->
+        <rect x="30" y="45" width="160" height="80" rx="10" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" filter="url(#shadow-f)"/>
+        <text x="110" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#1A237E">🔌 Cảm biến / PLC</text>
+        <text x="110" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">pH, COD, Temp, Flow...</text>
+        <text x="110" y="106" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">Modbus RTU / TCP</text>
+
+        <!-- DI/DO box -->
+        <rect x="220" y="45" width="140" height="80" rx="10" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" filter="url(#shadow-f)"/>
+        <text x="290" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#1A237E">⚡ DI / DO</text>
+        <text x="290" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">Trạng thái On/Off</text>
+        <text x="290" y="106" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">Qua Modbus</text>
+
+        <!-- Đồng hồ đo -->
+        <rect x="390" y="45" width="140" height="80" rx="10" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" filter="url(#shadow-f)"/>
+        <text x="460" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#1A237E">📊 Đồng hồ đo</text>
+        <text x="460" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">V, A, kW, kWh</text>
+        <text x="460" y="106" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">RS485 / Modbus</text>
+
+        <!-- Lưu lượng kế -->
+        <rect x="560" y="45" width="140" height="80" rx="10" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" filter="url(#shadow-f)"/>
+        <text x="630" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#1A237E">💧 Lưu lượng kế</text>
+        <text x="630" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">Flow meter</text>
+        <text x="630" y="106" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">Pulse / RS485</text>
+
+        <!-- Camera -->
+        <rect x="730" y="45" width="140" height="80" rx="10" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5" filter="url(#shadow-f)"/>
+        <text x="800" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#1A237E">📷 Camera</text>
+        <text x="800" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">Giám sát hình ảnh</text>
+        <text x="800" y="106" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#546E7A">RTSP</text>
+
+        <!-- RS485 bus line -->
+        <line x1="110" y1="125" x2="110" y2="175" stroke="#3949AB" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="290" y1="125" x2="290" y2="175" stroke="#3949AB" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="460" y1="125" x2="460" y2="175" stroke="#3949AB" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="630" y1="125" x2="630" y2="175" stroke="#3949AB" stroke-width="2" stroke-dasharray="5,3"/>
+
+        <text x="370" y="155" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#3949AB" font-weight="600">── RS485 Bus (Modbus RTU) ──</text>
+
+        <!-- ===== TẦNG 2: GATEWAY ===== -->
+        <text x="450" y="192" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#1A237E">TẦNG 2 — GATEWAY</text>
+
+        <rect x="250" y="200" width="400" height="90" rx="14" fill="url(#gw-grad)" filter="url(#shadow-f)"/>
+        <text x="450" y="228" text-anchor="middle" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="white">⚙️ Gateway Navis MOD</text>
+        <text x="450" y="250" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">RS485 → Cloud &nbsp;|&nbsp; Tối đa 100 tag &nbsp;|&nbsp; OTA Update</text>
+        <text x="450" y="270" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="rgba(255,255,255,0.85)">WiFi / Ethernet / 4G (VN) &nbsp;|&nbsp; Watchdog &nbsp;|&nbsp; Auto-restart</text>
+
+        <!-- Connection lines gateway to cloud -->
+        <line x1="450" y1="290" x2="450" y2="340" stroke="#00897B" stroke-width="3"/>
+        <text x="520" y="320" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#00897B" font-weight="600">MQTT + TLS/SSL 🔒</text>
+
+        <!-- ===== TẦNG 3: CLOUD ===== -->
+        <text x="450" y="355" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#00695C">TẦNG 3 — CLOUD SERVER (Google Cloud — Đại lý VN, có VAT)</text>
+
+        <rect x="120" y="365" width="660" height="65" rx="14" fill="url(#cloud-grad)" filter="url(#shadow-f)"/>
+        <text x="450" y="393" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="white">☁️ Cloud Platform</text>
+        <text x="450" y="413" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="rgba(255,255,255,0.9)">Lưu trữ dữ liệu &nbsp;|&nbsp; Xử lý cảnh báo &nbsp;|&nbsp; Báo cáo tự động &nbsp;|&nbsp; Backup &nbsp;|&nbsp; API</text>
+
+        <!-- Connection cloud to apps -->
+        <line x1="300" y1="430" x2="200" y2="470" stroke="#E65100" stroke-width="2.5"/>
+        <line x1="450" y1="430" x2="450" y2="470" stroke="#E65100" stroke-width="2.5"/>
+        <line x1="600" y1="430" x2="700" y2="470" stroke="#E65100" stroke-width="2.5"/>
+
+        <!-- ===== TẦNG 4: ỨNG DỤNG ===== -->
+        <text x="450" y="465" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#E65100">TẦNG 4 — ỨNG DỤNG NGƯỜI DÙNG</text>
+
+        <!-- Web App -->
+        <rect x="100" y="475" width="200" height="40" rx="8" fill="url(#app-grad)" filter="url(#shadow-f)"/>
+        <text x="200" y="500" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="white">🖥️ Web App (Domain riêng)</text>
+
+        <!-- Mobile App -->
+        <rect x="350" y="475" width="200" height="40" rx="8" fill="url(#app-grad)" filter="url(#shadow-f)"/>
+        <text x="450" y="500" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="white">📱 App Navis (iOS/Android)</text>
+
+        <!-- Push Notification -->
+        <rect x="600" y="475" width="200" height="40" rx="8" fill="url(#app-grad)" filter="url(#shadow-f)"/>
+        <text x="700" y="500" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="white">🔔 Push + Email Alert</text>
+    </svg>
+</div>
+
+<!-- ===== 1. GATEWAY ===== -->
+<div class="section" id="sec-1">
+    <div class="section-header" onclick="toggleSection('sec-1')">
+        <span class="icon">⚙️</span>
+        <h2>1. Gateway / Phần Cứng</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.1</span> Gateway có bao nhiêu cổng RS485?</div>
+            <div class="qa-answer">
+                <p>Gateway Navis MOD có <strong>1 cổng RS485</strong>. Trên bus RS485 này có thể đấu nối <strong>nhiều thiết bị Modbus</strong> theo kiểu daisy-chain (mỗi thiết bị có Slave ID riêng), nên 1 cổng RS485 đủ để đọc đồng thời nhiều thiết bị trên cùng 1 tuyến.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.2</span> Có hỗ trợ Modbus RTU, Modbus TCP/IP, 4-20mA, 0-10V, DI/DO, Pulse không?</div>
+            <div class="qa-answer">
+                <table class="qa-table">
+                    <tr><th>Giao thức</th><th>Hỗ trợ</th><th>Ghi chú</th></tr>
+                    <tr><td>Modbus RTU</td><td class="yes">✅ Có</td><td>Giao thức chính, giao tiếp qua RS485</td></tr>
+                    <tr><td>Modbus TCP/IP</td><td class="yes">✅ Có</td><td>Kết nối thiết bị qua mạng TCP/IP</td></tr>
+                    <tr><td>DI/DO</td><td class="yes">✅ Có</td><td>Đọc/ghi trạng thái DI/DO qua giao tiếp Modbus</td></tr>
+                    <tr><td>Pulse</td><td class="partial">⚠️ Gián tiếp</td><td>Cần bộ chuyển đổi Analog → Modbus</td></tr>
+                    <tr><td>Pulse</td><td class="partial">⚠️ Gián tiếp</td><td>Cần bộ chuyển đổi 0-10V → Modbus</td></tr>
+                    <tr><td>Pulse</td><td class="partial">⚠️ Gián tiếp</td><td>Đọc pulse counter qua thanh ghi Modbus</td></tr>
+                </table>
+                <div class="note">
+                    <strong>Lưu ý:</strong> Gateway hoạt động trên nền Modbus. Với thiết bị có ngõ ra analog, chỉ cần thêm <strong>bộ chuyển đổi analog sang Modbus</strong> (giá thành thấp) là gateway đọc được bình thường.
+                </div>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.3</span> Gateway có sẵn 4G không? Nếu không có LAN/Wi-Fi thì giải pháp là gì?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>, Gateway Navis MOD hỗ trợ <strong>3 phương thức kết nối</strong>:</p>
+                <table class="qa-table">
+                    <tr><th>Kết nối</th><th>Cách kích hoạt</th></tr>
+                    <tr><td>WiFi</td><td>Giữ nút Config >5s, kết nối WiFi 2.4GHz qua App</td></tr>
+                    <tr><td>LAN (Ethernet)</td><td>Cắm cáp mạng, nhấn 1 lần nút</td></tr>
+                    <tr><td>4G</td><td>Lắm SIM 4G, tự động kết nối</td></tr>
+                </table>
+                <div class="note warning">
+                    <strong>Lưu ý:</strong> 4G hiện <strong>chỉ hỗ trợ tại Việt Nam</strong> (SIM Viettel/Mobi/Vina). Dự án tại Campuchia hoặc nước ngoài sử dụng <strong>WiFi hoặc Ethernet</strong>.
+                </div>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.4</span> Gateway đọc tối đa bao nhiêu thiết bị/cảm biến/tag?</div>
+            <div class="qa-answer">
+                <p>Gateway hỗ trợ tối đa <strong>100 tag</strong> cho mỗi trạm.</p>
+                <div class="note success">
+                    <strong>Khuyến nghị:</strong> Nên ưu tiên chọn các <strong>tag quan trọng</strong> để giám sát (tag cảnh báo lỗi, cảm biến chất lượng, thông số vận hành chính...) thay vì đọc toàn bộ thanh ghi. Điều này giúp tối ưu tốc độ và đảm bảo dữ liệu cập nhật kịp thời.
+                </div>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.5</span> Khi mất Internet, gateway có lưu dữ liệu cục bộ không?</div>
+            <div class="qa-answer">
+                <p><strong>Không</strong>. Gateway hoạt động theo cơ chế <strong>đọc → gửi trực tiếp lên Cloud</strong>. Khi mất Internet, dữ liệu trong khoảng thời gian đó sẽ không được lưu. Gateway sẽ <strong>tự động kết nối lại</strong> ngay khi có mạng.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.6</span> Nếu có lưu cục bộ thì lưu được bao lâu?</div>
+            <div class="qa-answer">
+                <p>Hiện tại chưa hỗ trợ lưu cục bộ. Tính năng này đang được xem xét phát triển trong các phiên bản tương lai.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.7</span> Khi có mạng lại, dữ liệu có tự động gửi bù không?</div>
+            <div class="qa-answer">
+                <p>Do gateway không lưu trữ cục bộ, không có chức năng gửi bù. Tuy nhiên, gateway sẽ <strong>tự động reconnect</strong> và gửi dữ liệu mới ngay khi có mạng.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.8</span> Gateway có watchdog, RTC, chống treo, tự khởi động lại không?</div>
+            <div class="qa-answer">
+                <p><strong>Có đầy đủ</strong> các cơ chế bảo vệ:</p>
+                <table class="qa-table">
+                    <tr><th>Tính năng</th><th>Mô tả</th></tr>
+                    <tr><td>Watchdog (WDT)</td><td>Tự phát hiện treo và tự khởi động lại</td></tr>
+                    <tr><td>Chống treo</td><td>Giám sát liên tục kết nối, bộ nhớ, hoạt động module</td></tr>
+                    <tr><td>Tự restart</td><td>Tự restart khi phát hiện bất thường</td></tr>
+                    <tr><td>OTA Update</td><td>Cập nhật firmware từ xa, không cần ra hiện trường</td></tr>
+                    <tr><td>Đồng bộ thời gian</td><td>Tự động đồng bộ qua Internet</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.9</span> Gateway bảo hành bao lâu?</div>
+            <div class="qa-answer"><p><strong>Bảo hành 12 tháng</strong> kể từ ngày nghiệm thu.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">1.10</span> Có tài liệu kỹ thuật chi tiết / datasheet không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>. Bao gồm: thông số kỹ thuật, hướng dẫn đấu nối, cấu hình, sử dụng App/Web, kết nối thiết bị.</p>
+                <table class="spec-table">
+                    <tr><th>Thông số</th><th>Chi tiết</th></tr>
+                    <tr><td>Nguồn điện</td><td>12 – 24 VDC</td></tr>
+                    <tr><td>Giao tiếp</td><td>RS485, TCP/IP</td></tr>
+                    <tr><td>Kết nối</td><td>WiFi / Ethernet / 4G (4G chỉ tại VN)</td></tr>
+                    <tr><td>Kích thước</td><td>10 × 7.5 × 3 cm</td></tr>
+                    <tr><td>LED chỉ thị</td><td>WiFi, TX/RX, Power</td></tr>
+                    <tr><td>Giao thức</td><td>Modbus RTU / Modbus TCP</td></tr>
+                    <tr><td>Số tag tối đa</td><td>100 tag/trạm</td></tr>
+                    <tr><td>Bảo mật</td><td>Mã hóa dữ liệu, xác thực JWT</td></tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== 2. KẾT NỐI THIẾT BỊ ===== -->
+<div class="section" id="sec-2">
+    <div class="section-header" onclick="toggleSection('sec-2')">
+        <span class="icon">🔗</span>
+        <h2>2. Kết Nối Thiết Bị</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">2.1</span> Có hỗ trợ cấu hình đọc thiết bị qua RS485/Modbus RTU không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>. Cấu hình đơn giản qua App: Mở App → Settings → Advance Settings → Modbus Settings → Chọn template hoặc nhập cấu hình → Lưu → Update (20-30s gateway nhận cấu hình mới).</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">2.2</span> Cần cung cấp thông tin gì từ thiết bị đo?</div>
+            <div class="qa-answer">
+                <ul class="check-list">
+                    <li>Slave ID (địa chỉ Modbus)</li>
+                    <li>Baudrate (9600, 19200, 115200...)</li>
+                    <li>Register map (địa chỉ thanh ghi, function code, kiểu dữ liệu)</li>
+                    <li>Parity (None, Even, Odd)</li>
+                    <li>Stop bits (1, 2)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">2.3</span> Có xử lý được INT, UINT, FLOAT32, đảo byte/word không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>, hỗ trợ: INT16, UINT16, INT32, UINT32, FLOAT32, đảo byte/word, Boolean/Coil, hệ số scale.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">2.4</span> Thiết bị không có Modbus map thì xử lý thế nào?</div>
+            <div class="qa-answer">
+                <p>Sử dụng <strong>bộ chuyển đổi</strong> sang Modbus RTU, hoặc nhận dữ liệu từ Data Logger qua FTP. Đội ngũ kỹ thuật hỗ trợ phân tích datasheet và cấu hình phù hợp.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">2.5</span> Có hỗ trợ kết nối PLC/SCADA hiện hữu không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>. Kết nối PLC qua Modbus RTU/TCP: giám sát trạng thái (🟢 Chạy / 🟡 Dừng / 🔴 Lỗi), đọc thanh ghi PLC (Cảm biến, cài đặt,..). Chú ý thiết bị phải xuất được Modbus.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== 3. WEB / APP ===== -->
+<div class="section" id="sec-3">
+    <div class="section-header" onclick="toggleSection('sec-3')">
+        <span class="icon">📱</span>
+        <h2>3. Web / App</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">3.1</span> Gói 45 triệu là app/web riêng hay trên nền tảng Navis?</div>
+            <div class="qa-answer"><p><strong>Xây dựng trên nền tảng Navis có sẵn</strong>, tùy chỉnh white-label theo thương hiệu quý công ty: logo, tên miền, màu sắc, branding.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">3.2</span> App/web áp dụng cho Campuchia hay dùng chung?</div>
+            <div class="qa-answer"><p><strong>App dùng chung, còn web có thể tách riêng theo domain</strong> cho toàn bộ công trình tại VN, Campuchia và các thị trường khác. Hiện quản lý 177+ trạm, không giới hạn vùng địa lý.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">3.3</span> Chi phí mở rộng thêm trạm/khu vực?</div>
+            <div class="qa-answer">
+                <ul class="check-list">
+                    <li>Thêm gateway + cấu hình, phí duy trì/năm theo trạm</li>
+                    <li>Dùng lại giao diện có sẵn → không phí lập trình</li>
+                    <li class="warn">Thay đổi giao diện/tính năng nhiều → báo giá tùy dự án</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">3.6</span> Có đổi được logo, tên miền, màu sắc không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>. Logo, màu sắc, branding tùy chỉnh theo khách hàng. <strong>Tên miền do khách hàng tự cấp</strong>, hệ thống trỏ web app về domain đó (phí cloud web hosting đã bao gồm).</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">3.7</span> Có app riêng trên App Store/Google Play theo tên công ty?</div>
+            <div class="qa-answer">
+                <p>Sử dụng <strong>chung app Navis Smart Industry</strong> (iOS + Android). Khi khách hàng mở app, giao diện <strong>chỉ hiển thị thông tin và thương hiệu của công ty khách hàng</strong> (logo, tên, các trạm của khách) — không lẫn lộn với khách hàng khác.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">3.8</span> Gồm bao nhiêu màn hình/chức năng?</div>
+            <div class="qa-answer">
+                <p>Khoảng <strong>15-20+ màn hình/chức năng</strong>:</p>
+                <table class="qa-table">
+                    <tr><th>Mobile App (iOS + Android)</th><th>Web App</th></tr>
+                    <tr><td>Dashboard tổng quan trạm</td><td>Dashboard overview</td></tr>
+                    <tr><td>Chi tiết trạm — realtime</td><td>Chi tiết thiết bị + realtime</td></tr>
+                    <tr><td>Biểu đồ xu hướng</td><td>Biểu đồ lịch sử</td></tr>
+                    <tr><td>Lịch sử cảnh báo</td><td>Bản đồ trạm (Map)</td></tr>
+                    <tr><td>Điều khiển bật/tắt từ xa</td><td>Báo cáo & Xuất Excel/PDF</td></tr>
+                    <tr><td>QR thêm thiết bị</td><td>Quản lý người dùng/phân quyền</td></tr>
+                    <tr><td>Cài đặt cảnh báo, Modbus</td><td>Thống kê ON/OFF, heatmap</td></tr>
+                    <tr><td>Quản lý tài khoản</td><td>Sơ đồ P&ID (tùy dự án)</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">3.10</span> Web/app có realtime, lịch sử, biểu đồ, map?</div>
+            <div class="qa-answer">
+                <table class="qa-table">
+                    <tr><th>Tính năng</th><th>Web</th><th>App</th></tr>
+                    <tr><td>Realtime</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+                    <tr><td>Lịch sử</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+                    <tr><td>Biểu đồ (chart, zoom, lọc)</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+                    <tr><td>Bảng dữ liệu</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+                    <tr><td>Map trạm</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+                    <tr><td>Thống kê ON/OFF</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">3.11</span> Có phân quyền admin, kỹ thuật, khách hàng?</div>
+            <div class="qa-answer">
+                <table class="qa-table">
+                    <tr><th>Vai trò</th><th>Quyền</th></tr>
+                    <tr><td>Owner</td><td>Toàn quyền: quản lý, cài đặt, chia sẻ, thu hồi</td></tr>
+                    <tr><td>Admin</td><td>Quản lý người dùng, cấu hình hệ thống</td></tr>
+                    <tr><td>Kỹ thuật</td><td>Xem dữ liệu, cài đặt cảm biến, điều khiển</td></tr>
+                    <tr><td>Viewer</td><td>Chỉ xem dữ liệu (chia sẻ qua QR)</td></tr>
+                </table>
+                <p>Phân quyền theo <strong>từng trạm</strong> riêng biệt. Có thể cấp/thu hồi bất cứ lúc nào.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== 4. CẢNH BÁO ===== -->
+<div class="section" id="sec-4">
+    <div class="section-header" onclick="toggleSection('sec-4')">
+        <span class="icon">🔔</span>
+        <h2>4. Cảnh Báo</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">4.1</span> Hệ thống cảnh báo qua những kênh nào?</div>
+            <div class="qa-answer">
+                <table class="qa-table">
+                    <tr><th>Kênh</th><th>Hỗ trợ</th><th>Ghi chú</th></tr>
+                    <tr><td>App Push Notification</td><td class="yes">✅</td><td>Thông báo trực tiếp lên điện thoại (iOS + Android) và Web</td></tr>
+                    <tr><td>Email</td><td class="yes">✅</td><td>Gửi cảnh báo qua email</td></tr>
+                    <tr><td>Còi alarm tại chỗ</td><td class="yes">✅</td><td>Bật relay trên thiết bị qua Modbus</td></tr>
+                </table>
+                <div class="note">Vì đã có <strong>App Push Notification</strong> gửi cảnh báo trực tiếp lên điện thoại nên không cần thêm kênh SMS, Zalo hay Telegram.</div>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">4.3</span> Có cài ngưỡng cao/thấp cho từng thông số không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>, hỗ trợ cảnh báo <strong>ngưỡng đa cấp</strong> cho từng cảm biến: High Alarm cấp 1 & 2, Low Alarm cấp 1 & 2. Mỗi ngưỡng bật/tắt riêng biệt.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">4.4</span> Có thời gian trễ cảnh báo để tránh báo giả không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>. <strong>Delay Timer</strong>: Cài thời gian trễ (giây/phút). Nếu giá trị trở lại bình thường trong thời gian trễ → tự động hủy (không báo giả). Kèm tính năng <strong>Repeat Alarm</strong> — gửi lại nhiều lần nếu chưa xử lý.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">4.5</span> Có lưu lịch sử cảnh báo không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Toàn bộ lịch sử cảnh báo lưu trên cloud: thời gian, giá trị vượt ngưỡng, loại cảnh báo, trạm/cảm biến. Xem trên cả Web và App.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">4.6</span> Có phân quyền nhận cảnh báo theo trạm không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Cảnh báo gửi theo từng trạm — chỉ user được cấp quyền mới nhận. Owner quản lý danh sách người nhận.</p></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== 5. DỮ LIỆU / BÁO CÁO ===== -->
+<div class="section" id="sec-5">
+    <div class="section-header" onclick="toggleSection('sec-5')">
+        <span class="icon">📊</span>
+        <h2>5. Dữ Liệu / Báo Cáo</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">5.1</span> Dữ liệu được lưu bao lâu?</div>
+            <div class="qa-answer"><p>Dữ liệu lưu <strong>dài hạn trên cloud</strong>, không tự xóa. Hợp đồng duy trì 3-5 năm (gia hạn được).</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">5.2</span> Server đặt ở đâu?</div>
+            <div class="qa-answer">
+                <p>Sử dụng dịch vụ <strong>Google Cloud</strong>, thuê qua <strong>đại lý Google Cloud Việt Nam</strong> (có hóa đơn <strong>VAT đầy đủ</strong>). Server khu vực <strong>châu Á</strong>, tốc độ nhanh, mã hóa theo chuẩn quốc tế.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">5.3</span> Có backup dữ liệu không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Hệ thống cloud có backup dữ liệu, đảm bảo an toàn và khả năng phục hồi khi cần.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">5.4</span> Dừng dịch vụ có xuất được dữ liệu không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Dữ liệu thuộc <strong>sở hữu của khách hàng</strong>. Có quyền xuất toàn bộ (Excel, CSV).</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">5.5</span> Xuất báo cáo định dạng nào?</div>
+            <div class="qa-answer">
+                <p><strong>Excel (.xlsx)</strong> — báo cáo chuyên nghiệp: header công ty, biểu đồ nhúng, ngưỡng tô màu, thống kê Min/Max/Avg. <strong>PDF</strong> — báo cáo theo mẫu chuẩn.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">5.6</span> Có báo cáo tự động gửi email không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Cấu hình email, xuất tự động theo chu kỳ ngày/tuần/tháng, gửi file đính kèm.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">5.7</span> Có tùy chỉnh báo cáo theo mẫu công ty không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Báo cáo tự động lấy tên công ty, địa chỉ, SĐT, email từ cấu hình. Có thể phát triển thêm template theo yêu cầu.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">5.8</span> Có log thao tác không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Log hoạt động, log cảnh báo, log điều khiển bật/tắt thiết bị từ xa.</p></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== 6. BẢO MẬT ===== -->
+<div class="section" id="sec-6">
+    <div class="section-header" onclick="toggleSection('sec-6')">
+        <span class="icon">🔒</span>
+        <h2>6. Bảo Mật</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">6.1</span> Giao thức truyền dữ liệu?</div>
+            <div class="qa-answer"><p><strong>MQTT/HTTPS</strong> (giao thức IoT tiêu chuẩn) kết hợp <strong>mã hóa TLS/SSL</strong>.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">6.2</span> Dữ liệu có mã hóa không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>, mã hóa nhiều lớp:</p>
+                <table class="qa-table">
+                    <tr><th>Lớp</th><th>Mô tả</th></tr>
+                    <tr><td>Gateway → Cloud</td><td>TLS/SSL trên đường truyền</td></tr>
+                    <tr><td>Web App</td><td>HTTPS (SSL certificate)</td></tr>
+                    <tr><td>Mobile App</td><td>HTTPS, mã hóa giao tiếp</td></tr>
+                    <tr><td>Xác thực</td><td>JWT token, private key, auto-refresh</td></tr>
+                    <tr><td>Lưu trữ</td><td>Mã hóa trên server cloud</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">6.3</span> Có xác thực 2 lớp không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Hỗ trợ: SĐT + OTP, đăng nhập Google, Apple, Email + Mật khẩu.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">6.6</span> Ai sở hữu dữ liệu?</div>
+            <div class="qa-answer"><p><strong>Khách hàng là chủ sở hữu</strong> toàn bộ dữ liệu. Đại Việt IoT chỉ là nhà cung cấp nền tảng.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">6.7</span> Nhân sự Đại Việt có xem/sửa dữ liệu không?</div>
+            <div class="qa-answer"><p>Chỉ truy cập để <strong>hỗ trợ kỹ thuật</strong>. Không can thiệp dữ liệu đo. Mọi thao tác có log. Có thể ký cam kết bảo mật.</p></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== 7. PHÍ VÀ HỢP ĐỒNG ===== -->
+<div class="section" id="sec-7">
+    <div class="section-header" onclick="toggleSection('sec-7')">
+        <span class="icon">💰</span>
+        <h2>7. Phí và Hợp Đồng</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">7.1</span> Phí 5.500.000 VNĐ/năm/trạm bao gồm gì?</div>
+            <div class="qa-answer">
+                <ul class="check-list">
+                    <li>Cloud server (Google Cloud, có VAT)</li>
+                    <li>Phần mềm Web App + Mobile App</li>
+                    <li>Lưu trữ dữ liệu lịch sử</li>
+                    <li>Cảnh báo qua App Push + Email</li>
+                    <li>Hỗ trợ kỹ thuật từ xa</li>
+                    <li>Cập nhật phần mềm, vá lỗi</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">7.3</span> Phí server/cloud đã bao gồm chưa?</div>
+            <div class="qa-answer"><p><strong>Đã bao gồm</strong> trong phí duy trì. Google Cloud thuê qua đại lý Việt Nam, có hóa đơn VAT đầy đủ.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">7.4</span> Phí domain, SSL, SIM 4G đã bao gồm chưa?</div>
+            <div class="qa-answer">
+                <table class="qa-table">
+                    <tr><th>Hạng mục</th><th>Bao gồm?</th><th>Ghi chú</th></tr>
+                    <tr><td>Tên miền (domain)</td><td class="no">❌</td><td>Khách hàng tự cấp tên miền riêng</td></tr>
+                    <tr><td>Cloud web hosting</td><td class="yes">✅</td><td>Đã bao gồm</td></tr>
+                    <tr><td>SSL</td><td class="yes">✅</td><td>Tự động cấp, miễn phí</td></tr>
+                    <tr><td>SIM 4G</td><td class="no">❌</td><td>Khách tự mua SIM (chỉ VN)</td></tr>
+                    <tr><td>Email cảnh báo</td><td class="yes">✅</td><td>Không giới hạn</td></tr>
+                    <tr><td>Push Notification</td><td class="yes">✅</td><td>Miễn phí, không giới hạn</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">7.6</span> Tăng tag/cảm biến thì tính phí thế nào?</div>
+            <div class="qa-answer"><p>Trong giới hạn <strong>100 tag/gateway</strong> → miễn phí. Vượt giới hạn cần thêm gateway → phí gateway + duy trì.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">7.7</span> Có phí bảo trì onsite không?</div>
+            <div class="qa-answer"><p><strong>Ưu tiên hỗ trợ từ xa</strong> (bao gồm trong phí duy trì). Onsite tính riêng tùy khoảng cách và thời gian.</p></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== 8. NGHIỆM THU VÀ HỖ TRỢ ===== -->
+<div class="section" id="sec-8">
+    <div class="section-header" onclick="toggleSection('sec-8')">
+        <span class="icon">🤝</span>
+        <h2>8. Nghiệm Thu và Hỗ Trợ</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">8.1</span> Có demo trạm thật online không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. 177+ trạm đang online. Demo qua Web: <strong>navis.iotdaiviet.com</strong> | App: <strong>Navis Smart Industry</strong></p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">8.3</span> Thời gian triển khai 1 trạm pilot?</div>
+            <div class="qa-answer">
+                <p><strong>1-2 tuần</strong>: Tuần 1 (khảo sát, cài đặt, kết nối) → Tuần 2 (hoàn thiện cảnh báo, báo cáo, đào tạo, nghiệm thu).</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">8.4</span> Tiêu chí nghiệm thu?</div>
+            <div class="qa-answer">
+                <ul class="check-list">
+                    <li>Gateway kết nối ổn định, dữ liệu realtime trên App/Web</li>
+                    <li>Tất cả tag đọc đúng giá trị</li>
+                    <li>Cảnh báo vượt ngưỡng chính xác</li>
+                    <li>Biểu đồ, xuất báo cáo hoạt động</li>
+                    <li>Phân quyền, QR chia sẻ hoạt động</li>
+                    <li>Đào tạo nhân sự hoàn tất</li>
+                    <li>Bàn giao tài liệu hướng dẫn</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">8.5</span> Có chạy thử miễn phí không?</div>
+            <div class="qa-answer"><p><strong>Có</strong>. Hỗ trợ chạy thử để đánh giá trước khi triển khai chính thức.</p></div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">8.6</span> Thời gian phản hồi khi lỗi?</div>
+            <div class="qa-answer">
+                <table class="qa-table">
+                    <tr><th>Mức độ</th><th>Phản hồi</th></tr>
+                    <tr><td>Lỗi nghiêm trọng</td><td>1-2 giờ</td></tr>
+                    <tr><td>Lỗi thông thường</td><td>2-4 giờ (ngày làm việc)</td></tr>
+                    <tr><td>Yêu cầu hỗ trợ</td><td>24 giờ</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">8.8</span> Có hỗ trợ onsite không?</div>
+            <div class="qa-answer">
+                <p><strong>Ưu tiên hỗ trợ từ xa (online)</strong> — xử lý nhanh, tiết kiệm chi phí. Vẫn <strong>có hỗ trợ onsite</strong> khi cần (lắp đặt, sự cố phần cứng, đào tạo). Chi phí onsite tính riêng tùy khoảng cách và thời gian.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ===== 9. QUAN TRẮC MÔI TRƯỜNG ===== -->
+<div class="section" id="sec-9">
+    <div class="section-header" onclick="toggleSection('sec-9')">
+        <span class="icon">🌿</span>
+        <h2>9. Quan Trắc Môi Trường</h2>
+        <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">9.1</span> Có hỗ trợ truyền dữ liệu về Sở TNMT không?</div>
+            <div class="qa-answer">
+                <p><strong>Không</strong>. Hệ thống Navis được thiết kế cho mục đích <strong>giám sát nội bộ doanh nghiệp</strong>. Phần cứng và phần mềm không thiết kế cho việc truyền dữ liệu về Sở Tài nguyên & Môi trường.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">9.2</span> Đã triển khai truyền dữ liệu quan trắc về Sở chưa?</div>
+            <div class="qa-answer">
+                <p><strong>Chưa</strong>. Hệ thống chỉ phục vụ <strong>quan trắc nội bộ công ty</strong> — giúp doanh nghiệp tự giám sát, theo dõi và quản lý hệ thống xử lý nước thải / khí thải / vận hành nhà máy.</p>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">9.4</span> Có hỗ trợ camera, máy lấy mẫu, lưu lượng kế?</div>
+            <div class="qa-answer">
+                <table class="qa-table">
+                    <tr><th>Thiết bị</th><th>Hỗ trợ</th><th>Điều kiện</th></tr>
+                    <tr><td>Camera</td><td class="yes">✅</td><td>Hỗ trợ camera chuẩn <strong>RTSP</strong></td></tr>
+                    <tr><td>Máy lấy mẫu tự động</td><td class="yes">✅</td><td>Hỗ trợ kết nối</td></tr>
+                    <tr><td>Lưu lượng kế</td><td class="yes">✅</td><td>Thiết bị cần có giao tiếp <strong>RS485 (Modbus)</strong></td></tr>
+                </table>
+                <div class="note success">Nguyên tắc chung: Bất kỳ thiết bị nào có giao tiếp <strong>RS485 / Modbus</strong> đều kết nối được với Gateway Navis MOD.</div>
+            </div>
+        </div>
+
+        <div class="qa-item">
+            <div class="qa-question"><span class="q-num">9.5</span> Có xuất dữ liệu phục vụ kiểm tra nội bộ không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>. Báo cáo Excel/PDF: timestamp, giá trị, trạng thái, Min/Max/Avg, lịch sử cảnh báo, truy vấn bất kỳ khoảng thời gian nào.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div><!-- /.container -->
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+    <p><strong>Navis Smart Industry</strong> — Nền tảng Giám sát IoT Công nghiệp</p>
+    <div class="contact">
+        <span>📞 0932.786.579 (Mr. Cường)</span>
+        <span>✉️ omwater.vn@gmail.com</span>
+        <span>🌐 navis.iotdaiviet.com</span>
+    </div>
+    <p style="margin-top:16px;font-size:12px;color:#B0BEC5;">© 2024 Đại Việt IoT. Tài liệu mật — Chỉ dùng cho mục đích tư vấn kỹ thuật.</p>
+</div>
+
+<script>
+function toggleSection(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('collapsed');
+}
+</script>
+
+</body>
+</html>

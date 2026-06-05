@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phương Án Kỹ Thuật - Hệ Thống IoT Giám Sát Nước Thải</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d7c3d;
+            --primary-light: #15a050;
+            --primary-pale: #e8f7ee;
+            --accent: #1a6fb5;
+            --accent-light: #2196F3;
+            --accent-pale: #e3f2fd;
+            --purple: #7c3aed;
+            --purple-pale: #f0e7ff;
+            --orange: #e67e22;
+            --orange-pale: #fef3e2;
+            --bg: #f8fafb;
+            --bg-white: #ffffff;
+            --bg-section: #f1f5f8;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* ============ HEADER ============ */
+        .header {
+            background: var(--bg-white);
+            border-bottom: 2px solid var(--primary);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-group img {
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .logo-divider {
+            width: 2px;
+            height: 36px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+        }
+
+        .header-title {
+            text-align: right;
+        }
+
+        .header-title h2 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-title p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 50%, #f3e5f5 100%);
+            padding: 60px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(13, 124, 61, 0.1);
+            border: 1px solid rgba(13, 124, 61, 0.25);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(1.3);
+            }
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 14px;
+            line-height: 1.3;
+        }
+
+        .hero .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .section {
+            padding: 50px 0;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .section-title .icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .icon.green {
+            background: var(--primary);
+        }
+
+        .icon.blue {
+            background: var(--accent);
+        }
+
+        .icon.purple {
+            background: var(--purple);
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 28px;
+            padding-left: 50px;
+        }
+
+        /* ============ ITEM CARDS ============ */
+        .item-card {
+            background: var(--bg-white);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .item-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .item-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .item-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .item-icon.green {
+            background: linear-gradient(135deg, #0d7c3d, #15a050);
+        }
+
+        .item-icon.blue {
+            background: linear-gradient(135deg, #1a6fb5, #2196F3);
+        }
+
+        .item-icon.purple {
+            background: linear-gradient(135deg, #7c3aed, #9333ea);
+        }
+
+        .item-info h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .item-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .item-body {
+            padding: 20px 24px;
+        }
+
+        .item-body .desc-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .item-body ul {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+        .item-body li {
+            padding: 12px 16px;
+            background: var(--bg-section);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .item-body li.blue-accent {
+            border-left-color: var(--accent);
+        }
+
+        .item-body li.purple-accent {
+            border-left-color: var(--purple);
+        }
+
+        .item-body li strong {
+            color: var(--primary);
+        }
+
+        .item-body li.blue-accent strong {
+            color: var(--accent);
+        }
+
+        .item-body li.purple-accent strong {
+            color: var(--purple);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag.green {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        .tag.blue {
+            background: var(--accent-pale);
+            color: var(--accent);
+        }
+
+        .tag.purple {
+            background: var(--purple-pale);
+            color: var(--purple);
+        }
+
+        /* ============ FEATURE GRID ============ */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ============ DIAGRAM ============ */
+        .diagram-wrapper {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .diagram-title {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+        }
+
+        /* ============ SPECS TABLE ============ */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: var(--bg-white);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .specs-table thead th {
+            background: var(--primary);
+            color: #fff;
+            padding: 13px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .specs-table tbody td {
+            padding: 11px 20px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text);
+        }
+
+        .specs-table tbody tr:hover {
+            background: var(--bg-section);
+        }
+
+        .specs-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .specs-table .label-col {
+            font-weight: 600;
+            color: var(--primary);
+            width: 35%;
+        }
+
+        /* ============ SEPARATOR ============ */
+        .section-sep {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border), var(--primary-pale), var(--border), transparent);
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            background: var(--bg-white);
+            padding: 36px 40px;
+            text-align: center;
+            border-top: 2px solid var(--primary);
+            margin-top: 20px;
+        }
+
+        .footer .company {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* ============ PRINT ============ */
+        @media print {
+            @page {
+                margin: 10mm 10mm 10mm 10mm;
+            }
+
+            .header {
+                position: relative;
+            }
+
+            .item-card,
+            .feature-card,
+            .diagram-wrapper,
+            .supply-summary {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .header-title {
+                text-align: center;
+            }
+
+            .hero {
+                padding: 40px 20px;
+            }
+
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-desc {
+                padding-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============ HEADER ============ -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-group">
+                <img src="LOGO-omwater.png" alt="O&M Water Logo">
+                <div class="logo-divider"></div>
+                <img src="navis-logo.png" alt="Navis IoT Logo">
+            </div>
+            <div class="header-title">
+                <h2>Phương Án Kỹ Thuật Sơ Bộ</h2>
+                <p>Ngày: 06/03/2026 • Phiên bản: 1.0</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            O&M Water × Navis IoT
+        </div>
+        <h1>Hệ Thống IoT Giám Sát<br>Trạng Thái Hoạt Động Hệ Thống Xử Lý Nước Thải</h1>
+        <p class="subtitle">
+            Giải pháp giám sát từ xa theo thời gian thực — tích hợp thu thập dữ liệu, phần mềm Web App, cảnh báo tự động
+            và báo cáo thông minh.
+        </p>
+    </section>
+
+    <!-- ============ MÔ TẢ TỪNG HẠNG MỤC ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">📋</div>
+                Mô Tả Hạng Mục Cung Cấp
+            </div>
+            <p class="section-desc">
+                Chi tiết các hạng mục phần cứng & phần mềm mà O&M - Navis cung cấp cho hệ thống giám sát nước thải.
+            </p>
+
+            <!-- HẠNG MỤC 1: FTP CLOUD SERVER -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon green">🗄️</div>
+                    <div class="item-info">
+                        <h3>FTP Cloud Server + Phần Mềm Giám Sát Nước Thải Online</h3>
+                        <p><span class="tag green">Hạng mục 1</span> Dành cho tủ quan trắc có Data Logger bên trong</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Tủ quan trắc nước thải có tích hợp sẵn Data Logger bên trong. O&M - Navis sẽ cung cấp máy chủ
+                        FTP trên nền tảng đám mây
+                        để Data Logger đẩy dữ liệu lên, kèm theo phần mềm Web App giám sát trực tuyến cho phép xem dữ
+                        liệu và xuất báo cáo.
+                    </p>
+                    <ul>
+                        <li><strong>Cung cấp Server FTP Cloud</strong> — Máy chủ FTP trên nền tảng đám mây, cấu hình tài
+                            khoản FTP để Data Logger trong tủ quan trắc tự động đẩy dữ liệu lên theo chu kỳ</li>
+                        <li><strong>Cài đặt & cấu hình Data Logger</strong> — Thiết lập thông số kết nối FTP (IP, port,
+                            user/pass) cho Data Logger tại hiện trường, đảm bảo dữ liệu được truyền liên tục và ổn định
+                        </li>
+                        <li><strong>Phần mềm giám sát nước thải — Web App</strong> — Hiển thị dữ liệu trực tuyến qua
+                            trình duyệt web (PC, tablet, điện thoại):
+                            <br>• Thông số nước thải: <strong>pH, COD, BOD, TSS</strong>
+                            <br>• Biểu đồ theo thời gian thực
+                            <br>• Lưu trữ dữ liệu lịch sử
+                        </li>
+                        <li class="blue-accent"><strong>Xuất báo cáo</strong> — Báo cáo theo ngày/tuần/tháng,
+                            xuất file Excel/PDF để lưu trữ và nộp cho cơ quan quản lý môi trường</li>
+                        <li class="blue-accent"><strong>Cảnh báo vượt ngưỡng</strong> — Thông báo tự động khi các chỉ số
+                            nước thải vượt ngưỡng cho phép</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- HẠNG MỤC 2: GATEWAY + ĐỒNG HỒ ĐIỆN -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon blue">📶</div>
+                    <div class="item-info">
+                        <h3>Gateway Navis MOD + Phần Mềm Giám Sát Nguồn Điện</h3>
+                        <p><span class="tag blue">Hạng mục 2</span> Kết nối đồng hồ đa năng MFM383A qua Modbus</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Cung cấp Gateway Navis MOD kết nối với đồng hồ đa năng MFM383A qua giao thức Modbus RTU/TCP.
+                        Dữ liệu điện năng được đẩy lên Cloud và hiển thị trên phần mềm Web App giám sát.
+                    </p>
+                    <ul>
+                        <li class="blue-accent"><strong>Cung cấp Gateway Navis MOD</strong> — Thiết bị chuyển đổi giao
+                            thức Modbus RTU/TCP sang Cloud, hỗ trợ kết nối WiFi / Ethernet / 4G</li>
+                        <li class="blue-accent"><strong>Kết nối đồng hồ đa năng MFM383A</strong> — Đọc dữ liệu qua
+                            Modbus:
+                            <br>• <strong>Tổng công suất tiêu thụ</strong> (kW)
+                            <br>• <strong>Điện áp 3 pha</strong> (V)
+                            <br>• <strong>Dòng điện 3 pha</strong> (A)
+                        </li>
+                        <li class="blue-accent"><strong>Cấu hình & lập trình Gateway</strong> — Cấu hình địa chỉ Modbus,
+                            bảng thanh ghi (register map), tốc độ truyền thông (baud rate) cho đồng hồ MFM383A</li>
+                        <li><strong>Phần mềm giám sát nguồn điện — Web App</strong> — Hiển thị real-time các thông số
+                            điện năng, biểu đồ công suất tiêu thụ theo thời gian</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- HẠNG MỤC 3: GATEWAY + PLC -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon purple">🔧</div>
+                    <div class="item-info">
+                        <h3>Gateway Navis MOD + Phần Mềm Giám Sát Trạng Thái Thiết Bị (PLC)</h3>
+                        <p><span class="tag purple">Hạng mục 3</span> Kết nối PLC tủ điện chính qua Modbus</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Cung cấp Gateway Navis MOD kết nối với PLC trong tủ điện chính qua giao thức Modbus RTU/TCP.
+                        Đọc trạng thái vận hành của hệ thống và hiển thị trên phần mềm Web App.
+                    </p>
+                    <ul>
+                        <li class="purple-accent"><strong>Cung cấp Gateway Navis MOD</strong> — Kết nối PLC trong tủ
+                            điện chính, đọc dữ liệu trạng thái vận hành qua Modbus RTU/TCP</li>
+                        <li class="purple-accent"><strong>Giám sát 3 trạng thái thiết bị</strong> —
+                            <br>• 🟢 <strong>Đang chạy</strong> — Hệ thống hoạt động bình thường
+                            <br>• 🟡 <strong>Dừng</strong> — Hệ thống đã dừng hoạt động
+                            <br>• 🔴 <strong>Lỗi</strong> — Có sự cố, cần kiểm tra xử lý
+                        </li>
+                        <li class="purple-accent"><strong>Cấu hình & lập trình Gateway</strong> — Cấu hình địa chỉ
+                            Modbus, bảng thanh ghi trạng thái, mapping tín hiệu từ PLC</li>
+                        <li><strong>Phần mềm giám sát trạng thái — Web App</strong> — Hiển thị trạng thái real-time, mô
+                            hình hoạt động trực quan mô phỏng nguyên lý vận hành hệ thống</li>
+                        <li class="blue-accent"><strong>Cảnh báo thông minh</strong> — Thông báo ngay khi hệ thống gặp
+                            lỗi, thiết bị dừng bất thường, hoặc cần bổ sung hóa chất / dinh dưỡng</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ TÍNH NĂNG PHẦN MỀM ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">💻</div>
+                Tính Năng Phần Mềm IoT
+            </div>
+            <p class="section-desc">
+                Phần mềm giám sát chạy trên nền tảng Web App, tương thích mọi thiết bị có trình duyệt — điện thoại, máy
+                tính bảng, máy tính. Ngôn ngữ: Tiếng Việt. Server đám mây tại Việt Nam.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Giám Sát Thông Số Nước Thải</h4>
+                    <p>Hiển thị real-time các chỉ số pH, COD, BOD, TSS từ tủ quan trắc. Biểu đồ trực quan theo thời
+                        gian.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Giám Sát Nguồn Điện</h4>
+                    <p>Tổng công suất tiêu thụ, điện áp 3 pha, dòng điện 3 pha từ đồng hồ đa năng MFM383A.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h4>Trạng Thái Thiết Bị</h4>
+                    <p>Hiển thị 3 trạng thái vận hành: Đang chạy, Dừng, Lỗi. Đọc trực tiếp từ PLC tủ điện chính.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4>Cảnh Báo Tự Động</h4>
+                    <p>Thông báo ngay khi có sự cố, vượt ngưỡng thông số, hoặc cần bổ sung hóa chất.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Đa Nền Tảng</h4>
+                    <p>Hoạt động trên Android, iOS, máy tính. Giao diện tiếng Việt, server đám mây tại Việt Nam.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <h4>Xuất Báo Cáo</h4>
+                    <p>Báo cáo theo ngày/tuần/tháng. Xuất file Excel/PDF để lưu trữ và nộp cơ quan quản lý.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h4>Quản Lý Quyền Truy Cập</h4>
+                    <p>Phân quyền theo dõi cho nhiều người dùng. Quản lý và chia sẻ quyền linh hoạt theo vai trò.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏭</div>
+                    <h4>Mô Hình Hoạt Động</h4>
+                    <p>Hiển thị sơ đồ mô phỏng nguyên lý hoạt động, trực quan hóa quy trình xử lý nước thải.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ SƠ ĐỒ HỆ THỐNG (CANVAS) ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">📐</div>
+                Sơ Đồ Hệ Thống Sơ Bộ
+            </div>
+            <p class="section-desc">
+                Kiến trúc tổng quan kết nối từ các thiết bị hiện trường lên Cloud và phần mềm Web App giám sát.
+            </p>
+
+            <div class="diagram-wrapper">
+                <p class="diagram-title">System Architecture Overview</p>
+                <canvas id="systemDiagram" width="1000" height="580"></canvas>
+            </div>
+
+            <!-- TÓM TẮT O&M CUNG CẤP -->
+            <div class="supply-summary"
+                style="margin-top:28px; background:var(--bg-white); border:1px solid var(--border); border-radius:14px; padding:28px; box-shadow:var(--shadow-sm);">
+                <h3
+                    style="font-size:16px; font-weight:700; color:var(--primary); margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                    ✅ Tóm Tắt — O&M Cung Cấp
+                </h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div style="background:var(--primary-pale); border-radius:10px; padding:16px;">
+                        <h4 style="font-size:13px; font-weight:700; color:var(--primary); margin-bottom:8px;">🔧 Phần
+                            Cứng</h4>
+                        <ul style="list-style:none; font-size:13px; color:var(--text-secondary); line-height:1.8;">
+                            <li>• Gateway Navis MOD (cho đồng hồ MFM383A)</li>
+                            <li>• Gateway Navis MOD (cho PLC tủ điện)</li>
+                            <li>• Server FTP Cloud (cho Data Logger tủ quan trắc)</li>
+                        </ul>
+                    </div>
+                    <div style="background:var(--accent-pale); border-radius:10px; padding:16px;">
+                        <h4 style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:8px;">💻 Phần Mềm
+                        </h4>
+                        <ul style="list-style:none; font-size:13px; color:var(--text-secondary); line-height:1.8;">
+                            <li>• Web App giám sát nước thải (pH, COD, BOD, TSS)</li>
+                            <li>• Web App giám sát nguồn điện (V, A, kW 3 pha)</li>
+                            <li>• Web App giám sát trạng thái thiết bị (PLC)</li>
+                            <li>• Xuất báo cáo Excel/PDF</li>
+                        </ul>
+                    </div>
+                    <div style="background:var(--orange-pale); border-radius:10px; padding:16px;">
+                        <h4 style="font-size:13px; font-weight:700; color:var(--orange); margin-bottom:8px;">⚙️ Dịch Vụ
+                            Cài Đặt & Cấu Hình</h4>
+                        <ul style="list-style:none; font-size:13px; color:var(--text-secondary); line-height:1.8;">
+                            <li>• Cấu hình FTP cho Data Logger tủ quan trắc</li>
+                            <li>• Cấu hình Modbus Gateway ↔ Đồng hồ MFM383A</li>
+                            <li>• Cấu hình Modbus Gateway ↔ PLC tủ điện chính</li>
+                            <li>• Hướng dẫn vận hành & bàn giao hệ thống</li>
+                        </ul>
+                    </div>
+                    <div style="background:var(--purple-pale); border-radius:10px; padding:16px;">
+                        <h4 style="font-size:13px; font-weight:700; color:var(--purple); margin-bottom:8px;">🛡️ Hỗ Trợ
+                            Kỹ Thuật</h4>
+                        <ul style="list-style:none; font-size:13px; color:var(--text-secondary); line-height:1.8;">
+                            <li>• Cảnh báo sự cố qua Web App</li>
+                            <li>• Quản lý phân quyền người dùng</li>
+                            <li>• Server đám mây tại Việt Nam</li>
+                            <li>• Hỗ trợ kỹ thuật từ xa & tại hiện trường</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ THÔNG SỐ GATEWAY ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">🔧</div>
+                Thông Số Kỹ Thuật — Gateway Navis MOD
+            </div>
+            <p class="section-desc">
+                Thiết bị thu thập dữ liệu từ các cảm biến & PLC qua cổng truyền thông công nghiệp Modbus, đẩy lên Cloud.
+                Sản phẩm do O&M cung cấp.
+            </p>
+
+            <div style="display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap;">
+                <div style="flex:0 0 280px; text-align:center;">
+                    <img src="https://navis.iotdaiviet.com/modbus-guide/images/navis-mod-gateway.png"
+                        alt="Gateway Navis MOD"
+                        style="max-width:260px; border-radius:12px; border:1px solid var(--border); box-shadow:var(--shadow-md);">
+                    <p style="font-size:12px; color:var(--text-muted); margin-top:10px;">Gateway Navis MOD</p>
+                </div>
+                <div style="flex:1; min-width:300px;">
+                    <table class="specs-table">
+                        <thead>
+                            <tr>
+                                <th>Thông Số</th>
+                                <th>Chi Tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="label-col">Nguồn điện</td>
+                                <td>12 – 24 VDC</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">Giao tiếp</td>
+                                <td>RS485, TCP/IP, IO/AO</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">Kết nối</td>
+                                <td>WiFi / Ethernet / 4G</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">Kích thước</td>
+                                <td>10 × 7.5 × 3 cm</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">LED chỉ thị</td>
+                                <td>WiFi, TX/RX, Power</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">Giao thức</td>
+                                <td>Modbus RTU / Modbus TCP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <p class="company">CÔNG TY TNHH TM DV KT SX O & M — NAVIS IoT</p>
+        <p>Giải pháp IoT giám sát & vận hành hệ thống xử lý nước thải</p>
+        <p style="margin-top:10px; font-size:11px; color:var(--text-muted);">
+            Tài liệu phương án kỹ thuật sơ bộ • Phiên bản 1.0 — Tháng 03/2026
+        </p>
+    </footer>
+
+    <!-- ============ CANVAS DIAGRAM SCRIPT ============ -->
+    <script>
+        (function () {
+            const canvas = document.getElementById('systemDiagram');
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width;
+            const H = canvas.height;
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            canvas.style.width = W + 'px';
+            canvas.style.height = H + 'px';
+            ctx.scale(dpr, dpr);
+
+            // Light-theme colors
+            const C = {
+                bg: '#f8fafb',
+                card: '#ffffff',
+                cardBorder: '#d1dbe5',
+                green: '#0d7c3d',
+                greenLight: '#15a050',
+                greenPale: '#e8f7ee',
+                blue: '#1a6fb5',
+                blueLight: '#2196F3',
+                bluePale: '#e3f2fd',
+                purple: '#7c3aed',
+                purpleLight: '#9333ea',
+                purplePale: '#f0e7ff',
+                orange: '#e67e22',
+                orangePale: '#fef3e2',
+                text: '#1e293b',
+                textMuted: '#64748b',
+                line: '#94a3b8',
+            };
+
+            function roundRect(x, y, w, h, r, fill, stroke, lw) {
+                ctx.beginPath();
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + w - r, y);
+                ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+                ctx.lineTo(x + w, y + h - r);
+                ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                ctx.lineTo(x + r, y + h);
+                ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+                ctx.lineTo(x, y + r);
+                ctx.quadraticCurveTo(x, y, x + r, y);
+                ctx.closePath();
+                if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+                if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw || 1.5; ctx.stroke(); }
+            }
+
+            function drawBox(x, y, w, h, label, sublabel, color, bgColor, icon) {
+                ctx.shadowColor = 'rgba(0,0,0,0.08)';
+                ctx.shadowBlur = 8;
+                ctx.shadowOffsetY = 2;
+                roundRect(x, y, w, h, 10, bgColor || C.card, color, 2);
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetY = 0;
+
+                // Top color bar
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x + 10, y);
+                ctx.lineTo(x + w - 10, y);
+                ctx.quadraticCurveTo(x + w, y, x + w, y + 10);
+                ctx.lineTo(x + w, y + 5);
+                ctx.lineTo(x, y + 5);
+                ctx.lineTo(x, y + 10);
+                ctx.quadraticCurveTo(x, y, x + 10, y);
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.restore();
+
+                // Icon
+                ctx.font = '18px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = C.text;
+                ctx.fillText(icon, x + w / 2, y + 30);
+
+                // Label
+                ctx.font = 'bold 11px Inter, sans-serif';
+                ctx.fillStyle = C.text;
+                ctx.fillText(label, x + w / 2, y + 48);
+
+                if (sublabel) {
+                    ctx.font = '9px Inter, sans-serif';
+                    ctx.fillStyle = C.textMuted;
+                    const words = sublabel.split(' ');
+                    let line = '';
+                    let lineY = y + 62;
+                    words.forEach(word => {
+                        const test = line + word + ' ';
+                        if (ctx.measureText(test).width > w - 12) {
+                            ctx.fillText(line.trim(), x + w / 2, lineY);
+                            line = word + ' ';
+                            lineY += 12;
+                        } else {
+                            line = test;
+                        }
+                    });
+                    ctx.fillText(line.trim(), x + w / 2, lineY);
+                }
+
+                return { cx: x + w / 2, cy: y + h / 2, x, y, w, h, r: x + w, b: y + h };
+            }
+
+            function drawArrow(x1, y1, x2, y2, color, dashed) {
+                ctx.beginPath();
+                ctx.strokeStyle = color || C.line;
+                ctx.lineWidth = 2;
+                if (dashed) ctx.setLineDash([6, 4]);
+                else ctx.setLineDash([]);
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                const angle = Math.atan2(y2 - y1, x2 - x1);
+                const hl = 8;
+                ctx.beginPath();
+                ctx.fillStyle = color || C.line;
+                ctx.moveTo(x2, y2);
+                ctx.lineTo(x2 - hl * Math.cos(angle - Math.PI / 6), y2 - hl * Math.sin(angle - Math.PI / 6));
+                ctx.lineTo(x2 - hl * Math.cos(angle + Math.PI / 6), y2 - hl * Math.sin(angle + Math.PI / 6));
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            function drawLineLabel(x, y, text, color) {
+                ctx.font = 'bold 9px Inter, sans-serif';
+                const tw = ctx.measureText(text).width + 10;
+                roundRect(x - tw / 2, y - 9, tw, 18, 4, C.bg, null);
+                ctx.fillStyle = color || C.textMuted;
+                ctx.textAlign = 'center';
+                ctx.fillText(text, x, y + 3);
+            }
+
+            function drawSectionLabel(x, y, w, text, color) {
+                ctx.font = 'bold 10px Inter, sans-serif';
+                ctx.fillStyle = color;
+                ctx.textAlign = 'left';
+                ctx.fillText(text, x, y);
+                ctx.beginPath();
+                ctx.strokeStyle = color;
+                ctx.globalAlpha = 0.3;
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 3]);
+                ctx.moveTo(x, y + 5);
+                ctx.lineTo(x + w, y + 5);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.globalAlpha = 1;
+            }
+
+            // ========== DRAW ==========
+            ctx.fillStyle = C.bg;
+            ctx.fillRect(0, 0, W, H);
+
+            // Section labels
+            drawSectionLabel(30, 22, 200, '🏭 THIẾT BỊ HIỆN TRƯỜNG', C.green);
+            drawSectionLabel(370, 22, 180, '🔗 KẾT NỐI / TRUNG GIAN', C.blue);
+            drawSectionLabel(720, 22, 250, '☁️ CLOUD & WEB APP', C.purple);
+
+            // Vertical dividers
+            ctx.beginPath();
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([6, 4]);
+            ctx.moveTo(330, 32); ctx.lineTo(330, H - 15);
+            ctx.moveTo(690, 32); ctx.lineTo(690, H - 15);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // ---- LEFT: Field Devices ----
+            // Hạng mục 1: Tủ quan trắc (có Data Logger bên trong)
+            const tuQuantrac = drawBox(30, 50, 150, 85, 'Tủ Quan Trắc', 'pH, COD, BOD, TSS (có Data Logger)', C.green, C.greenPale, '🧪');
+
+            // Hạng mục 2: Đồng hồ MFM383A
+            const dongHo = drawBox(30, 195, 150, 85, 'Đồng Hồ MFM383A', 'V, A, kW 3 pha', C.blue, C.bluePale, '⚡');
+
+            // Hạng mục 3: PLC Tủ điện chính
+            const plc = drawBox(30, 340, 150, 85, 'PLC Tủ Điện Chính', 'Chạy / Dừng / Lỗi', C.purple, C.purplePale, '🔧');
+
+            // ---- MIDDLE: Gateway / FTP ----
+            // FTP Server cho tủ quan trắc
+            const ftpBox = drawBox(380, 50, 155, 85, 'FTP Server Cloud', 'Nhận file từ Data Logger', C.orange, C.orangePale, '🗄️');
+
+            // Gateway cho đồng hồ & PLC
+            const gw1 = drawBox(380, 195, 155, 85, 'Gateway Navis MOD', 'WiFi/Ethernet/4G • Modbus → Cloud', C.blue, C.bluePale, '📶');
+
+            const gw2 = drawBox(380, 340, 155, 85, 'Gateway Navis MOD', 'WiFi/Ethernet/4G • Modbus → Cloud', C.purple, C.purplePale, '📶');
+
+            // ---- RIGHT: Cloud & App ----
+            const cloud = drawBox(720, 55, 250, 85, 'Navis Cloud Server', 'MQTT / HTTPS • Database Việt Nam', C.purple, C.purplePale, '☁️');
+
+            const webapp = drawBox(720, 190, 250, 120, 'Phần Mềm Web App', 'Dashboard • Biểu đồ • Cảnh báo Báo cáo • Mô hình HĐ', C.green, C.greenPale, '📊');
+
+            const user1 = drawBox(720, 360, 120, 75, 'Quản Lý', 'PC / Tablet', C.green, '#f1f5f8', '👨‍💼');
+            const user2 = drawBox(850, 360, 120, 75, 'Kỹ Thuật', 'Mobile', C.blue, '#f1f5f8', '👷');
+
+            const report = drawBox(720, 475, 250, 70, 'Xuất Báo Cáo', 'Excel / PDF tự động', C.orange, C.orangePale, '📄');
+
+            // ========== ARROWS ==========
+
+            // Tủ quan trắc → FTP (Data Logger gửi FTP)
+            drawArrow(tuQuantrac.r, tuQuantrac.cy, ftpBox.x, ftpBox.cy, C.orange);
+            drawLineLabel(290, tuQuantrac.cy - 12, 'FTP Upload', C.orange);
+
+            // Đồng hồ → Gateway 1 (Modbus)
+            drawArrow(dongHo.r, dongHo.cy, gw1.x, gw1.cy, C.blue);
+            drawLineLabel(290, dongHo.cy - 12, 'Modbus RTU', C.blue);
+
+            // PLC → Gateway 2 (Modbus)
+            drawArrow(plc.r, plc.cy, gw2.x, gw2.cy, C.purple);
+            drawLineLabel(290, plc.cy - 12, 'Modbus RTU', C.purple);
+
+            // FTP → Cloud
+            drawArrow(ftpBox.r, ftpBox.cy, cloud.x, cloud.cy, C.orange);
+            drawLineLabel(670, ftpBox.cy - 12, 'Internet', C.orange);
+
+            // Gateway 1 → Cloud
+            drawArrow(gw1.r, gw1.cy, 695, gw1.cy, C.blue);
+            ctx.beginPath(); ctx.strokeStyle = C.blue; ctx.lineWidth = 2;
+            ctx.moveTo(695, gw1.cy); ctx.lineTo(695, cloud.b);
+            ctx.stroke();
+            drawArrow(695, cloud.b, cloud.x, cloud.b - 5, C.blue);
+            drawLineLabel(620, gw1.cy - 12, '4G', C.blue);
+
+            // Gateway 2 → Cloud
+            drawArrow(gw2.r, gw2.cy, 700, gw2.cy, C.purple);
+            ctx.beginPath(); ctx.strokeStyle = C.purple; ctx.lineWidth = 2;
+            ctx.moveTo(700, gw2.cy); ctx.lineTo(700, cloud.b + 5);
+            ctx.stroke();
+            drawLineLabel(620, gw2.cy - 12, '4G', C.purple);
+
+            // Cloud → WebApp
+            drawArrow(cloud.cx, cloud.b, webapp.cx, webapp.y, C.purple);
+
+            // WebApp → Users
+            drawArrow(webapp.cx - 40, webapp.b, user1.cx, user1.y, C.green);
+            drawArrow(webapp.cx + 40, webapp.b, user2.cx, user2.y, C.blue);
+
+            // WebApp → Report
+            drawArrow(webapp.r, webapp.cy + 20, report.r, report.y, C.orange, true);
+
+            // ---- Legend ----
+            const lx = 30, ly = 475;
+            ctx.font = 'bold 10px Inter, sans-serif';
+            ctx.fillStyle = C.textMuted;
+            ctx.textAlign = 'left';
+            ctx.fillText('CHÚ THÍCH:', lx, ly);
+
+            const legends = [
+                { color: C.green, label: 'HM1: Tủ quan trắc → FTP Cloud' },
+                { color: C.blue, label: 'HM2: Đồng hồ MFM383A → Gateway Modbus' },
+                { color: C.purple, label: 'HM3: PLC Tủ điện → Gateway Modbus' },
+            ];
+
+            legends.forEach((l, i) => {
+                const y = ly + 18 + i * 20;
+                ctx.beginPath();
+                ctx.strokeStyle = l.color;
+                ctx.lineWidth = 3;
+                ctx.moveTo(lx, y);
+                ctx.lineTo(lx + 30, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(lx + 30, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = l.color;
+                ctx.fill();
+
+                ctx.font = '10px Inter, sans-serif';
+                ctx.fillStyle = C.text;
+                ctx.fillText(l.label, lx + 40, y + 4);
+            });
+
+            ctx.textAlign = 'left';
+        })();
+    </script>
+
+</body>
+
+</html>

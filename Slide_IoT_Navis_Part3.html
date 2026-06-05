@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Pháp IoT Giám Sát Đa Trạm — Navis IoT Platform | Phần 3: Tổng Kết</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d7c3d;
+            --primary-light: #15a050;
+            --primary-pale: #e8f7ee;
+            --accent: #1a6fb5;
+            --accent-light: #2196F3;
+            --accent-pale: #e3f2fd;
+            --purple: #7c3aed;
+            --purple-pale: #f0e7ff;
+            --orange: #e67e22;
+            --orange-pale: #fef3e2;
+            --red: #e74c3c;
+            --bg: #f8fafb;
+            --bg-white: #ffffff;
+            --bg-section: #f1f5f8;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        .slide {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 80px 80px 60px;
+            position: relative; overflow: hidden;
+        }
+
+        /* NAV */
+        .nav-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary);
+            padding: 10px 40px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 14px; }
+        .nav-brand img { height: 36px; object-fit: contain; }
+        .nav-brand .logo-divider { width: 1px; height: 28px; background: linear-gradient(to bottom, transparent, var(--primary), transparent); }
+        .nav-links { display: flex; gap: 4px; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-size: 12px;
+            font-weight: 600; padding: 6px 14px; border-radius: 8px; transition: all 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: #fff; background: var(--primary); }
+        .nav-page-indicator { font-size: 11px; color: var(--text-muted); padding: 4px 12px; background: var(--bg-section); border-radius: 6px; font-weight: 600; }
+
+        /* CONTENT */
+        .slide-content { max-width: 1200px; width: 100%; position: relative; z-index: 1; }
+        .slide-header { margin-bottom: 36px; }
+        .slide-number { font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+        .slide-title { font-size: 34px; font-weight: 800; line-height: 1.2; margin-bottom: 12px; color: var(--text); }
+        .slide-title .accent { color: var(--primary); }
+        .slide-title .accent-purple { color: var(--purple); }
+        .slide-desc { font-size: 15px; color: var(--text-secondary); max-width: 650px; line-height: 1.6; }
+
+        /* STAT FEATURE CARDS */
+        .stat-feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+        .sf-card {
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 16px; padding: 26px; box-shadow: var(--shadow-sm);
+            transition: all 0.4s; position: relative; overflow: hidden;
+        }
+        .sf-card::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .sf-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+        .sf-card:hover::after { opacity: 1; }
+        .sf-card.green::after { background: linear-gradient(90deg, var(--primary), var(--accent)); }
+        .sf-card.purple::after { background: linear-gradient(90deg, var(--purple), var(--accent-light)); }
+
+        .sf-card .sf-icon { font-size: 30px; margin-bottom: 14px; }
+        .sf-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+        .sf-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+        .sf-card .sf-list { list-style: none; margin-top: 12px; }
+        .sf-card .sf-list li {
+            font-size: 13px; color: var(--text-secondary); padding: 5px 0;
+            border-bottom: 1px solid var(--border); line-height: 1.5;
+        }
+        .sf-card .sf-list li:last-child { border-bottom: none; }
+        .sf-card .sf-list li strong { color: var(--primary); }
+
+        /* AI SECTION */
+        .ai-feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .ai-card {
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 16px; padding: 26px; box-shadow: var(--shadow-sm);
+            transition: all 0.4s; border-left: 4px solid var(--purple);
+        }
+        .ai-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+        .ai-card .ai-icon { font-size: 30px; margin-bottom: 12px; }
+        .ai-card h4 { font-size: 15px; font-weight: 700; color: var(--purple); margin-bottom: 6px; }
+        .ai-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+        /* TIMELINE */
+        .ai-timeline {
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 16px; padding: 28px; margin-top: 24px; box-shadow: var(--shadow-sm);
+        }
+        .ai-timeline h3 {
+            font-size: 17px; font-weight: 700; color: var(--purple);
+            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+        }
+        .timeline {
+            display: flex; align-items: center; gap: 0; justify-content: space-between;
+            position: relative;
+        }
+        .timeline::before {
+            content: ''; position: absolute; top: 50%; left: 30px; right: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--purple), var(--accent), var(--primary));
+            transform: translateY(-50%); z-index: 0;
+        }
+        .tl-step { position: relative; z-index: 1; text-align: center; flex: 1; }
+        .tl-dot {
+            width: 46px; height: 46px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; margin: 0 auto 8px; color: #fff;
+            box-shadow: var(--shadow-md);
+        }
+        .tl-dot.done { background: var(--primary); }
+        .tl-dot.current { background: var(--accent); animation: pulseGlow 2s infinite; }
+        .tl-dot.future { background: var(--purple); }
+        @keyframes pulseGlow { 0%,100%{box-shadow:0 0 0 0 rgba(33,150,243,0.3)} 50%{box-shadow:0 0 16px 6px rgba(33,150,243,0.15)} }
+        .tl-label { font-size: 12px; font-weight: 600; color: var(--text); }
+        .tl-desc { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+
+        /* INDICATOR CARDS */
+        .indicator-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+        .indicator-card {
+            background: var(--bg-white); border-radius: 16px; padding: 26px;
+            text-align: center; box-shadow: var(--shadow-sm); transition: all 0.3s;
+        }
+        .indicator-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+        .indicator-card.red { border: 2px solid #fca5a5; }
+        .indicator-card.orange { border: 2px solid #fcd34d; }
+        .indicator-card.blue { border: 2px solid #93c5fd; }
+        .indicator-card .ind-icon { font-size: 36px; margin-bottom: 10px; }
+        .indicator-card .ind-value { font-size: 34px; font-weight: 900; }
+        .indicator-card.red .ind-value { color: var(--red); }
+        .indicator-card.orange .ind-value { color: var(--orange); }
+        .indicator-card.blue .ind-value { color: var(--accent); }
+        .indicator-card .ind-label { font-size: 14px; font-weight: 700; margin: 6px 0 4px; }
+        .indicator-card.red .ind-label { color: var(--red); }
+        .indicator-card.orange .ind-label { color: var(--orange); }
+        .indicator-card.blue .ind-label { color: var(--accent); }
+        .indicator-card .ind-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+        /* SUMMARY */
+        .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 32px; }
+        .summary-stat {
+            text-align: center; padding: 24px 14px;
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 16px; box-shadow: var(--shadow-sm); transition: all 0.3s;
+        }
+        .summary-stat:hover { box-shadow: var(--shadow-md); transform: scale(1.04); }
+        .summary-stat .ss-icon { font-size: 32px; margin-bottom: 10px; }
+        .summary-stat .ss-value { font-size: 30px; font-weight: 900; color: var(--primary); }
+        .summary-stat .ss-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        /* CTA */
+        .cta-section {
+            background: var(--bg-white); border: 2px solid var(--primary);
+            border-radius: 20px; padding: 44px; text-align: center; box-shadow: var(--shadow-md);
+        }
+        .cta-section h2 { font-size: 26px; font-weight: 800; margin-bottom: 14px; color: var(--text); }
+        .cta-section p { font-size: 15px; color: var(--text-secondary); max-width: 600px; margin: 0 auto 28px; line-height: 1.6; }
+        .cta-contacts { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; }
+        .cta-contact {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 22px; background: var(--bg-section);
+            border: 1px solid var(--border); border-radius: 12px; transition: all 0.3s;
+        }
+        .cta-contact:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+        .cta-contact .ct-icon { font-size: 20px; }
+        .cta-contact .ct-label { font-size: 11px; color: var(--text-muted); }
+        .cta-contact .ct-value { font-size: 14px; font-weight: 600; color: var(--text); }
+
+        /* HIGHLIGHT BOX */
+        .highlight-box {
+            background: var(--primary-pale); border: 1px solid rgba(13,124,61,0.2);
+            border-radius: 14px; padding: 22px 26px; margin-top: 24px;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .highlight-box .hb-icon { font-size: 32px; flex-shrink: 0; }
+        .highlight-box h4 { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .highlight-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+        /* SCROLL & PAGE NAV */
+        .slide-nav-bottom {
+            position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 10;
+        }
+        .scroll-arrow {
+            width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 50%;
+            background: var(--bg-white); display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-size: 14px; text-decoration: none;
+            animation: bounce 2s infinite; cursor: pointer; transition: all 0.3s;
+        }
+        .scroll-arrow:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+        @keyframes bounce { 0%,20%,50%,80%,100%{transform:translateY(0)} 40%{transform:translateY(6px)} 60%{transform:translateY(3px)} }
+
+        /* SCREENSHOT */
+        .screenshot-container {
+            border-radius: 14px; overflow: hidden;
+            border: 1px solid var(--border); box-shadow: var(--shadow-lg);
+            position: relative; transition: transform 0.4s ease;
+        }
+        .screenshot-container:hover { transform: scale(1.02); }
+        .screenshot-container img { width: 100%; display: block; }
+        .screenshot-label {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(15,23,42,0.9));
+            padding: 36px 20px 14px;
+        }
+        .screenshot-label h4 { font-size: 14px; font-weight: 700; color: #fff; }
+        .screenshot-label p { font-size: 11px; color: #cbd5e1; margin-top: 2px; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
+
+        .page-nav { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; gap: 6px; }
+        .page-nav a {
+            padding: 8px 16px; background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text-secondary); text-decoration: none;
+            font-size: 12px; font-weight: 600; transition: all 0.3s;
+        }
+        .page-nav a:hover, .page-nav a.current { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        @media (max-width: 1024px) {
+            .slide { padding: 60px 30px; }
+            .ai-feature-grid { grid-template-columns: 1fr; }
+            .slide-title { font-size: 28px; }
+            .summary-grid { grid-template-columns: 1fr 1fr; }
+            .indicator-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .slide { padding: 50px 20px; }
+            .stat-feature-grid { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: 1fr; }
+            .nav-bar { padding: 8px 16px; }
+            .nav-brand img { height: 28px; }
+            .timeline { flex-direction: column; gap: 14px; }
+            .timeline::before { display: none; }
+            .cta-contacts { flex-direction: column; align-items: center; }
+        }
+        @media print {
+            html { scroll-snap-type: none; }
+            body { overflow: visible; }
+            .slide {
+                min-height: auto; page-break-after: always; page-break-inside: avoid;
+                padding: 40px; scroll-snap-align: none;
+                height: auto; overflow: visible;
+            }
+            .nav-bar, .page-nav, .slide-nav-bottom { display: none !important; }
+            .sf-card:hover, .ai-card:hover, .indicator-card:hover, .summary-stat:hover { transform: none; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV BAR -->
+    <nav class="nav-bar">
+        <div class="nav-brand">
+            <img src="LOGO-omwater.png" alt="O&M Water Logo">
+            <div class="logo-divider"></div>
+            <img src="navis-logo.png" alt="Navis IoT Logo">
+        </div>
+        <div class="nav-links">
+            <a href="#projects">Dự án</a>
+            <a href="#summary">Tổng kết</a>
+            <a href="#contact">Liên hệ</a>
+        </div>
+        <div class="nav-page-indicator">Phần 3 / 3</div>
+    </nav>
+
+    <!-- =============================== -->
+    <!-- SLIDE: DỰ ÁN TIÊU BIỂU          -->
+    <!-- =============================== -->
+    <section class="slide" id="projects" style="background: var(--bg);">
+        <div class="slide-content">
+            <div class="slide-header" style="text-align: center;">
+                <div class="slide-number">09 — Dự Án Tiêu Biểu</div>
+                <h2 class="slide-title" style="text-align: center;">
+                    Khách Hàng <span class="accent">Đã Tin Tưởng Triển Khai</span>
+                </h2>
+                <p class="slide-desc" style="margin: 0 auto; text-align: center;">
+                    Navis IoT Platform đã được triển khai thực tế tại nhiều nhà máy, khu công nghiệp và trạm xử lý nước trên toàn quốc — mang lại hiệu quả vận hành vượt trội.
+                </p>
+            </div>
+
+            <style>
+                .project-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+                .project-card {
+                    background: #fff; border-radius: 12px; overflow: hidden;
+                    border: 1px solid var(--border); transition: all 0.3s;
+                    box-shadow: var(--shadow-sm);
+                }
+                .project-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); cursor: pointer; }
+                .project-card img {
+                    width: 100%; height: 130px; object-fit: cover;
+                    border-bottom: 2px solid var(--primary); cursor: pointer;
+                }
+                .project-card .pc-body { padding: 12px 14px; }
+                .project-card h3 { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+                .project-card p { font-size: 10.5px; color: var(--text-secondary); line-height: 1.5; }
+                @media print { .project-card:hover { transform: none; box-shadow: var(--shadow-sm); } }
+                /* Lightbox */
+                .lightbox-overlay {
+                    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.85); z-index: 9999;
+                    justify-content: center; align-items: center; cursor: pointer;
+                }
+                .lightbox-overlay.active { display: flex; }
+                .lightbox-overlay img {
+                    max-width: 90%; max-height: 90%; object-fit: contain;
+                    border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+                    animation: lbZoomIn 0.3s ease;
+                }
+                .lightbox-close {
+                    position: absolute; top: 20px; right: 30px; color: #fff;
+                    font-size: 36px; font-weight: bold; cursor: pointer; z-index: 10000;
+                    background: rgba(0,0,0,0.5); border-radius: 50%; width: 48px; height: 48px;
+                    display: flex; align-items: center; justify-content: center;
+                }
+                .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+                @keyframes lbZoomIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+                @media print { .lightbox-overlay { display: none !important; } }
+            </style>
+            <div class="project-grid">
+                <div class="project-card">
+                    <img src="project-lixil.png" alt="LIXIL — Bình Dương">
+                    <div class="pc-body">
+                        <h3>LIXIL — Bình Dương</h3>
+                        <p>Giám sát &amp; cảnh báo quan trắc nước thải từ xa cho nhà máy sản xuất thiết bị vệ sinh.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="project-poonginvina.png" alt="Poong In Vina — Bình Dương">
+                    <div class="pc-body">
+                        <h3>Poong In Vina — Bình Dương</h3>
+                        <p>Cải tạo hệ thống xử lý nước thải, cung cấp phần mềm giám sát SCADA trên App &amp; Web.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="project-gas.png" alt="GAS — Bắc Giang">
+                    <div class="pc-body">
+                        <h3>GAS — Bắc Giang</h3>
+                        <p>Kết nối máy lấy mẫu khí, xuất báo cáo tự động &amp; giám sát từ xa qua App Navis.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="project-nhamay-nuoc.png" alt="Nhà Máy Nước — Bến Tre">
+                    <div class="pc-body">
+                        <h3>Nhà Máy Nước — Bến Tre</h3>
+                        <p>Trạm quan trắc chất lượng nước từ xa — theo dõi độ đục, Clo dư, lưu lượng realtime.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="project-pccc.png" alt="PCCC — Bình Dương">
+                    <div class="pc-body">
+                        <h3>PCCC — Bình Dương</h3>
+                        <p>Cảnh báo cháy từ xa, giám sát mực nước bồn PCCC — push notification tức thì.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="project-pttfood.png" alt="PTT FOOD — Bình Dương">
+                    <div class="pc-body">
+                        <h3>PTT FOOD — Bình Dương</h3>
+                        <p>Tủ điện &amp; phần mềm giám sát hệ thống RO công nghiệp — theo dõi áp suất, lưu lượng.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="project-visip.png" alt="VISIP — Bình Dương">
+                    <div class="pc-body">
+                        <h3>VISIP — Bình Dương</h3>
+                        <p>Hệ thống tủ điện &amp; phần mềm giám sát RO cho nhà máy thực phẩm — EC, pH, TDS.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="project-server.png" alt="Phòng Server — Bình Dương">
+                    <div class="pc-body">
+                        <h3>Phòng Server — Bình Dương</h3>
+                        <p>Giám sát nhiệt độ, độ ẩm phòng server — cảnh báo tức thì khi nhiệt độ vượt ngưỡng.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 20px; justify-content: center; text-align: center; flex-direction: column; padding: 22px;">
+                <h4 style="font-size: 16px; margin-bottom: 6px;">🏆 Đa Dạng Ngành Nghề — Từ Nước Thải, Nước Sạch, PCCC Đến Server Room</h4>
+                <p>Navis IoT Platform không giới hạn ngành nghề — bất kỳ hệ thống nào có cảm biến, PLC, hoặc thiết bị Modbus đều có thể kết nối và giám sát từ xa.</p>
+            </div>
+        </div>
+        <div class="slide-nav-bottom">
+            <a href="#summary" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE: TỔNG KẾT                  -->
+    <!-- =============================== -->
+    <section class="slide" id="summary" style="background: var(--bg-white);">
+        <div class="slide-content">
+            <div class="slide-header" style="text-align: center;">
+                <div class="slide-number">10 — Tổng Kết</div>
+                <h2 class="slide-title" style="text-align: center;">
+                    Tại Sao Chọn <span class="accent">Navis IoT Platform?</span>
+                </h2>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-stat">
+                    <div class="ss-icon">🏭</div>
+                    <div class="ss-value">177+</div>
+                    <div class="ss-label">Trạm giám sát</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="ss-icon">📡</div>
+                    <div class="ss-value">349+</div>
+                    <div class="ss-label">Thiết bị kết nối</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="ss-icon">⏱️</div>
+                    <div class="ss-value">24/7</div>
+                    <div class="ss-label">Giám sát liên tục</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="ss-icon">🇻🇳</div>
+                    <div class="ss-value">100%</div>
+                    <div class="ss-label">Server Việt Nam</div>
+                </div>
+            </div>
+
+            <div class="stat-feature-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="sf-card green" style="padding: 20px;">
+                    <div class="sf-icon" style="font-size: 26px;">🌐</div>
+                    <h3 style="font-size: 14px;">Đa Nền Tảng</h3>
+                    <p style="font-size: 12px;">Web App, Android, iOS — mọi thiết bị, mọi nơi.</p>
+                </div>
+                <div class="sf-card green" style="padding: 20px;">
+                    <div class="sf-icon" style="font-size: 26px;">🔒</div>
+                    <h3 style="font-size: 14px;">Bảo Mật Cao</h3>
+                    <p style="font-size: 12px;">Phân quyền, mã hóa dữ liệu, xác thực 2 lớp.</p>
+                </div>
+                <div class="sf-card green" style="padding: 20px;">
+                    <div class="sf-icon" style="font-size: 26px;">📶</div>
+                    <h3 style="font-size: 14px;">Navis MOD Gateway</h3>
+                    <p style="font-size: 12px;">WiFi, Ethernet, 4G — Modbus RTU/TCP, MQTT.</p>
+                </div>
+                <div class="sf-card green" style="padding: 20px;">
+                    <div class="sf-icon" style="font-size: 26px;">📊</div>
+                    <h3 style="font-size: 14px;">Thống Kê Nâng Cao</h3>
+                    <p style="font-size: 12px;">Biểu đồ ON/OFF, heatmap, báo cáo tự động.</p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 28px; justify-content: center; text-align: center; flex-direction: column; padding: 28px;">
+                <h4 style="font-size: 18px; margin-bottom: 6px;">✅ Giải Pháp Toàn Diện — Từ Cảm Biến Đến Quản Lý</h4>
+                <p>Navis IoT Platform — nền tảng IoT hoàn chỉnh: phần cứng Gateway Navis MOD, Cloud Server, Web & Mobile App, cảnh báo thông minh, thống kê báo cáo — quản lý tập trung hàng trăm trạm trên một phần mềm duy nhất.</p>
+            </div>
+        </div>
+        <div class="slide-nav-bottom">
+            <a href="#contact" class="scroll-arrow">▼</a>
+        </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- SLIDE 13: LIÊN HỆ               -->
+    <!-- =============================== -->
+    <section class="slide" id="contact" style="background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 50%, #f3e5f5 100%);">
+        <div class="slide-content">
+            <div class="cta-section">
+                <div style="display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:28px;">
+                    <img src="LOGO-omwater.png" alt="O&M Water Logo" style="height:52px;">
+                    <div style="width:2px; height:40px; background:linear-gradient(to bottom, transparent, var(--primary), transparent);"></div>
+                    <img src="navis-logo.png" alt="Navis IoT Logo" style="height:52px;">
+                </div>
+
+                <h2>
+                    Liên Hệ <span style="color: var(--primary);">O&M Water Việt Nam</span>
+                </h2>
+                <p>
+                    Hãy liên hệ để được tư vấn giải pháp IoT phù hợp nhất 
+                    cho hệ thống xử lý nước & quản lý thiết bị công nghiệp của bạn.
+                </p>
+
+                <div class="cta-contacts">
+                    <div class="cta-contact">
+                        <span class="ct-icon">🏢</span>
+                        <div>
+                            <div class="ct-label">Công ty</div>
+                            <div class="ct-value">CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ KỸ THUẬT SẢN XUẤT O & M</div>
+                        </div>
+                    </div>
+                    <div class="cta-contact">
+                        <span class="ct-icon">📞</span>
+                        <div>
+                            <div class="ct-label">Liên hệ</div>
+                            <div class="ct-value">0932.786.579 (Mr. Cường)</div>
+                        </div>
+                    </div>
+                    <div class="cta-contact">
+                        <span class="ct-icon">📧</span>
+                        <div>
+                            <div class="ct-label">Email</div>
+                            <div class="ct-value">omwater.vn@gmail.com</div>
+                        </div>
+                    </div>
+                    <div class="cta-contact">
+                        <span class="ct-icon">🌐</span>
+                        <div>
+                            <div class="ct-label">Website</div>
+                            <div class="ct-value">navis.iotdaiviet.com</div>
+                        </div>
+                    </div>
+                    <div class="cta-contact">
+                        <span class="ct-icon">📍</span>
+                        <div>
+                            <div class="ct-label">Địa chỉ</div>
+                            <div class="ct-value">124/5P, ấp 6, Xuân Thới Sơn, Hóc Môn, TP.HCM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border);">
+                    <p style="font-size: 14px; color: var(--text-muted);">
+                        🚀 <strong style="color:var(--primary)">NAVIS IoT Platform</strong> — 
+                        Giám Sát Thông Minh • Cảnh Báo Kịp Thời • Quản Lý Đa Trạm Hiệu Quả
+                    </p>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">
+                        © 2026 Công Ty TNHH TM DV KT SX O & M — Phiên bản 1.0 — Tháng 03/2026
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Navigation -->
+    <div class="page-nav">
+        <a href="Slide_IoT_Navis_Part1.html">Phần 1</a>
+        <a href="Slide_IoT_Navis_Part2.html">Phần 2</a>
+        <a href="Slide_IoT_Navis_Part3.html" class="current">Phần 3</a>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    const activeLink = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+        slides.forEach(slide => observer.observe(slide));
+
+        // Lightbox for project images
+        const lbOverlay = document.createElement('div');
+        lbOverlay.className = 'lightbox-overlay';
+        lbOverlay.innerHTML = '<span class="lightbox-close">&times;</span><img src="" alt="">';
+        document.body.appendChild(lbOverlay);
+        const lbImg = lbOverlay.querySelector('img');
+        const lbClose = lbOverlay.querySelector('.lightbox-close');
+
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const img = card.querySelector('img');
+                if (img) { lbImg.src = img.src; lbOverlay.classList.add('active'); }
+            });
+        });
+        lbOverlay.addEventListener('click', (e) => {
+            if (e.target !== lbImg) lbOverlay.classList.remove('active');
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') lbOverlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

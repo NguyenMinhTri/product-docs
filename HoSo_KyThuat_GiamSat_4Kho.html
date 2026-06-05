@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Kỹ Thuật - Giám Sát Nhiệt Độ Độ Ẩm 4 Kho</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d7c3d;
+            --primary-light: #15a050;
+            --primary-pale: #e8f7ee;
+            --accent: #1a6fb5;
+            --accent-light: #2196F3;
+            --accent-pale: #e3f2fd;
+            --purple: #7c3aed;
+            --purple-pale: #f0e7ff;
+            --orange: #e67e22;
+            --orange-pale: #fef3e2;
+            --red: #d32f2f;
+            --red-pale: #fdeaea;
+            --bg: #f8fafb;
+            --bg-white: #ffffff;
+            --bg-section: #f1f5f8;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .header {
+            background: var(--bg-white);
+            border-bottom: 2px solid var(--primary);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-group img {
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .logo-divider {
+            width: 2px;
+            height: 36px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+        }
+
+        .header-title {
+            text-align: right;
+        }
+
+        .header-title h2 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-title p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 50%, #f3e5f5 100%);
+            padding: 30px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(13, 124, 61, 0.1);
+            border: 1px solid rgba(13, 124, 61, 0.25);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(1.3)
+            }
+        }
+
+        .hero h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .hero .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .section {
+            padding: 28px 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .section-title .icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .icon.green {
+            background: var(--primary);
+        }
+
+        .icon.blue {
+            background: var(--accent);
+        }
+
+        .icon.purple {
+            background: var(--purple);
+        }
+
+        .icon.orange {
+            background: var(--orange);
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 16px;
+            padding-left: 50px;
+        }
+
+        .item-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .item-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .item-header {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .item-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .item-icon.green {
+            background: linear-gradient(135deg, #0d7c3d, #15a050);
+        }
+
+        .item-icon.blue {
+            background: linear-gradient(135deg, #1a6fb5, #2196F3);
+        }
+
+        .item-icon.purple {
+            background: linear-gradient(135deg, #7c3aed, #9333ea);
+        }
+
+        .item-icon.orange {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+        }
+
+        .item-info h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .item-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .item-body {
+            padding: 10px 16px;
+        }
+
+        .item-body .desc-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .item-body ul {
+            list-style: none;
+            display: grid;
+            gap: 5px;
+        }
+
+        .item-body li {
+            padding: 6px 12px;
+            background: var(--bg-section);
+            border-radius: 6px;
+            border-left: 3px solid var(--primary);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .item-body li.blue-accent {
+            border-left-color: var(--accent);
+        }
+
+        .item-body li.purple-accent {
+            border-left-color: var(--purple);
+        }
+
+        .item-body li.orange-accent {
+            border-left-color: var(--orange);
+        }
+
+        .item-body li strong {
+            color: var(--primary);
+        }
+
+        .item-body li.blue-accent strong {
+            color: var(--accent);
+        }
+
+        .item-body li.purple-accent strong {
+            color: var(--purple);
+        }
+
+        .item-body li.orange-accent strong {
+            color: var(--orange);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag.green {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        .tag.blue {
+            background: var(--accent-pale);
+            color: var(--accent);
+        }
+
+        .tag.purple {
+            background: var(--purple-pale);
+            color: var(--purple);
+        }
+
+        .tag.orange {
+            background: var(--orange-pale);
+            color: var(--orange);
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            background: var(--bg-white);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .specs-table thead th {
+            background: var(--primary);
+            color: #fff;
+            padding: 8px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .specs-table tbody td {
+            padding: 6px 14px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text);
+        }
+
+        .specs-table tbody tr:hover {
+            background: var(--bg-section);
+        }
+
+        .specs-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .specs-table .label-col {
+            font-weight: 600;
+            color: var(--primary);
+            width: 35%;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .feature-card:hover {
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+            display: inline;
+            margin-right: 4px;
+        }
+
+        .feature-card h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 2px;
+            display: inline;
+        }
+
+        .feature-card p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .section-sep {
+            display: none;
+        }
+
+        .img-section {
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        .img-section img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .img-section .caption {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .screenshots-row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .screenshots-row .screenshot {
+            text-align: center;
+        }
+
+        .screenshots-row .screenshot img {
+            max-height: 500px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+
+        .screenshots-row .screenshot .caption {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .diagram-wrapper {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .diagram-title {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .two-col {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .two-col .col-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .two-col .col-img {
+            flex: 0 0 auto;
+            text-align: center;
+        }
+
+        .two-col .col-img img {
+            max-width: 180px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .two-col .col-img .caption {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+        }
+
+        .footer {
+            background: var(--bg-white);
+            padding: 20px 40px;
+            text-align: center;
+            border-top: 2px solid var(--primary);
+            margin-top: 10px;
+        }
+
+        .footer .company {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .footer p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
+        @media print {
+            @page {
+                margin: 8mm;
+                size: A4;
+            }
+
+            body {
+                background: #fff;
+            }
+
+            .header {
+                position: relative;
+                padding: 10px 0;
+            }
+
+            .hero {
+                padding: 16px 30px;
+            }
+
+            .hero h1 {
+                font-size: 22px;
+                margin-bottom: 6px;
+            }
+
+            .hero .subtitle {
+                font-size: 12px;
+            }
+
+            .hero-badge {
+                display: none;
+            }
+
+            .section {
+                padding: 16px 0;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .section-desc {
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+
+            .item-card {
+                margin-bottom: 10px;
+            }
+
+            .item-body {
+                padding: 12px 16px;
+            }
+
+            .desc-text {
+                font-size: 12px;
+            }
+
+            .feature-grid {
+                gap: 8px;
+            }
+
+            .feature-card {
+                padding: 10px;
+            }
+
+            .feature-card h4 {
+                font-size: 12px;
+            }
+
+            .feature-card p {
+                font-size: 11px;
+            }
+
+            .specs-table {
+                font-size: 12px;
+            }
+
+            .specs-table thead th {
+                padding: 8px 14px;
+                font-size: 11px;
+            }
+
+            .specs-table tbody td {
+                padding: 6px 14px;
+            }
+
+            .diagram-wrapper {
+                padding: 14px;
+            }
+
+            canvas {
+                max-width: 100%;
+                height: auto !important;
+            }
+
+            .img-section img {
+                max-width: 280px !important;
+            }
+
+            .section-sep {
+                margin: 0;
+            }
+
+            .footer {
+                padding: 12px 20px;
+                margin-top: 5px;
+            }
+
+            .footer .company {
+                font-size: 12px;
+            }
+
+            .footer p {
+                font-size: 10px;
+            }
+
+            .item-card,
+            .feature-card,
+            .diagram-wrapper {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+
+            .item-card:hover,
+            .feature-card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width:768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .header-title {
+                text-align: center;
+            }
+
+            .hero {
+                padding: 40px 20px;
+            }
+
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-desc {
+                padding-left: 0;
+            }
+
+            .screenshots-row {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============ HEADER ============ -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-group">
+                <img src="LOGO-omwater.png" alt="O&M Logo">
+                <div class="logo-divider"></div>
+                <img src="navis-logo.png" alt="Navis IoT Logo">
+            </div>
+            <div class="header-title">
+                <h2>Hồ Sơ Kỹ Thuật</h2>
+                <p>Ngày: 09/03/2026 • Phiên bản: 1.0</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            O&M × Navis Smart Industry
+        </div>
+        <h1>Hệ Thống Giám Sát Nhiệt Độ &amp; Độ Ẩm<br>4 Kho Bảo Quản</h1>
+        <p class="subtitle">
+            Giải pháp giám sát từ xa theo thời gian thực — tích hợp thiết bị đo Multispan, Gateway Navis MOD,
+            phần mềm App &amp; Web, cảnh báo vượt ngưỡng qua điện thoại.
+        </p>
+    </section>
+
+    <!-- ============ TỔNG QUAN HỆ THỐNG ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">📋</div>
+                Tổng Quan Hệ Thống
+            </div>
+            <p class="section-desc">
+                Hệ thống giám sát nhiệt độ &amp; độ ẩm cho 4 kho bảo quản, bố trí <strong>1 tủ trung tâm</strong> (tích
+                hợp Gateway) và <strong>3 tủ nhánh</strong>,
+                sử dụng thiết bị đo Multispan MHT 1202 kết hợp Gateway Navis MOD truyền dữ liệu lên Cloud, hiển thị trên
+                App &amp; Web.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌡️</div>
+                    <h4>4 Kho Bảo Quản</h4>
+                    <p>Giám sát đồng thời nhiệt độ và độ ẩm tại 4 kho, mỗi kho 1 bộ cảm biến PT-100 (nhiệt độ) và RH-100
+                        (độ ẩm).</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>App Điện Thoại</h4>
+                    <p>Ứng dụng Navis Smart Industry trên Android &amp; iOS — xem giá trị real-time, biểu đồ lịch sử,
+                        cài đặt ngưỡng cảnh báo.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h4>Phần Mềm Web</h4>
+                    <p>Giao diện trên máy tính qua trình duyệt — quản lý dữ liệu tập trung, xem tất cả cảm biến, xuất
+                        báo cáo Excel/PDF.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4>Cảnh Báo Vượt Ngưỡng</h4>
+                    <p>Thông báo đẩy (Push Notification) trực tiếp lên điện thoại khi nhiệt độ hoặc độ ẩm vượt ngưỡng
+                        cài đặt.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔊</div>
+                    <h4>Còi Alarm Tại Chỗ</h4>
+                    <p>Thiết bị MHT 1202 có 2 relay output — kết nối còi alarm cảnh báo tại kho khi nhiệt độ/độ ẩm vượt
+                        ngưỡng.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Báo Cáo &amp; Lịch Sử</h4>
+                    <p>Lưu trữ dữ liệu lịch sử trên Cloud, biểu đồ xu hướng, thống kê MAX/MIN/AVG, xuất báo cáo theo
+                        ngày/tháng.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ THIẾT BỊ PHẦN CỨNG ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">🔧</div>
+                Thiết Bị Phần Cứng
+            </div>
+            <p class="section-desc">
+                Chi tiết các thiết bị sử dụng trong hệ thống giám sát nhiệt độ, độ ẩm 4 kho bảo quản.
+            </p>
+
+            <!-- THIẾT BỊ 1: MHT 1202 -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon green">🌡️</div>
+                    <div class="item-info">
+                        <h3>Bộ Hiển Thị Nhiệt Độ &amp; Độ Ẩm — Multispan MHT 1202</h3>
+                        <p><span class="tag green">Thiết bị đo</span> 4 bộ — mỗi kho 1 bộ</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <div class="two-col">
+                        <div class="col-text">
+                            <p class="desc-text">
+                                Bộ hiển thị nhiệt độ &amp; độ ẩm Multispan MHT 1202, nguồn 100–270V AC, 2 đầu vào PT-100
+                                + RH-100,
+                                2 relay output kết nối còi alarm, giao tiếp Modbus RTU.
+                            </p>
+                            <table class="specs-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Thông Số — MHT 1202-A2-00</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="label-col">Nguồn cấp</td>
+                                        <td>100–270V AC, 50/60 Hz</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Dải đo nhiệt độ</td>
+                                        <td>-50.0 – 200.0 °C</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Dải đo độ ẩm</td>
+                                        <td>0.0 – 100.0 %RH</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Đầu vào</td>
+                                        <td>PT-100 + RH-100</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Output</td>
+                                        <td>2 Relay (còi alarm)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Giao tiếp</td>
+                                        <td>Modbus RTU (RS485)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Hiển thị</td>
+                                        <td>2 dòng LED (°C + %RH)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Chứng nhận</td>
+                                        <td>CE, UKCA</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Xuất xứ</td>
+                                        <td>Multispan — India</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Số lượng</td>
+                                        <td><strong>4 bộ</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-img">
+                            <img src="images/multispan_mht1202.jpg" alt="MHT 1202">
+                            <p class="caption">Hình 1: MHT 1202</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THIẾT BỊ 2: GATEWAY NAVIS MOD -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon blue">📶</div>
+                    <div class="item-info">
+                        <h3>Gateway Navis MOD — Bộ Thu Thập Dữ Liệu Trung Tâm</h3>
+                        <p><span class="tag blue">Gateway IoT</span> 1 bộ — đặt tại tủ trung tâm</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <div class="two-col">
+                        <div class="col-text">
+                            <p class="desc-text">
+                                Gateway Navis MOD đặt tại tủ trung tâm, kết nối bus RS485 từ 4 bộ MHT 1202, đẩy dữ liệu
+                                lên Cloud qua WiFi / Ethernet / 4G.
+                            </p>
+                            <ul>
+                                <li class="blue-accent"><strong>Chức năng</strong> — Modbus RTU/TCP → Cloud, thu thập 4
+                                    bộ MHT 1202</li>
+                                <li class="blue-accent"><strong>Nguồn cấp</strong> — 12–24VDC</li>
+                                <li class="blue-accent"><strong>Giao tiếp</strong> — RS485, TCP/IP, IO/AO</li>
+                                <li class="blue-accent"><strong>Kết nối</strong> — WiFi / Ethernet / 4G</li>
+                                <li class="blue-accent"><strong>Kích thước</strong> — 10 × 7.5 × 3 cm</li>
+                                <li class="blue-accent"><strong>LED</strong> — WiFi, LAN, 4G, Power</li>
+                            </ul>
+                        </div>
+                        <div class="col-img">
+                            <img src="images/navis-mod-gateway.png" alt="Gateway Navis MOD">
+                            <p class="caption">Gateway Navis MOD</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THIẾT BỊ 3: CẢM BIẾN -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon purple">🔌</div>
+                    <div class="item-info">
+                        <h3>Cảm Biến Nhiệt Độ &amp; Độ Ẩm</h3>
+                        <p><span class="tag purple">Cảm biến</span> 4 bộ PT-100 + 4 bộ RH-100</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <ul>
+                        <li class="purple-accent"><strong>Cảm biến nhiệt độ PT-100</strong> — Kết nối vào
+                            đầu vào PT-100 của MHT 1202. Dải đo: -50.0 – 200.0°C. Số lượng: <strong>4 cái</strong></li>
+                        <li class="purple-accent"><strong>Cảm biến độ ẩm RH-100</strong> — Kết nối vào đầu vào RH-100
+                            (chân Y, R, B — +5V DC, I/P, GND) của MHT 1202. Dải đo: 0 – 100%RH. Số lượng: <strong>4
+                                cái</strong></li>
+                        <li class="purple-accent"><strong>Còi Alarm</strong> — Kết nối qua Relay-1 hoặc Relay-2 của MHT
+                            1202, báo động tại chỗ khi nhiệt độ hoặc độ ẩm vượt ngưỡng. Số lượng: <strong>4 cái</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- THIẾT BỊ 4: TỦ ĐIỆN -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon orange">🗄️</div>
+                    <div class="item-info">
+                        <h3>Bố Trí Tủ Điện — 1 Tủ Điều Khiển Trung Tâm + 3 Tủ Điều Khiển Nhánh</h3>
+                        <p><span class="tag orange">Tủ điện</span> Tổng 4 tủ cho 4 kho</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Hệ thống gồm <strong>4 tủ điều khiển</strong>: 1 tủ điều khiển trung tâm đặt tại 1 kho và 3 tủ
+                        điều khiển nhánh đặt tại 3
+                        kho còn lại.
+                        Tủ điều khiển trung tâm vừa giám sát nhiệt độ &amp; độ ẩm tại kho đặt tủ (giống tủ điều khiển
+                        nhánh), vừa tích hợp
+                        Gateway
+                        làm "đầu não" thu thập dữ liệu từ cả 4 kho rồi đẩy lên Cloud.
+                        Các tủ điều khiển nhánh chỉ cần kéo dây RS485 về tủ điều khiển trung tâm — không cần kết nối
+                        mạng riêng, tiết kiệm chi
+                        phí và đơn giản hóa hệ thống.
+                    </p>
+                    <ul>
+                        <li class="orange-accent"><strong>Tủ Điều Khiển Trung Tâm (1 tủ)</strong> — MHT 1202 + cảm biến
+                            + còi alarm
+                            (giám sát kho đặt tủ) + Gateway Navis MOD + nguồn 24VDC + CB + Domino RS485 + phụ kiện</li>
+                        <li class="orange-accent"><strong>Tủ Điều Khiển Nhánh (3 tủ)</strong> — Mỗi tủ: MHT 1202 + cảm
+                            biến PT-100
+                            + RH-100 + còi alarm + CB + domino. Dữ liệu kéo về tủ trung tâm qua RS485 (≤100m)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ SƠ ĐỒ KẾT NỐI ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">📐</div>
+                Sơ Đồ Kết Nối Hệ Thống
+            </div>
+            <p class="section-desc">
+                Kiến trúc tổng quan kết nối từ cảm biến → thiết bị đo MHT 1202 → Gateway Navis MOD → Cloud → App &amp;
+                Web.
+            </p>
+
+            <div class="diagram-wrapper">
+                <p class="diagram-title">System Architecture — 4 Warehouse Temperature &amp; Humidity Monitoring</p>
+                <canvas id="systemDiagram" width="1000" height="560"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ GIAO DIỆN APP ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">📱</div>
+                Giao Diện App Điện Thoại — Navis Smart Industry
+            </div>
+            <p class="section-desc">
+                Ứng dụng Navis Smart Industry hoạt động trên Android &amp; iOS, hiển thị giá trị nhiệt độ và độ ẩm theo
+                thời gian thực
+                từ 4 kho, kèm cảnh báo vượt ngưỡng và biểu đồ lịch sử.
+            </p>
+
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon blue">📱</div>
+                    <div class="item-info">
+                        <h3>App Dashboard &amp; Biểu Đồ Lịch Sử</h3>
+                        <p>Giám sát realtime 4 kho, biểu đồ xu hướng, cảnh báo vượt ngưỡng</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Dashboard hiển thị 8 kênh (4 nhiệt độ + 4 độ ẩm) realtime, cảnh báo vượt ngưỡng bằng màu sắc.
+                        Biểu đồ xu hướng với Hi/Lo-Limit, MAX/MIN/AVG, bộ lọc ngày.
+                    </p>
+                    <div class="two-col" style="justify-content:center;">
+                        <div class="col-img">
+                            <img src="images/app_dashboard.png" alt="App Dashboard">
+                            <p class="caption">Hình 2: Dashboard App</p>
+                        </div>
+                        <div class="col-img">
+                            <img src="images/app_chart.png" alt="App Chart">
+                            <p class="caption">Hình 3: Biểu đồ xu hướng</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ GIAO DIỆN WEB ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon purple">💻</div>
+                Giao Diện Phần Mềm Web — Quản Lý Dữ Liệu
+            </div>
+            <p class="section-desc">
+                Phần mềm Web truy cập qua trình duyệt trên máy tính — giao diện "Quản Lý Dữ Liệu" hiển thị tất cả cảm
+                biến,
+                cảnh báo vượt ngưỡng, kết nối 4G trực tuyến, và các chức năng quản lý nâng cao.
+            </p>
+
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon purple">🖥️</div>
+                    <div class="item-info">
+                        <h3>Dashboard Web — Quản Lý Dữ Liệu Tập Trung</h3>
+                        <p>Hiển thị tổng quan trên màn hình lớn, quản lý đa trạm, xuất báo cáo</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <div class="two-col">
+                        <div class="col-text">
+                            <p class="desc-text">
+                                Web hiển thị tất cả cảm biến dạng thẻ: Nhiệt độ 1–4 + Độ ẩm 1–4. Khi vượt ngưỡng, thẻ
+                                đổi <strong style="color:var(--red);">màu đỏ</strong>. Trạng thái: LIVE, 4G [Viettel]
+                                Good.
+                            </p>
+                        </div>
+                        <div class="col-img">
+                            <img src="images/web_dashboard.png" alt="Web Dashboard" style="max-width:350px;">
+                            <p class="caption">Hình 4: Web Dashboard</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ CẢNH BÁO ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon orange">🔔</div>
+                Cảnh Báo Vượt Ngưỡng — Push Notification
+            </div>
+            <p class="section-desc">
+                Hệ thống tự động gửi thông báo đẩy (Push Notification) lên điện thoại của người quản lý khi nhiệt độ
+                hoặc độ ẩm
+                vượt ngưỡng cài đặt. Thông báo hiển thị ngay trên màn hình khóa, đảm bảo xử lý kịp thời.
+            </p>
+
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon orange">⚠️</div>
+                    <div class="item-info">
+                        <h3>Thông Báo Cảnh Báo — Trực Tiếp Trên Điện Thoại</h3>
+                        <p>Push Notification với nội dung chi tiết: tên kho, giá trị hiện tại, ngưỡng cài đặt</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <div class="two-col">
+                        <div class="col-text">
+                            <p class="desc-text">
+                                Khi vượt ngưỡng, hệ thống gửi thông báo chi tiết: <strong>[High-Alarm] Nhiệt độ kho 1 —
+                                    đang là 15°C lớn hơn mức cài đặt -10°C</strong>. Hiển thị trên màn hình khóa điện
+                                thoại.
+                            </p>
+                        </div>
+                        <div class="col-img">
+                            <img src="images/push_notification.png" alt="Push Notification">
+                            <p class="caption">Hình 5: Push Notification</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ TÍNH NĂNG PHẦN MỀM ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">⚡</div>
+                Tính Năng Phần Mềm IoT
+            </div>
+            <p class="section-desc">
+                Phần mềm giám sát hoạt động trên 2 nền tảng: App điện thoại (Android &amp; iOS) và Web trên máy tính.
+                Ngôn ngữ: Tiếng Việt. Navis Cloud (Google Cloud).
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌡️</div>
+                    <h4>Giám Sát Nhiệt Độ &amp; Độ Ẩm</h4>
+                    <p>Hiển thị realtime 8 kênh (4 nhiệt độ + 4 độ ẩm). Cập nhật liên tục qua kết nối 4G / WiFi /
+                        Ethernet.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h4>Biểu Đồ Xu Hướng</h4>
+                    <p>Biểu đồ theo thời gian cho từng cảm biến. Hiển thị đường Hi-Limit, Lo-Limit, giá trị MAX, MIN,
+                        AVG.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4>Cảnh Báo Ngưỡng</h4>
+                    <p>Push Notification khi vượt ngưỡng cao hoặc thấp. Còi alarm tại chỗ qua relay output của MHT 1202.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <h4>Xuất Báo Cáo</h4>
+                    <p>Xuất báo cáo theo ngày/tuần/tháng dưới dạng Excel hoặc PDF. Lưu trữ dữ liệu lịch sử trên Cloud.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h4>Quản Lý Người Dùng</h4>
+                    <p>Phân quyền theo dõi cho nhiều người. Quản lý và chia sẻ quyền truy cập linh hoạt theo vai trò.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Đa Nền Tảng</h4>
+                    <p>App: Android &amp; iOS. Web: mọi trình duyệt trên PC/tablet. Giao diện tiếng Việt, Navis Cloud
+                        (Google Cloud).</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- ============ BẢNG TÓM TẮT CUNG CẤP ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">✅</div>
+                Tóm Tắt Hạng Mục Cung Cấp
+            </div>
+            <p class="section-desc">
+                Các hạng mục phần cứng, phần mềm, và dịch vụ mà O&amp;M — Navis cung cấp cho hệ thống giám sát 4 kho.
+            </p>
+
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th style="width:5%;">STT</th>
+                        <th style="width:25%;">Hạng Mục</th>
+                        <th style="width:8%;">SL</th>
+                        <th>Mô Tả Chi Tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center; font-weight:600;">1</td>
+                        <td><strong>Tủ Trung Tâm</strong></td>
+                        <td style="text-align:center;">1 tủ</td>
+                        <td>
+                            Tủ trung tâm đặt tại 1 kho, vừa giám sát tại chỗ vừa thu thập dữ liệu từ 3 tủ nhánh,
+                            gồm:<br>
+                            • Controller Multispan MHT 1202 (hiển thị nhiệt độ + độ ẩm)<br>
+                            • Cảm biến PT-100 + RH-100<br>
+                            • Còi alarm báo động tại chỗ<br>
+                            • Gateway Navis MOD (thu thập 4 bộ MHT 1202 → Cloud)<br>
+                            • Nguồn 24VDC cấp cho Gateway<br>
+                            • Kết nối Cloud: WiFi / Ethernet (4G tùy chọn)<br>
+                            • Phần mềm App Navis Smart Industry (Android &amp; iOS)<br>
+                            • Phần mềm Web quản lý dữ liệu trên máy tính<br>
+                            • Cloud Server (Google Cloud)<br>
+                            • Tính năng: giám sát realtime, biểu đồ xu hướng, cảnh báo Push Notification, thống kê
+                            MAX/MIN/AVG, xuất báo cáo Excel/PDF<br>
+                            • Tủ điện gia công, CB, domino RS485, rail DIN, phụ kiện<br>
+                            <em>* Chưa bao gồm vật tư thi công và lắp đặt tại hiện trường</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:600;">2</td>
+                        <td><strong>Tủ Nhánh</strong></td>
+                        <td style="text-align:center;">3 tủ</td>
+                        <td>
+                            Tủ nhánh đặt tại 3 kho còn lại, giám sát tại chỗ và truyền dữ liệu về tủ trung tâm qua
+                            RS485, gồm:<br>
+                            • Controller Multispan MHT 1202 (hiển thị nhiệt độ + độ ẩm)<br>
+                            • Cảm biến PT-100 (-50–200°C)<br>
+                            • Cảm biến RH-100 (0–100%RH)<br>
+                            • Còi alarm báo động tại chỗ khi vượt ngưỡng<br>
+                            • Tủ điện gia công, CB, domino, phụ kiện lắp đặt<br>
+                            * Không có Gateway — dữ liệu kéo về tủ trung tâm qua dây RS485 (≤100m)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <p class="company">CÔNG TY TNHH TM DV KT SX O & M</p>
+        <p>Giải pháp IoT Công Nghiệp — Navis Smart Industry</p>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">
+            🌐 omwater.vn &nbsp;|&nbsp; 🌐 navis.iotdaiviet.com
+        </p>
+    </footer>
+
+    <!-- ============ CANVAS DIAGRAM SCRIPT ============ -->
+    <script>
+        (function () {
+            const canvas = document.getElementById('systemDiagram');
+            if (!canvas) return;
+            const W = 1000, H = 560;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            canvas.style.width = W + 'px';
+            canvas.style.height = H + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            const C = {
+                bg: '#f8fafb', card: '#ffffff',
+                green: '#0d7c3d', greenPale: '#e8f7ee',
+                blue: '#1a6fb5', bluePale: '#e3f2fd',
+                purple: '#7c3aed', purplePale: '#f0e7ff',
+                orange: '#e67e22', orangePale: '#fef3e2',
+                text: '#1e293b', textMuted: '#64748b', line: '#94a3b8',
+            };
+
+            function rr(x, y, w, h, r, fill, stroke, lw) {
+                ctx.beginPath();
+                ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+                ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+                ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+                if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+                if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw || 1.5; ctx.stroke(); }
+            }
+
+            function box(x, y, w, h, label, sub, color, bg, icon) {
+                ctx.shadowColor = 'rgba(0,0,0,0.06)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2;
+                rr(x, y, w, h, 8, bg || C.card, color, 1.5);
+                ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+                ctx.save(); ctx.beginPath();
+                ctx.moveTo(x + 8, y); ctx.lineTo(x + w - 8, y); ctx.quadraticCurveTo(x + w, y, x + w, y + 8);
+                ctx.lineTo(x + w, y + 4); ctx.lineTo(x, y + 4); ctx.lineTo(x, y + 8);
+                ctx.quadraticCurveTo(x, y, x + 8, y); ctx.closePath();
+                ctx.fillStyle = color; ctx.fill(); ctx.restore();
+                ctx.textAlign = 'center';
+                var cy = y + h / 2;
+                if (icon && sub) {
+                    ctx.font = '13px sans-serif'; ctx.fillStyle = C.text; ctx.fillText(icon, x + w / 2, cy - 10);
+                    ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.fillText(label, x + w / 2, cy + 4);
+                    ctx.font = '9px Inter,sans-serif'; ctx.fillStyle = C.textMuted; ctx.fillText(sub, x + w / 2, cy + 16);
+                } else if (icon) {
+                    ctx.font = '13px sans-serif'; ctx.fillStyle = C.text; ctx.fillText(icon, x + w / 2, cy - 4);
+                    ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.fillText(label, x + w / 2, cy + 10);
+                } else if (sub) {
+                    ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.fillText(label, x + w / 2, cy - 2);
+                    ctx.font = '9px Inter,sans-serif'; ctx.fillStyle = C.textMuted; ctx.fillText(sub, x + w / 2, cy + 12);
+                } else {
+                    ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.fillText(label, x + w / 2, cy + 4);
+                }
+                return { cx: x + w / 2, cy: cy, x, y, w, h, r: x + w, b: y + h };
+            }
+
+            function arrow(x1, y1, x2, y2, color) {
+                ctx.beginPath(); ctx.strokeStyle = color || C.line; ctx.lineWidth = 2; ctx.setLineDash([]);
+                ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+                const a = Math.atan2(y2 - y1, x2 - x1);
+                ctx.beginPath(); ctx.fillStyle = color || C.line; ctx.moveTo(x2, y2);
+                ctx.lineTo(x2 - 8 * Math.cos(a - Math.PI / 6), y2 - 8 * Math.sin(a - Math.PI / 6));
+                ctx.lineTo(x2 - 8 * Math.cos(a + Math.PI / 6), y2 - 8 * Math.sin(a + Math.PI / 6));
+                ctx.closePath(); ctx.fill();
+            }
+
+            function tag(x, y, text, color) {
+                ctx.font = 'bold 9px Inter,sans-serif';
+                const tw = ctx.measureText(text).width + 10;
+                rr(x - tw / 2, y - 9, tw, 18, 4, '#fff', color || C.line, 1);
+                ctx.fillStyle = color || C.textMuted; ctx.textAlign = 'center';
+                ctx.fillText(text, x, y + 3);
+            }
+
+            function cab(x, y, w, h, label, color) {
+                ctx.setLineDash([6, 4]); ctx.strokeStyle = color; ctx.lineWidth = 2;
+                rr(x, y, w, h, 10, null, color, 2); ctx.setLineDash([]);
+                ctx.font = 'bold 13px Inter,sans-serif'; ctx.fillStyle = color; ctx.textAlign = 'center';
+                ctx.fillText(label, x + w / 2, y - 6);
+            }
+
+            ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+            // ========================================
+            // LAYOUT: Left=T\u1ee7 TT | Center=3 T\u1ee7 Nh\u00e1nh | Right=Cloud/App
+            // ========================================
+
+            // === T\u1ee6 TRUNG T\u00c2M (Kho 1) ===
+            cab(20, 28, 290, 330, 'T\u1ee6 TRUNG T\u00c2M (Kho 1)', C.blue);
+
+            box(30, 45, 130, 50, 'MHT 1202 #1', '220V \u2022 Modbus', C.green, C.greenPale, '\ud83c\udf21\ufe0f');
+            box(170, 45, 130, 50, 'Ngu\u1ed3n 24V', 'C\u1ea5p Gateway', C.orange, C.orangePale, '\u26a1');
+
+            box(30, 108, 85, 38, 'PT-100', '-50~200\u00b0C', C.purple, C.purplePale, '');
+            box(123, 108, 75, 38, 'RH-100', '0~100%', C.purple, C.purplePale, '');
+            box(206, 108, 95, 38, 'C\u00f2i Alarm', '', C.orange, C.orangePale, '\ud83d\udd0a');
+
+            // Gateway image
+            const gwImg = new Image();
+            gwImg.src = 'images/navis-mod-gateway.png';
+            gwImg.onload = function () {
+                ctx.drawImage(gwImg, 30, 158, 70, 55);
+                ctx.font = 'bold 9px Inter,sans-serif'; ctx.fillStyle = C.blue; ctx.textAlign = 'center';
+                ctx.fillText('Gateway Navis MOD', 65, 225);
+                ctx.font = '8px Inter,sans-serif'; ctx.fillStyle = C.textMuted;
+                ctx.fillText('Modbus \u2192 Cloud', 65, 236);
+            };
+
+            box(115, 162, 85, 42, 'Domino', 'RS485', C.green, C.greenPale, '\ud83d\udd17');
+            box(210, 162, 90, 42, 'WiFi / ETH', '4G t\u00f9y ch\u1ecdn', C.blue, C.bluePale, '\ud83d\udcf6');
+            ctx.font = '8px Inter,sans-serif'; ctx.fillStyle = C.textMuted; ctx.textAlign = 'center';
+            ctx.fillText('CB \u2022 Rail DIN \u2022 Ph\u1ee5 ki\u1ec7n', 160, 268);
+
+            // === 3 T\u1ee6 NH\u00c1NH (spaced out, labels visible) ===
+            var nhanhY = [35, 160, 285];
+
+            for (var i = 0; i < 3; i++) {
+                var x = 370, y = nhanhY[i], kn = i + 2;
+                cab(x, y, 275, 88, 'T\u1ee6 NH\u00c1NH (Kho ' + kn + ')', C.green);
+
+                box(x + 8, y + 14, 125, 50, 'MHT 1202 #' + kn, '220V \u2022 Modbus', C.green, C.greenPale, '\ud83c\udf21\ufe0f');
+                box(x + 140, y + 14, 62, 50, 'PT-100', '-50~200\u00b0C', C.purple, C.purplePale, '');
+                box(x + 208, y + 14, 58, 50, 'RH-100', '0~100%', C.purple, C.purplePale, '');
+                box(x + 140, y + 67, 62, 16, 'C\u00f2i', '', C.orange, C.orangePale, '');
+            }
+
+            // === RS485 BUS (vertical between t\u1ee7 TT and t\u1ee7 nh\u00e1nh) ===
+            var busX = 350;
+            ctx.strokeStyle = C.green; ctx.lineWidth = 3; ctx.setLineDash([]);
+
+            ctx.beginPath();
+            ctx.moveTo(200, 183); ctx.lineTo(busX, 183);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(busX, 77); ctx.lineTo(busX, 340);
+            ctx.stroke();
+
+            for (var i = 0; i < 3; i++) {
+                var stubY = nhanhY[i] + 45;
+                ctx.beginPath(); ctx.moveTo(busX, stubY); ctx.lineTo(370, stubY); ctx.stroke();
+            }
+
+            tag(busX, 355, 'RS485 (\u2264 100m)', C.green);
+
+            // === CLOUD & APP (right column, wider boxes) ===
+            var cx = 690;
+            box(cx, 28, 190, 52, 'Navis Cloud', 'Google Cloud', C.green, C.greenPale, '\u2601\ufe0f');
+
+            // WiFi/ETH line — routed RIGHT outside t\u1ee7 TT, then UP, then RIGHT to Cloud
+            ctx.beginPath(); ctx.strokeStyle = C.blue; ctx.lineWidth = 2; ctx.setLineDash([]);
+            ctx.moveTo(300, 183);   // right edge of WiFi/ETH
+            ctx.lineTo(320, 183);   // go RIGHT outside t\u1ee7 TT
+            ctx.lineTo(320, 10);    // go UP above everything
+            ctx.lineTo(785, 10);    // go RIGHT to Cloud
+            ctx.lineTo(785, 54);    // go DOWN to Cloud box
+            ctx.stroke();
+            ctx.beginPath(); ctx.fillStyle = C.blue;
+            ctx.moveTo(785, 54); ctx.lineTo(781, 46); ctx.lineTo(789, 46); ctx.closePath(); ctx.fill();
+            tag(555, 10, 'WiFi / Ethernet (4G t\u00f9y ch\u1ecdn)', C.blue);
+
+            box(cx, 100, 190, 48, 'App Mobile', 'Android & iOS', C.blue, C.bluePale, '\ud83d\udcf1');
+            arrow(cx + 95, 80, cx + 95, 100, C.blue);
+
+            box(cx, 165, 190, 48, 'Web App', 'PC / Tablet', C.purple, C.purplePale, '\ud83d\udcbb');
+            arrow(cx + 95, 148, cx + 95, 165, C.purple);
+
+            box(cx, 230, 190, 42, 'Push Notification', 'C\u1ea3nh b\u00e1o v\u01b0\u1ee3t ng\u01b0\u1ee1ng', C.orange, C.orangePale, '\ud83d\udd14');
+            arrow(cx + 95, 213, cx + 95, 230, C.orange);
+
+            box(cx, 288, 190, 42, 'Xu\u1ea5t B\u00e1o C\u00e1o', 'Excel / PDF', C.green, C.greenPale, '\ud83d\udcc4');
+            arrow(cx + 95, 272, cx + 95, 288, C.green);
+
+            // === LEGEND ===
+            const lx = 700, ly = 400;
+            ctx.font = 'bold 10px Inter,sans-serif'; ctx.fillStyle = C.textMuted; ctx.textAlign = 'left';
+            ctx.fillText('CH\u00da TH\u00cdCH:', lx, ly);
+            [{ c: C.green, l: 'RS485 Modbus (\u2264 100m)' },
+            { c: C.blue, l: 'Gateway \u2192 Cloud (Ethernet/WiFi)' },
+            { c: C.purple, l: 'C\u1ea3m bi\u1ebfn (PT-100, RH-100)' },
+            { c: C.orange, l: 'Relay \u2192 C\u00f2i Alarm' }
+            ].forEach(function (v, i) {
+                const y = ly + 18 + i * 20;
+                ctx.beginPath(); ctx.strokeStyle = v.c; ctx.lineWidth = 3;
+                ctx.moveTo(lx, y); ctx.lineTo(lx + 28, y); ctx.stroke();
+                ctx.beginPath(); ctx.arc(lx + 28, y, 3, 0, Math.PI * 2); ctx.fillStyle = v.c; ctx.fill();
+                ctx.font = '10px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.textAlign = 'left';
+                ctx.fillText(v.l, lx + 36, y + 4);
+            });
+        })();
+    </script>
+
+</body>
+
+</html>
