@@ -1,0 +1,118 @@
+CANVA PAGE-BY-PAGE ELEMENTS REPORT
+==================================
+
+
+=========================================
+PAGE 1 (X range: -9538.1 to -8557.8)
+=========================================
+[IMAGE] File: canva_img_10_MAHLw3peyiw.jpg at (-8557.8, 26.3) size (5353.1, 4014.8)
+[TEXT] "TỦ 180D HOÀN THIỆN" at (-9538.1, 799.7)
+
+=========================================
+PAGE 2 (X range: -1990.8 to -1990.8)
+=========================================
+[TEXT] "BƯỚC 1: CHUẨN BỊ VẬT TƯ" at (-1990.8, -799.4)
+
+=========================================
+PAGE 3 (X range: -971.7 to 2487.4)
+=========================================
+[TEXT] "Dây đơn trắng được cắt từ dây 10 lõi trắng" at (1650.0, -2667.4)
+[IMAGE] File: canva_img_1_MAHLxJVtdDQ.png at (320.5, -2579.4) size (3926.3, 1286.8)
+[IMAGE] File: canva_img_13_MAHLwxgmQGc.png at (-232.8, 1492.8) size (2158.2, 1337.1)
+[IMAGE] File: canva_img_14_MAHLw-rkVQY.png at (1104.3, 1492.8) size (2158.2, 724.3)
+[TEXT] "9 BÓ DÂY" at (-392.2, 1697.0)
+[TEXT] "NGUỒN 24V 2.5A" at (2416.0, 3543.3)
+[TEXT] "BỘ CHUYỂN ĐỔI ANALOG- MODBUS" at (2429.3, 4925.5)
+[IMAGE] File: canva_img_23_MAHLw6uu4h4.png at (-271.6, 5254.1) size (1883.0, 2538.4)
+[TEXT] "PLC XINJE (XD3-16PR-E) NPN" at (-971.7, 6136.7)
+[TEXT] "GATEWAY NAVIS MOD" at (2487.4, 6545.8)
+[TEXT] "CB TÉP CHINT" at (2442.6, 8232.1)
+[IMAGE] File: canva_img_28_MAHLwxJYWpI.png at (204.7, 8467.3) size (1605.7, 1402.6)
+[IMAGE] File: canva_img_29_MAHLxLWVukw.png at (-971.7, 8470.9) size (1791.6, 1599.0)
+[TEXT] "VỎ TU BOXO 180D" at (2328.1, 9540.5)
+[IMAGE] File: canva_img_30_MAHLxLjDOuk.png at (-232.8, 10563.6) size (1194.5, 1592.6)
+[TEXT] "PG 25" at (2349.6, 10716.3)
+[IMAGE] File: canva_img_32_MAHLxLMUsF8.png at (-22.9, 12249.1) size (1109.0, 321.4)
+[IMAGE] File: canva_img_33_MAHLxKCtiOo.png at (767.8, 12397.6) size (445.8, 392.3)
+[IMAGE] File: canva_img_34_MAHLxIWTbxM.png at (320.5, 12397.6) size (445.8, 392.3)
+[TEXT] "ÓC VÍT BẮT GATEWAY, CỐ ĐỊNH THIẾT BỊ TRONG TỦ" at (2168.8, 12481.3)
+[IMAGE] File: canva_img_35_MAHLxMtk4qw.png at (563.5, 12843.3) size (445.8, 392.3)
+
+=========================================
+PAGE 4 (X range: 4086.6 to 8445.1)
+=========================================
+[TEXT] "BƯỚC 3: KHOAN TỦ" at (7469.8, -2667.4)
+[TEXT] "LỖ BẮT EC" at (8445.1, -1414.1)
+[TEXT] "BƯỚC 2: CẮT DÂY, BẤM COS, GẮN TAG 9 BỘ DÂY CHO MỖI TỦ" at (4086.6, -704.2)
+[TEXT] "Dây đơn trắng được cắt từ dây 10 lõi trắng" at (6835.9, -673.2)
+[IMAGE] File: canva_img_4_MAHLxJVtdDQ.png at (5506.4, -585.2) size (3926.3, 1286.8)
+[IMAGE] File: canva_img_9_MAHLxIKLEPs.jpg at (8072.4, -183.6) size (1758.1, 1508.5)
+[IMAGE] File: canva_img_15_MAHLxLlD0Pk.jpg at (8072.4, 1653.3) size (1716.8, 1508.5)
+[IMAGE] File: canva_img_18_MAHLwxgmQGc.png at (4953.1, 3487.0) size (2158.2, 1337.1)
+[IMAGE] File: canva_img_19_MAHLw-rkVQY.png at (6290.2, 3487.0) size (2158.2, 724.3)
+[IMAGE] File: canva_img_20_MAHLxGwJ-Fo.jpg at (8072.4, 3544.3) size (1751.5, 1508.5)
+[IMAGE] File: canva_img_25_MAHLxGJz0fo.jpg at (8072.4, 5469.9) size (1322.0, 1508.5)
+
+=========================================
+PAGE 5 (X range: 9864.0 to 10256.4)
+=========================================
+[TEXT] "LỖ BẮT GATEWAY" at (10256.4, -1522.8)
+[IMAGE] File: canva_img_8_MAHLxK2E9do.jpg at (9864.0, -236.0) size (1810.5, 1859.8)
+[IMAGE] File: canva_img_16_MAHLxDlAUQ8.jpg at (9864.0, 2610.6) size (1340.7, 1953.8)
+
+=========================================
+PAGE 6 (X range: 12199.1 to 12943.0)
+=========================================
+[TEXT] "LỖ BẮT PG 25" at (12773.2, -1522.8)
+[IMAGE] File: canva_img_7_MAHLxDlWrco.jpg at (12199.1, -236.0) size (1513.7, 1925.2)
+[IMAGE] File: canva_img_12_MAHLxKuNb_s.jpg at (12943.0, 1489.8) size (1626.6, 1181.3)
+[IMAGE] File: canva_img_17_MAHLxCEyoqM.jpg at (12850.4, 3328.4) size (1737.9, 1307.8)
+[IMAGE] File: canva_img_24_MAHLxE1kvUA.jpg at (12419.9, 5438.5) size (1857.7, 1704.4)
+[IMAGE] File: canva_img_27_MAHLxPtR5yA.jpg at (12372.9, 7759.2) size (2957.1, 1785.3)
+
+=========================================
+PAGE 7 (X range: 14912.2 to 14974.2)
+=========================================
+[IMAGE] File: canva_img_5_MAHLxHO5QTs.jpg at (14912.2, -436.3) size (1714.0, 1631.5)
+[IMAGE] File: canva_img_11_MAHLxAoMVgE.jpg at (14974.2, 1479.6) size (1847.4, 1569.4)
+[IMAGE] File: canva_img_21_MAHLxA4fvr8.jpg at (14946.3, 3704.6) size (1876.3, 1557.3)
+
+=========================================
+PAGE 8 (X range: 17600.6 to 17849.7)
+=========================================
+[TEXT] "BÁT THANH RAY" at (17849.7, -1743.5)
+[IMAGE] File: canva_img_6_MAHLxIfp8Lg.jpg at (17600.6, -436.3) size (2846.7, 3795.6)
+
+=========================================
+PAGE 9 (X range: 22150.2 to 23518.9)
+=========================================
+[IMAGE] File: canva_img_0_MAHLxNONne0.png at (23518.9, -4389.0) size (10323.4, 4836.2)
+[TEXT] "BƯỚC 4: LẮP THIẾT BỊ, ĐI DÂY" at (22150.2, -2667.4)
+[IMAGE] File: canva_img_26_MAHLxMMjdWI.png at (22850.9, 5676.2) size (4281.4, 5708.5)
+[IMAGE] File: canva_img_31_MAHLxBZG8Zs.png at (22469.9, 10809.1) size (4456.9, 6115.9)
+
+=========================================
+PAGE 10 (X range: 29609.6 to 29609.6)
+=========================================
+[TEXT] "BƯỚC 5: CHO VÀO HỘP, TEST NGUỒN, GATEWAY VÀ TEST" at (29609.6, -2732.4)
+
+=========================================
+PAGE 11 (X range: 31517.2 to 32144.1)
+=========================================
+[IMAGE] File: canva_img_2_MAHLw3peyiw.jpg at (32144.1, -2371.4) size (6079.0, 4559.2)
+[IMAGE] File: canva_img_22_MAHLxAgusH8.png at (31517.2, 4316.5) size (6079.0, 5813.0)
+
+=========================================
+PAGE 12 (X range: 38098.1 to 38098.1)
+=========================================
+[TEXT] "ĐO NGUỒN KHÔNG CHẬP CẤP NGUỒN, NẠP CODE PLC, GẮN SIM ĐẤU DÂY VÀO BỘ GIẢ LẬP ANALOG GND(EC-) VÀ AIo ( EC+) TẢI APP, SCAN QR TEST TÍN HIỆU IOT ĐỦ 8 TÍN HIỆU DIGITAL VÀ 1 CẢM BIẾN CHỤP HÌNH TỦ LẠI" at (38098.1, 820.9)
+
+=========================================
+PAGE 13 (X range: 41290.7 to 41290.7)
+=========================================
+[TEXT] "BƯỚC 6: QUẤN CO, ĐÓNG THÙNG, GIAO HÀNG" at (41290.7, -3108.8)
+
+=========================================
+PAGE 14 (X range: 42352.0 to 42352.0)
+=========================================
+[IMAGE] File: canva_img_3_MAHLxDsGWto.png at (42352.0, -704.2) size (7913.0, 10550.6)

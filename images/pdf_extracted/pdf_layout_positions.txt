@@ -1,0 +1,276 @@
+PDF IMAGE PLACEMENTS:
+=====================
+
+Placement 1: xref=18
+  Extracted File: page_1_img_3_xref_18.png
+  Canva Match: no_exact_match
+  Image Size: 2560x1920
+  Page Bounding Box: (2619.8, 273.6, 5631.0, 4288.4)
+
+Placement 2: xref=19
+  Extracted File: page_1_img_4_xref_19.png
+  Canva Match: no_exact_match
+  Image Size: 1920x2560
+  Page Bounding Box: (5780.8, 6926.7, 8083.7, 8671.2)
+
+Placement 3: xref=16
+  Extracted File: page_1_img_1_xref_16.png
+  Canva Match: canva_img_18_MAHLwxgmQGc.png
+  Image Size: 1175x740
+  Page Bounding Box: (3217.8, 7010.7, 4836.3, 8030.7)
+
+Placement 4: xref=21
+  Extracted File: page_1_img_6_xref_21.png
+  Canva Match: no_exact_match
+  Image Size: 1536x2048
+  Page Bounding Box: (10020.9, 7019.1, 10916.4, 8213.9)
+
+Placement 5: xref=26
+  Extracted File: page_1_img_11_xref_26.png
+  Canva Match: canva_img_32_MAHLxLMUsF8.png
+  Image Size: 728x211
+  Page Bounding Box: (11285.0, 7176.6, 12116.8, 7417.3)
+
+Placement 6: xref=20
+  Extracted File: page_1_img_5_xref_20.png
+  Canva Match: canva_img_28_MAHLwxJYWpI.png
+  Image Size: 585x511
+  Page Bounding Box: (8448.7, 7347.2, 9653.2, 8399.5)
+
+Placement 7: xref=22
+  Extracted File: page_1_img_7_xref_22.png
+  Canva Match: canva_img_1_MAHLxJVtdDQ.png
+  Image Size: 476x156
+  Page Bounding Box: (163.7, 7434.1, 3108.2, 8399.4)
+
+Placement 8: xref=23
+  Extracted File: page_1_img_8_xref_23.png
+  Canva Match: no_exact_match
+  Image Size: 540x476
+  Page Bounding Box: (11396.4, 7434.1, 11730.9, 7728.1)
+
+Placement 9: xref=25
+  Extracted File: page_1_img_10_xref_25.png
+  Canva Match: no_exact_match
+  Image Size: 540x476
+  Page Bounding Box: (11730.7, 7616.3, 12065.2, 7910.3)
+
+Placement 10: xref=24
+  Extracted File: page_1_img_9_xref_24.png
+  Canva Match: no_exact_match
+  Image Size: 540x476
+  Page Bounding Box: (11396.4, 7769.6, 11730.9, 8063.6)
+
+Placement 11: xref=17
+  Extracted File: page_1_img_2_xref_17.png
+  Canva Match: canva_img_14_MAHLw-rkVQY.png
+  Image Size: 1205x411
+  Page Bounding Box: (3217.8, 8017.4, 4836.3, 8569.4)
+
+Placement 12: xref=16
+  Extracted File: page_1_img_1_xref_16.png
+  Canva Match: canva_img_18_MAHLwxgmQGc.png
+  Image Size: 1175x740
+  Page Bounding Box: (4713.5, 10900.1, 6332.0, 11920.1)
+
+Placement 13: xref=22
+  Extracted File: page_1_img_7_xref_22.png
+  Canva Match: canva_img_1_MAHLxJVtdDQ.png
+  Image Size: 476x156
+  Page Bounding Box: (1659.3, 11323.6, 4603.8, 12288.8)
+
+Placement 14: xref=17
+  Extracted File: page_1_img_2_xref_17.png
+  Canva Match: canva_img_14_MAHLw-rkVQY.png
+  Image Size: 1205x411
+  Page Bounding Box: (4713.5, 11906.8, 6332.0, 12458.8)
+
+Placement 15: xref=27
+  Extracted File: page_1_img_12_xref_27.jpeg
+  Canva Match: canva_img_9_MAHLxIKLEPs.jpg
+  Image Size: 634x544
+  Page Bounding Box: (1960.5, 13248.1, 3279.0, 14379.8)
+
+Placement 16: xref=28
+  Extracted File: page_1_img_13_xref_28.jpeg
+  Canva Match: canva_img_15_MAHLxLlD0Pk.jpg
+  Image Size: 750x659
+  Page Bounding Box: (3338.2, 13248.1, 4626.0, 14379.8)
+
+Placement 17: xref=29
+  Extracted File: page_1_img_14_xref_29.jpeg
+  Canva Match: canva_img_20_MAHLxGwJ-Fo.jpg
+  Image Size: 889x766
+  Page Bounding Box: (4756.5, 13248.1, 6070.5, 14379.8)
+
+Placement 18: xref=30
+  Extracted File: page_1_img_15_xref_30.jpeg
+  Canva Match: canva_img_25_MAHLxGJz0fo.jpg
+  Image Size: 567x647
+  Page Bounding Box: (6200.6, 13248.1, 7192.1, 14379.8)
+
+Placement 19: xref=31
+  Extracted File: page_1_img_16_xref_31.jpeg
+  Canva Match: canva_img_8_MAHLxK2E9do.jpg
+  Image Size: 624x641
+  Page Bounding Box: (1921.2, 14591.7, 3278.7, 15986.7)
+
+Placement 20: xref=32
+  Extracted File: page_1_img_17_xref_32.jpeg
+  Canva Match: canva_img_16_MAHLxDlAUQ8.jpg
+  Image Size: 468x682
+  Page Bounding Box: (4056.2, 14591.7, 5061.9, 16057.2)
+
+Placement 21: xref=33
+  Extracted File: page_1_img_18_xref_33.jpeg
+  Canva Match: canva_img_7_MAHLxDlWrco.jpg
+  Image Size: 669x851
+  Page Bounding Box: (1921.2, 16343.0, 3056.7, 17786.8)
+
+Placement 22: xref=37
+  Extracted File: page_1_img_22_xref_37.jpeg
+  Canva Match: canva_img_27_MAHLxPtR5yA.jpg
+  Image Size: 930x561
+  Page Bounding Box: (7917.6, 16473.4, 10135.4, 17812.1)
+
+Placement 23: xref=35
+  Extracted File: page_1_img_20_xref_35.jpeg
+  Canva Match: canva_img_24_MAHLxE1kvUA.jpg
+  Image Size: 889x816
+  Page Bounding Box: (6177.1, 16508.6, 7570.6, 17786.6)
+
+Placement 24: xref=36
+  Extracted File: page_1_img_21_xref_36.jpeg
+  Canva Match: canva_img_17_MAHLxCEyoqM.jpg
+  Image Size: 972x732
+  Page Bounding Box: (4594.5, 16831.5, 5898.0, 17812.5)
+
+Placement 25: xref=34
+  Extracted File: page_1_img_19_xref_34.jpeg
+  Canva Match: canva_img_12_MAHLxKuNb_s.jpg
+  Image Size: 947x688
+  Page Bounding Box: (3215.6, 16901.0, 4435.8, 17786.7)
+
+Placement 26: xref=38
+  Extracted File: page_1_img_23_xref_38.jpeg
+  Canva Match: canva_img_5_MAHLxHO5QTs.jpg
+  Image Size: 706x672
+  Page Bounding Box: (1771.0, 18377.9, 3056.5, 19601.1)
+
+Placement 27: xref=40
+  Extracted File: page_1_img_25_xref_40.jpeg
+  Canva Match: canva_img_21_MAHLxA4fvr8.jpg
+  Image Size: 986x818
+  Page Bounding Box: (4876.7, 18403.4, 6283.7, 19571.2)
+
+Placement 28: xref=39
+  Extracted File: page_1_img_24_xref_39.jpeg
+  Canva Match: canva_img_11_MAHLxAoMVgE.jpg
+  Image Size: 731x621
+  Page Bounding Box: (3207.9, 18424.4, 4593.2, 19601.2)
+
+Placement 29: xref=41
+  Extracted File: page_1_img_26_xref_41.jpeg
+  Canva Match: canva_img_6_MAHLxIfp8Lg.jpg
+  Image Size: 1920x2560
+  Page Bounding Box: (1771.0, 20394.2, 3906.2, 23241.2)
+
+Placement 30: xref=43
+  Extracted File: page_1_img_28_xref_43.png
+  Canva Match: canva_img_31_MAHLxBZG8Zs.png
+  Image Size: 892x1223
+  Page Bounding Box: (6144.9, 24046.1, 9487.6, 28633.1)
+
+Placement 31: xref=42
+  Extracted File: page_1_img_27_xref_42.png
+  Canva Match: no_exact_match
+  Image Size: 1920x2560
+  Page Bounding Box: (2295.2, 24331.9, 5505.9, 28612.9)
+
+Placement 32: xref=18
+  Extracted File: page_1_img_3_xref_18.png
+  Canva Match: no_exact_match
+  Image Size: 2560x1920
+  Page Bounding Box: (3825.5, 30092.2, 6836.8, 34107.0)
+
+
+PDF TEXT BLOCKS:
+================
+
+Block 1: bbox=(3019.9, 26.0, 4781.5, 249.6)
+  Text: TỦ 180D HOÀN THIỆN
+
+Block 2: bbox=(2617.2, 5683.6, 5281.4, 5956.0)
+  Text: BƯỚC 1: CHUẨN BỊ VẬT TƯ
+
+Block 3: bbox=(6700.7, 6456.1, 8100.5, 6592.3)
+  Text: PLC XINJE (XD3-16PR-E) NPN
+
+Block 4: bbox=(3875.0, 6890.7, 4332.5, 7026.9)
+  Text: 9 BÓ DÂY
+
+Block 5: bbox=(167.1, 8400.7, 2297.2, 8558.6)
+  Text: 6.Dây đơn trắng được cắt từ dây 10 lõi trắng
+
+Block 6: bbox=(11459.2, 8792.6, 13964.9, 8947.6)
+  Text: ÓC VÍT BẮT GATEWAY, CÔȴ  ĐỊNH THIÊȴT BỊ TRONG TỦ
+
+Block 7: bbox=(9253.6, 8930.9, 10147.3, 9067.1)
+  Text: VỎ TU BOXO 180D
+
+Block 8: bbox=(10604.2, 8947.1, 10882.0, 9083.2)
+  Text: PG 25
+
+Block 9: bbox=(4755.7, 8996.8, 5338.8, 9272.5)
+  Text: NGUỒN 24V
+2.5A
+
+Block 10: bbox=(5792.3, 9006.8, 6719.7, 9282.5)
+  Text: BỘ CHUYỂN ĐỔI
+ANALOG- MODBUS
+
+Block 11: bbox=(8272.3, 9016.8, 8953.7, 9153.0)
+  Text: CB TÉP CHINT
+
+Block 12: bbox=(7007.6, 9050.4, 8066.1, 9186.6)
+  Text: GATEWAY NAVIS MOD
+
+Block 13: bbox=(1920.0, 10204.1, 7872.8, 10514.0)
+  Text: BƯỚC 2: CẮT DÂY, BÂȴ M COS, GĂȴ N TAG 9 BỘ DÂY CHO MÔȺ I TỦ
+
+Block 14: bbox=(1662.7, 12290.2, 3792.8, 12448.0)
+  Text: 6.Dây đơn trắng được cắt từ dây 10 lõi trắng
+
+Block 15: bbox=(1577.6, 12779.0, 3519.1, 13051.4)
+  Text: BƯỚC 3: KHOAN TỦ
+
+Block 16: bbox=(1073.7, 13496.9, 1638.4, 13670.8)
+  Text: LỖ BĂȴT EC
+
+Block 17: bbox=(1078.5, 14876.5, 1470.6, 15029.2)
+  Text: LỖ BẮT
+
+Block 18: bbox=(1006.7, 15033.4, 1542.4, 15186.1)
+  Text: GATEWAY
+
+Block 19: bbox=(987.0, 16764.1, 1562.1, 16916.8)
+  Text: LỖ BẮT PG
+
+Block 20: bbox=(1209.6, 16921.0, 1339.5, 17073.7)
+  Text: 25
+
+Block 21: bbox=(1001.2, 20571.5, 1216.8, 20724.2)
+  Text: BÁT
+
+Block 22: bbox=(904.6, 20728.4, 1313.6, 20881.1)
+  Text: THANH
+
+Block 23: bbox=(1000.1, 20885.3, 1218.0, 21038.0)
+  Text: RAY
+
+Block 24: bbox=(1074.7, 23751.8, 4022.0, 24061.7)
+  Text: BƯỚC 4: LẮP THIÊȴT BỊ, ĐI DÂY
+
+Block 25: bbox=(834.3, 29383.9, 6406.8, 29656.3)
+  Text: BƯỚC 5: CHO VÀO HỘP, TEST NGUỒN, GATEWAY VÀ TEST
+

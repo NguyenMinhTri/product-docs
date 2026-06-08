@@ -1,0 +1,30 @@
+--- PAGE 1 ---
+NGUỒN 24V
+2.5A
+BỘ CHUYỂN ĐỔI
+ANALOG- MODBUS
+GATEWAY NAVIS MOD
+PLC XINJE (XD3-16PR-E) NPN
+BƯỚC 3: KHOAN TỦ
+CB TÉP CHINT
+VỎ TU BOXO 180D
+9 BÓ DÂY
+PG 25
+TỦ 180D HOÀN THIỆN
+6.Dây đơn trắng được cắt từ dây 10 lõi trắng
+ÓC VÍT BẮT GATEWAY, CÔȴ  ĐỊNH THIÊȴT BỊ TRONG TỦ
+6.Dây đơn trắng được cắt từ dây 10 lõi trắng
+BƯỚC 2: CẮT DÂY, BÂȴ M COS, GĂȴ N TAG 9 BỘ DÂY CHO MÔȺ I TỦ
+LỖ BĂȴT EC
+LỖ BẮT
+GATEWAY
+LỖ BẮT PG
+25
+BÁT
+THANH
+RAY
+BƯỚC 1: CHUẨN BỊ VẬT TƯ
+BƯỚC 4: LẮP THIÊȴT BỊ, ĐI DÂY
+BƯỚC 5: CHO VÀO HỘP, TEST NGUỒN, GATEWAY VÀ TEST
+
+

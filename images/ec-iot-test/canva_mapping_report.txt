@@ -1,0 +1,80 @@
+CANVA PAGE STRUCTURE AND ELEMENT MAPPING REPORT
+================================================
+
+  [IMAGE] File: canva_img_0_MAHLxNONne0.png (id=MAHLxNONne0) at (23518.9, -4389.0) size (10323.4, 4836.2) url=_assets/media/498e6abd48266ad0cef059bfa3346d78.png
+
+
+--- SECTION: BƯỚC 6: QUẤN CO, ĐÓNG THÙNG, GIAO HÀNG (y=-3108.8) ---
+
+
+--- SECTION: BƯỚC 5: CHO VÀO HỘP, TEST NGUỒN, GATEWAY VÀ TEST (y=-2732.4) ---
+  [TEXT] "Dây đơn trắng được cắt từ dây 10 lõi trắng" at (1650.0, -2667.4) size (3926.3, 159.3)
+
+
+--- SECTION: BƯỚC 3: KHOAN TỦ (y=-2667.4) ---
+
+
+--- SECTION: BƯỚC 4: LẮP THIẾT BỊ, ĐI DÂY (y=-2667.4) ---
+  [IMAGE] File: canva_img_1_MAHLxJVtdDQ.png (id=MAHLxJVtdDQ) at (320.5, -2579.4) size (3926.3, 1286.8) url=_assets/media/744813347568e238412fe6731208d671.png
+  [IMAGE] File: canva_img_2_MAHLw3peyiw.jpg (id=MAHLw3peyiw) at (32144.1, -2371.4) size (6079.0, 4559.2) url=_assets/media/5dc4d1e9ca2032d7b59573cf7430e62d.jpg
+  [TEXT] "BÁT THANH RAY" at (17849.7, -1743.5) size (849.2, 597.7)
+  [TEXT] "LỖ BẮT GATEWAY" at (10256.4, -1522.8) size (849.2, 388.5)
+  [TEXT] "LỖ BẮT PG 25" at (12773.2, -1522.8) size (849.2, 388.5)
+  [TEXT] "LỖ BẮT EC" at (8445.1, -1414.1) size (849.2, 179.3)
+
+
+--- SECTION: BƯỚC 1: CHUẨN BỊ VẬT TƯ (y=-799.4) ---
+  [IMAGE] File: canva_img_3_MAHLxDsGWto.png (id=MAHLxDsGWto) at (42352.0, -704.2) size (7913.0, 10550.6) url=_assets/media/ff0f931a62334bbe5f190d231f09f25a.png
+
+
+--- SECTION: BƯỚC 2: CẮT DÂY, BẤM COS, GẮN TAG 9 BỘ DÂY CHO MỖI TỦ (y=-704.2) ---
+  [TEXT] "Dây đơn trắng được cắt từ dây 10 lõi trắng" at (6835.9, -673.2) size (3926.3, 159.3)
+  [IMAGE] File: canva_img_4_MAHLxJVtdDQ.png (id=MAHLxJVtdDQ) at (5506.4, -585.2) size (3926.3, 1286.8) url=_assets/media/744813347568e238412fe6731208d671.png
+  [IMAGE] File: canva_img_5_MAHLxHO5QTs.jpg (id=MAHLxHO5QTs) at (14912.2, -436.3) size (1714.0, 1631.5) url=_assets/media/ea9f07c3035a4d57466212d7f2df1df7.jpg
+  [IMAGE] File: canva_img_6_MAHLxIfp8Lg.jpg (id=MAHLxIfp8Lg) at (17600.6, -436.3) size (2846.7, 3795.6) url=_assets/media/d946b9a990afe141450690e9fe158154.jpg
+  [IMAGE] File: canva_img_7_MAHLxDlWrco.jpg (id=MAHLxDlWrco) at (12199.1, -236.0) size (1513.7, 1925.2) url=_assets/media/063cfd7e9ba0176096b08401ea7e5eee.jpg
+  [IMAGE] File: canva_img_8_MAHLxK2E9do.jpg (id=MAHLxK2E9do) at (9864.0, -236.0) size (1810.5, 1859.8) url=_assets/media/f73416c8c77460bb2aa76a56b46bcea4.jpg
+  [IMAGE] File: canva_img_9_MAHLxIKLEPs.jpg (id=MAHLxIKLEPs) at (8072.4, -183.6) size (1758.1, 1508.5) url=_assets/media/1f319cb9cd638bb58608ac8498fec52f.jpg
+  [IMAGE] File: canva_img_10_MAHLw3peyiw.jpg (id=MAHLw3peyiw) at (-8557.8, 26.3) size (5353.1, 4014.8) url=_assets/media/5dc4d1e9ca2032d7b59573cf7430e62d.jpg
+
+
+--- SECTION: TỦ 180D HOÀN THIỆN (y=799.7) ---
+
+
+--- SECTION: ĐO NGUỒN KHÔNG CHẬP CẤP NGUỒN, NẠP CODE PLC, GẮN SIM ĐẤU DÂY VÀO BỘ GIẢ LẬP ANALOG GND(EC-) VÀ AIo ( EC+) TẢI APP, SCAN QR TEST TÍN HIỆU IOT ĐỦ 8 TÍN HIỆU DIGITAL VÀ 1 CẢM BIẾN CHỤP HÌNH TỦ LẠI (y=820.9) ---
+  [IMAGE] File: canva_img_11_MAHLxAoMVgE.jpg (id=MAHLxAoMVgE) at (14974.2, 1479.6) size (1847.4, 1569.4) url=_assets/media/0ea11c23d2d453639f87a16184090a0b.jpg
+  [IMAGE] File: canva_img_12_MAHLxKuNb_s.jpg (id=MAHLxKuNb_s) at (12943.0, 1489.8) size (1626.6, 1181.3) url=_assets/media/94ad939443a8ea541e4db4ebe7e0af5d.jpg
+  [IMAGE] File: canva_img_13_MAHLwxgmQGc.png (id=MAHLwxgmQGc) at (-232.8, 1492.8) size (2158.2, 1337.1) url=_assets/media/319b98ed03186e47bd0f4ca11fa709a6.png
+  [IMAGE] File: canva_img_14_MAHLw-rkVQY.png (id=MAHLw-rkVQY) at (1104.3, 1492.8) size (2158.2, 724.3) url=_assets/media/537d4c43486cfbc7fee23dd814f48afa.png
+  [IMAGE] File: canva_img_15_MAHLxLlD0Pk.jpg (id=MAHLxLlD0Pk) at (8072.4, 1653.3) size (1716.8, 1508.5) url=_assets/media/7f41e75a1b5995a60c3a08bd2a4a9ef7.jpg
+  [TEXT] "9 BÓ DÂY" at (-392.2, 1697.0) size (1953.9, 159.3)
+  [IMAGE] File: canva_img_16_MAHLxDlAUQ8.jpg (id=MAHLxDlAUQ8) at (9864.0, 2610.6) size (1340.7, 1953.8) url=_assets/media/c45dfb09e358707c7809142f75b055af.jpg
+  [IMAGE] File: canva_img_17_MAHLxCEyoqM.jpg (id=MAHLxCEyoqM) at (12850.4, 3328.4) size (1737.9, 1307.8) url=_assets/media/de345026eb7ad11af147705c4647bb7f.jpg
+  [IMAGE] File: canva_img_18_MAHLwxgmQGc.png (id=MAHLwxgmQGc) at (4953.1, 3487.0) size (2158.2, 1337.1) url=_assets/media/319b98ed03186e47bd0f4ca11fa709a6.png
+  [IMAGE] File: canva_img_19_MAHLw-rkVQY.png (id=MAHLw-rkVQY) at (6290.2, 3487.0) size (2158.2, 724.3) url=_assets/media/537d4c43486cfbc7fee23dd814f48afa.png
+
+
+--- SECTION: NGUỒN 24V 2.5A (y=3543.3) ---
+  [IMAGE] File: canva_img_20_MAHLxGwJ-Fo.jpg (id=MAHLxGwJ-Fo) at (8072.4, 3544.3) size (1751.5, 1508.5) url=_assets/media/3581bddee835576604cd974526105561.jpg
+  [IMAGE] File: canva_img_21_MAHLxA4fvr8.jpg (id=MAHLxA4fvr8) at (14946.3, 3704.6) size (1876.3, 1557.3) url=_assets/media/d4a2e4efe6283981bc97ffe424d1aac8.jpg
+  [IMAGE] File: canva_img_22_MAHLxAgusH8.png (id=MAHLxAgusH8) at (31517.2, 4316.5) size (6079.0, 5813.0) url=_assets/media/c9140eace09263a452de4cbcf28d92e2.png
+  [TEXT] "BỘ CHUYỂN ĐỔI ANALOG- MODBUS" at (2429.3, 4925.5) size (1620.4, 345.3)
+  [IMAGE] File: canva_img_23_MAHLw6uu4h4.png (id=MAHLw6uu4h4) at (-271.6, 5254.1) size (1883.0, 2538.4) url=_assets/media/00d47cddb1ff4135a3f93b2b550b0be1.png
+  [IMAGE] File: canva_img_24_MAHLxE1kvUA.jpg (id=MAHLxE1kvUA) at (12419.9, 5438.5) size (1857.7, 1704.4) url=_assets/media/3c34956d2e336415ae4109524c513633.jpg
+  [IMAGE] File: canva_img_25_MAHLxGJz0fo.jpg (id=MAHLxGJz0fo) at (8072.4, 5469.9) size (1322.0, 1508.5) url=_assets/media/946575dff990a93857803aa43d73450f.jpg
+  [IMAGE] File: canva_img_26_MAHLxMMjdWI.png (id=MAHLxMMjdWI) at (22850.9, 5676.2) size (4281.4, 5708.5) url=_assets/media/aad55d329c69b06d0a58d26181cfbc11.png
+  [TEXT] "PLC XINJE (XD3-16PR-E) NPN" at (-971.7, 6136.7) size (1953.9, 159.3)
+  [TEXT] "GATEWAY NAVIS MOD" at (2487.4, 6545.8) size (1620.4, 159.3)
+  [IMAGE] File: canva_img_27_MAHLxPtR5yA.jpg (id=MAHLxPtR5yA) at (12372.9, 7759.2) size (2957.1, 1785.3) url=_assets/media/94c554198979356f2c412a72d9f81d94.jpg
+  [TEXT] "CB TÉP CHINT" at (2442.6, 8232.1) size (1620.4, 159.3)
+  [IMAGE] File: canva_img_28_MAHLwxJYWpI.png (id=MAHLwxJYWpI) at (204.7, 8467.3) size (1605.7, 1402.6) url=_assets/media/4d6d122b23d35ba98ea105daaee004fb.png
+  [IMAGE] File: canva_img_29_MAHLxLWVukw.png (id=MAHLxLWVukw) at (-971.7, 8470.9) size (1791.6, 1599.0) url=_assets/media/885514586756fd3fa6bd377cce380f1c.png
+  [TEXT] "VỎ TU BOXO 180D" at (2328.1, 9540.5) size (1620.4, 159.3)
+  [IMAGE] File: canva_img_30_MAHLxLjDOuk.png (id=MAHLxLjDOuk) at (-232.8, 10563.6) size (1194.5, 1592.6) url=_assets/media/c863d5ae733f11a382c380cf689ec461.png
+  [TEXT] "PG 25" at (2349.6, 10716.3) size (1620.4, 159.3)
+  [IMAGE] File: canva_img_31_MAHLxBZG8Zs.png (id=MAHLxBZG8Zs) at (22469.9, 10809.1) size (4456.9, 6115.9) url=_assets/media/6874d0444e76e7f8d46b01736ce6319f.png
+  [IMAGE] File: canva_img_32_MAHLxLMUsF8.png (id=MAHLxLMUsF8) at (-22.9, 12249.1) size (1109.0, 321.4) url=_assets/media/5fda69ba5e935685ac3f549e96414090.png
+  [IMAGE] File: canva_img_33_MAHLxKCtiOo.png (id=MAHLxKCtiOo) at (767.8, 12397.6) size (445.8, 392.3) url=_assets/media/ad60cdc5a69e8b73eb5e6b85613d5246.png
+  [IMAGE] File: canva_img_34_MAHLxIWTbxM.png (id=MAHLxIWTbxM) at (320.5, 12397.6) size (445.8, 392.3) url=_assets/media/6e354d8caca93e531144ff18a548e924.png
+  [TEXT] "ÓC VÍT BẮT GATEWAY, CỐ ĐỊNH THIẾT BỊ TRONG TỦ" at (2168.8, 12481.3) size (3926.3, 159.3)
+  [IMAGE] File: canva_img_35_MAHLxMtk4qw.png (id=MAHLxMtk4qw) at (563.5, 12843.3) size (445.8, 392.3) url=_assets/media/8e85655d6511b3d21800e82713eb9108.png

@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Lắp Ráp Và Test Tủ Giám Sát EC-IoT | OM Water</title>
+    <meta name="description" content="Hướng dẫn đầy đủ các bước lắp ráp, đấu dây và kiểm thử tủ giám sát EC-IoT máy RO của Công ty OM Water">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+        /* Tắt header/footer URL của trình duyệt khi in */
+        @page {
+            size: A4;
+            margin: 10mm 12mm;
+            /* Chrome sẽ không thể hiện URL nếu margin đủ nhỏ */
+        }
+
+        :root {
+            --primary: #1565C0;
+            --primary-light: #1E88E5;
+            --primary-dark: #0D47A1;
+            --success: #2E7D32;
+            --danger: #C62828;
+            --warning: #E65100;
+            --orange: #F57C00;
+            --background: #F0F4F8;
+            --surface: #FFFFFF;
+            --text-primary: #1A2B3C;
+            --text-secondary: #5F6C7B;
+            --border: #D6E0EA;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 12.5px;
+        }
+
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, #0D47A1 0%, #1E88E5 100%);
+            color: white;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            page-break-inside: avoid;
+        }
+        .header-logo {
+            background: white;
+            border-radius: 8px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 70px;
+            height: 70px;
+        }
+        .header-logo img { width: 62px; height: auto; }
+        .header h1 { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
+        .header .subtitle { font-size: 11px; opacity: 0.9; }
+        .header .doc-info { margin-top: 5px; font-size: 10.5px; opacity: 0.8; display: flex; gap: 14px; flex-wrap: wrap; }
+        .header .doc-info span { display: flex; align-items: center; gap: 4px; }
+
+        /* ===== SECTION ===== */
+        .section {
+            background: var(--surface);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+        .section-header {
+            background: linear-gradient(90deg, #1565C0, #1976D2);
+            color: white;
+            padding: 7px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .section-header.green { background: linear-gradient(90deg, #2E7D32, #388E3C); }
+        .section-header.red { background: linear-gradient(90deg, #B71C1C, #C62828); }
+        .section-header.orange { background: linear-gradient(90deg, #E65100, #F57C00); }
+        .section-body { padding: 10px 12px; }
+
+        /* ===== NGUYÊN LÝ HOẠT ĐỘNG ===== */
+        .principle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .principle-card {
+            background: #EEF2FF;
+            border: 1px solid #C5CAE9;
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 11.5px;
+        }
+        .principle-card h4 { font-size: 12px; color: var(--primary-dark); margin-bottom: 4px; }
+        .principle-card p { color: #3949AB; line-height: 1.4; }
+
+        /* ===== IMAGES ===== */
+        .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0; }
+        .img-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 6px 0; }
+        .img-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin: 6px 0; }
+        .img-box {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .img-box img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+            max-height: 180px;
+        }
+        .img-box img.tall { max-height: 220px; }
+        .img-box img.full { max-height: 300px; object-fit: contain; }
+        .img-box .caption {
+            background: #F5F7FA;
+            padding: 4px 7px;
+            font-size: 10.5px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            line-height: 1.3;
+        }
+        .img-single {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 6px 0;
+            background: #fff;
+        }
+        .img-single img { width: 100%; display: block; object-fit: contain; max-height: 360px; }
+        .img-single .caption {
+            background: #F5F7FA;
+            padding: 4px 10px;
+            font-size: 10.5px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        /* ===== VẬT TƯ GRID ===== */
+        .mat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 8px 0;
+        }
+        .mat-card {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .mat-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+        .mat-card-body { padding: 6px 8px; }
+        .mat-card-body h5 { font-size: 11.5px; color: var(--primary-dark); margin-bottom: 2px; }
+        .mat-card-body p { font-size: 10.5px; color: var(--text-secondary); line-height: 1.3; }
+
+        /* ===== STEP FLOW ===== */
+        .steps { display: flex; flex-direction: column; gap: 7px; }
+        .step {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: #FAFBFC;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 8px 10px;
+        }
+        .step-num {
+            min-width: 28px; height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1565C0, #1E88E5);
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-num.red { background: linear-gradient(135deg, #C62828, #E53935); }
+        .step-num.orange { background: linear-gradient(135deg, #E65100, #FF7043); }
+        .step-num.green { background: linear-gradient(135deg, #2E7D32, #43A047); }
+        .step-content { flex: 1; }
+        .step-content h3 { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; color: var(--text-primary); }
+        .step-content p { font-size: 11.5px; color: var(--text-secondary); line-height: 1.4; }
+        .step-content ul { margin: 4px 0 0 14px; font-size: 11.5px; line-height: 1.5; color: var(--text-secondary); }
+
+        /* ===== CẢNH BÁO ===== */
+        .danger-box {
+            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+            border: 1.5px solid #E53935;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin: 8px 0;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .danger-box .icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+        .danger-box h3 { font-size: 12.5px; font-weight: 700; color: #B71C1C; margin-bottom: 4px; }
+        .danger-box p { font-size: 11.5px; color: #C62828; line-height: 1.4; margin-bottom: 4px; }
+        .danger-box ul { margin: 4px 0 0 14px; font-size: 11.5px; color: #C62828; line-height: 1.5; }
+
+        .warning-box {
+            background: #FFF8E1;
+            border-left: 3px solid #FFC107;
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-size: 11.5px;
+            margin: 6px 0;
+            color: #5D4037;
+        }
+        .warning-box strong { color: #E65100; }
+
+        .info-box {
+            background: #E3F2FD;
+            border-left: 3px solid #1565C0;
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-size: 11.5px;
+            margin: 6px 0;
+            color: #0D47A1;
+        }
+        .success-box {
+            background: #E8F5E9;
+            border-left: 3px solid #2E7D32;
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-size: 11.5px;
+            margin: 6px 0;
+            color: #1B5E20;
+        }
+
+        /* ===== WIRING TABLE ===== */
+        .wire-table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 6px 0; }
+        .wire-table th {
+            background: var(--primary-dark); color: white;
+            padding: 5px 8px; text-align: left; font-weight: 600;
+        }
+        .wire-table td { padding: 4px 8px; border-bottom: 1px solid var(--border); }
+        .wire-table tr:nth-child(even) { background: #F0F4F8; }
+
+        /* ===== SIGNAL TAGS ===== */
+        .tag-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin: 6px 0;
+        }
+        .tag-item {
+            border: 1px solid #90CAF9;
+            border-radius: 5px;
+            padding: 5px 7px;
+            background: #E3F2FD;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .tag-num {
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 700; flex-shrink: 0;
+        }
+
+        /* ===== STATUS LED ===== */
+        .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 6px 0; }
+        .status-item {
+            display: flex; flex-direction: column; align-items: center;
+            border: 1px solid var(--border); border-radius: 6px;
+            padding: 6px 4px; background: white;
+            font-size: 10.5px; text-align: center;
+        }
+        .led {
+            width: 12px; height: 12px; border-radius: 50%;
+            margin-bottom: 3px;
+        }
+        .led-off { background: #B0BEC5; box-shadow: 0 0 3px rgba(0,0,0,0.2); }
+        .led-on { background: #4CAF50; box-shadow: 0 0 6px #4CAF50; }
+
+        /* ===== QC TABLE ===== */
+        .qc-table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 6px 0; }
+        .qc-table th {
+            background: #0D47A1; color: white;
+            padding: 5px 8px; text-align: left;
+        }
+        .qc-table td { padding: 4px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .qc-table tr:nth-child(even) { background: #F0F4F8; }
+        .qc-table .result { text-align: center; white-space: nowrap; }
+
+        /* ===== TOOLS GRID ===== */
+        .tools-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 5px 0; }
+        .tool-chip {
+            background: #EEF2FF;
+            border: 1px solid #C5CAE9;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 11px;
+            color: #283593;
+            display: flex; align-items: center; gap: 4px;
+        }
+
+        /* ===== SIGN AREA ===== */
+        .sign-area {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 20px; margin-top: 12px;
+        }
+        .sign-box { text-align: center; }
+        .sign-box p { font-size: 11.5px; color: var(--text-secondary); margin-bottom: 20px; }
+        .sign-line { border-bottom: 1px dashed #90A4AE; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 10.5px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+        .footer .company { font-weight: 700; font-size: 11.5px; color: var(--primary-dark); }
+
+        /* ===== PRINT ===== */
+        @media print {
+            /* Giữ màu sắc khi in */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body { background: white !important; font-size: 11px; }
+            .page { max-width: 100%; padding: 0; }
+
+            /* ── Ngăn section header bị tách khỏi nội dung ── */
+            .section {
+                margin-bottom: 10px;
+                box-shadow: none !important;
+                border: 1px solid #D6E0EA !important;
+                break-inside: avoid;
+            }
+            .section-header {
+                background: var(--primary) !important;
+                color: white !important;
+                break-after: avoid;        /* không ngắt trang ngay sau header */
+            }
+            .section-header.red    { background: #C62828 !important; }
+            .section-header.green  { background: #2E7D32 !important; }
+            .section-header.orange { background: #E65100 !important; }
+            .section-body { padding: 8px 10px; }
+
+            /* ── Sub-heading luôn gắn với nội dung sau nó ── */
+            .sub-heading {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            /* ── Mỗi bước test không bị cắt ngang ── */
+            .step {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* ── Lưới ảnh 2/3 cột: cố gắng giữ nguyên trang ── */
+            .img-grid-2,
+            .img-grid-3 {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* ── Mỗi ô ảnh không bị cắt ── */
+            .img-box {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* ── Ảnh đơn full-width không bị cắt ── */
+            .img-single {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* ── Giới hạn chiều cao ảnh để vừa trang A4 ──
+               A4 print area ~247mm, mỗi ảnh tối đa ~35% trang */
+            .img-box img        { max-height: 180px !important; width: 100%; object-fit: contain; }
+            .img-single img     { max-height: 300px !important; width: 100%; object-fit: contain; }
+            .img-box img.tall   { max-height: 220px !important; }
+
+            /* ── Các hộp thông báo không bị cắt ── */
+            .warning-box, .success-box, .danger-box, .info-box {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .warning-box  { background: #FFF8E1 !important; border-color: #F9A825 !important; }
+            .success-box  { background: #E8F5E9 !important; border-color: #2E7D32 !important; }
+            .danger-box   { background: #FFEBEE !important; border-color: #C62828 !important; }
+            .info-box     { background: #E3F2FD !important; border-color: #1565C0 !important; }
+
+            /* ── Bảng không bị cắt ngang ── */
+            table { break-inside: avoid; page-break-inside: avoid; }
+            tr    { break-inside: avoid; page-break-inside: avoid; }
+            tr:nth-child(even) td { background: #F8F9FA !important; }
+
+            /* ── Màu số bước ── */
+            .step-num        { color: white !important; }
+            .step-num.red    { background: #C62828 !important; }
+            .step-num.orange { background: #E65100 !important; }
+            .step-num.green  { background: #2E7D32 !important; }
+
+            /* ── Tag và wiring ── */
+            .tag-item  { background: #E3F2FD !important; border-color: #90CAF9 !important; break-inside: avoid; }
+            .tag-num   { background: #1565C0 !important; color: white !important; }
+            .tag-grid  { break-inside: avoid; }
+            .wiring-row td:first-child { background: #F5F5F5 !important; }
+
+            /* ── Header tài liệu ── */
+            .header { padding: 10px 14px; break-inside: avoid; }
+
+            /* ── Sign area không cắt ── */
+            .sign-area { break-inside: avoid; page-break-inside: avoid; }
+            .qc-table  { break-inside: avoid; }
+        }
+
+        /* ===== SUB-HEADING ===== */
+        .sub-heading {
+            font-size: 12px; font-weight: 600; color: var(--primary-dark);
+            margin: 8px 0 4px; border-left: 3px solid var(--primary);
+            padding-left: 7px;
+        }
+
+        p { font-size: 11.5px; line-height: 1.5; }
+        ul { font-size: 11.5px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <div class="header-logo">
+            <img src="images/ec-iot-test/om_logo.png" alt="Logo OM Water"
+                onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:22px;font-weight:900;color:#1565C0;line-height:1;\'>OM<br><span style=\'font-size:11px;color:#666;\'>WATER</span></div>';">
+        </div>
+        <div>
+            <h1>HƯỚNG DẪN LẮP RÁP &amp; TEST TỦ GIÁM SÁT EC-IoT</h1>
+            <div class="subtitle">Tủ Giám Sát Tín Hiệu Máy Lọc Nước RO – Cảm Biến EC Online</div>
+            <div class="doc-info">
+                <span>🏭 Công ty TNHH TM DV KT SX O &amp; M (OMwater.vn)</span>
+                <span>📄 Tài liệu kỹ thuật nội bộ QC</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ẢNH TỦ HOÀN THIỆN ===== -->
+    <div style="border-radius:10px; overflow:hidden; margin-bottom:10px; border:2px solid #1565C0; background:#fff; page-break-inside:avoid;">
+        <div style="background:linear-gradient(90deg,#1565C0,#1E88E5); color:white; padding:6px 14px; font-size:12px; font-weight:600; display:flex; align-items:center; gap:8px;">
+            <span>🏆</span> Tủ Giám Sát EC-IoT – Thành Phẩm Hoàn Thiện
+        </div>
+        <img src="images/ec-iot-test/canva_img_10_MAHLw3peyiw.jpg"
+             alt="Tủ giám sát EC IoT hoàn thiện bên trong"
+             style="width:100%; display:block; object-fit:contain; max-height:420px; background:#000;">
+        <div style="background:#F0F4F8; padding:6px 14px; font-size:11px; color:#5F6C7B; text-align:center; border-top:1px solid #D6E0EA;">
+            Tủ EC-IoT hoàn thiện: CB CHINT (trái) • Nguồn Meanwell MDR-60-24 (phải trên) • PLC XINJE XD2-16R-E (giữa) • Bộ chuyển đổi DAM3102 (dưới, xanh) • Gateway Navis Mod NM03 (trên cùng, có QR code trạm)
+        </div>
+    </div>
+
+    <!-- ===== NGUYÊN LÝ HOẠT ĐỘNG ===== -->
+    <div class="section">
+        <div class="section-header">⚙️ Nguyên Lý Hoạt Động Tủ Giám Sát EC-IoT</div>
+        <div class="section-body">
+            <div class="principle-grid">
+                <div class="principle-card">
+                    <h4>🔌 PLC XINJE (220V)</h4>
+                    <p>Thu nhận 8 tín hiệu Digital ON/OFF từ máy RO: bơm cao áp, áp suất, phao mức nước, báo rò rỉ, EC relay...</p>
+                </div>
+                <div class="principle-card">
+                    <h4>📡 Gateway Navis Mod</h4>
+                    <p>Modbus Master đọc dữ liệu từ PLC và DAM3102 qua RS485. Gửi lên Cloud IoT qua SIM 4G để giám sát từ xa.</p>
+                </div>
+                <div class="principle-card">
+                    <h4>🧪 Module DAM3102</h4>
+                    <p>Nhận tín hiệu Analog 4–20mA từ cảm biến EC, chuyển đổi sang Modbus RTU để Gateway đọc giá trị độ dẫn điện.</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <strong>Nguồn cấp:</strong> CB CHINT đóng nguồn 220VAC → PLC dùng 220V trực tiếp. Nguồn Meanwell MDR-60-24 chuyển đổi ra <strong>24VDC 2.5A</strong> cấp cho Gateway, DAM3102 và dây tín hiệu output 24V.
+            </div>
+            <div class="img-single" style="margin-top:6px;">
+                <img src="images/ec-iot-test/canva_img_31_MAHLxBZG8Zs.png" alt="Sơ đồ điện tủ giám sát EC Online" style="width:100%; display:block; object-fit:contain; max-height:400px;">
+                <div class="caption">Sơ đồ điện đầy đủ tủ giám sát EC Online – L01 đến L19 (Nguồn: OMwater.vn)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BƯỚC 1: CHUẨN BỊ VẬT TƯ ===== -->
+    <div class="section">
+        <div class="section-header">📦 Bước 1: Chuẩn Bị Vật Tư Và Dây Dẫn</div>
+        <div class="section-body">
+
+            <!-- BẢNG THỜI GIAN NHẬP VẬT TƯ -->
+            <div class="danger-box" style="margin-bottom:10px;">
+                <div class="icon">⏳</div>
+                <div>
+                    <h3>ƯU TIÊN NHẬP KHO TRƯỚC – THỜI GIAN CHỜ LÂU</h3>
+                    <p>Các vật tư bên dưới cần đặt hàng trước vài tuần. Khi hết hàng từ đối tác, thời gian chờ có thể từ 4–8 tuần. Phải lưu kho đủ số lượng để không gián đoạn sản xuất hàng loạt.</p>
+                </div>
+            </div>
+
+            <table class="wire-table" style="margin-bottom:10px;">
+                <thead>
+                    <tr>
+                        <th style="width:30px;">#</th>
+                        <th>Vật tư</th>
+                        <th style="width:110px; text-align:center;">Thời gian chờ</th>
+                        <th>Nhà cung cấp / Liên hệ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Vỏ tủ BC-AGQ-203018G</strong> (bao gồm đế lưới)</td>
+                        <td style="text-align:center; color:#C62828; font-weight:700;">6–8 Tuần ⚠️</td>
+                        <td>CÔng ty Trường Thịnh – Mr. Hiếu: <strong>0915 030 220</strong></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Mạch Gateway Navis Mod NM03</strong></td>
+                        <td style="text-align:center; color:#E65100; font-weight:700;">4 Tuần</td>
+                        <td>CÔng ty Humatic – Hùng: <strong>098 8020646</strong></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>PLC XINJE XD2-16R-E</strong></td>
+                        <td style="text-align:center; color:#E65100; font-weight:700;">4 Tuần</td>
+                        <td>Toàn Cầu – Vũ Ngọc Nguyên: <strong>0986 830 800</strong></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>Bộ chuyển đổi Analog DAM3102</strong></td>
+                        <td style="text-align:center; color:#E65100; font-weight:700;">4 Tuần</td>
+                        <td>ALIBABA</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>Nguồn 24V – Meanwell MDR-60-24</strong></td>
+                        <td style="text-align:center; color:#E65100; font-weight:700;">4 Tuần</td>
+                        <td>ALIBABA</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><strong>Vỏ Gateway (case Gateway NM03)</strong></td>
+                        <td style="text-align:center; color:#E65100; font-weight:700;">4 Tuần</td>
+                        <td>TAOBAO</td>
+                    </tr>
+                    <tr style="background:#FFF8E1;">
+                        <td colspan="4" style="font-weight:700; color:#5D4037; padding:5px 8px;">Dây điện &amp; cáp – có thể mua trong ngày</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><strong>Cáp điều khiển 10 lõi 0.5mm²</strong> (dây trắng, 10 lõi)</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện hoặc đầu mối cáp</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><strong>Dây cáp điều khiển không lưới chống nhiễu 2×0.5mm²</strong> (shield, dùng Analog)</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện, đầu mối cáp</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td><strong>Dây điện DPC-FA 2x1.0-300/500V màu xám</strong> (Daphaco 2 lõi mềm)</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện / Daphaco</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td><strong>Dây đơn đỏ 1mm²</strong> (dây nử đơn lõi cứng, pha nóng L 220V)</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td><strong>Dây đơn xanh blue 1mm²</strong> (trung tính N 220V)</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td><strong>Dây đơn trắng 0.5mm²</strong> (cắt từ dây 10 lõi trắng, tín hiệu digital)</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Cắt từ cuộn cáp 10 lõi</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td><strong>Dây đơn đen 0.5mm²</strong> (nguồn (-) 24V, V– các thiết bị)</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện</td>
+                    </tr>
+                    <tr style="background:#FFF8E1;">
+                        <td colspan="4" style="font-weight:700; color:#5D4037; padding:5px 8px;">Ốc vít, và phụ kiện khác</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td><strong>Vít gỗ dù M4×10 Inox 304</strong> – bắt tấm đế vào vỏ tủ</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Nam Hải / chợ cơ khí</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td><strong>Ecu liền long đen M4 Inox 304</strong> – gá Gateway</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Nam Hải / chợ cơ khí</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td><strong>Vít pake dù M4×10 Inox 304</strong> – gá ray DIN lên tấm đế</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Nam Hải / chợ cơ khí</td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td><strong>Ốc siết cáp PG25</strong> (88 cái/túi) – luồn cáp qua thành tủ</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện / đại lý PG</td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td><strong>CB CHINT NXB-63 1P 10A</strong> – ngắt điện bảo vệ tủ</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện / CHINT</td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td><strong>Thanh ray DIN 35mm</strong> – gá CB, nguồn, PLC</td>
+                        <td style="text-align:center; color:#2E7D32; font-weight:700;">Trong ngày</td>
+                        <td>Chợ điện / điện cơ</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ẢNH NGUỒN + DAM3102 + NAVIS MOD -->
+            <div class="sub-heading">1.1 – Thiết bị điện tử chính trong tủ</div>
+            <div class="img-single">
+                <img src="images/ec-iot-test/user_img_nguon_dam_navis.png" alt="Nguồn Meanwell MDR-60-24 + DAM3102 + Navis Mod NM03" style="width:100%; display:block; object-fit:contain; max-height:380px;">
+                <div class="caption">3 thiết bị chính: <strong>Nguồn Meanwell MDR-60-24</strong> (trái – cấp 24VDC) · <strong>Bộ chuyển đổi DAM3102</strong> (giữa – nhận analog 4–20mA từ cảm biến EC) · <strong>Gateway Navis Mod NM03</strong> (phải – Modbus Master, 4G IoT)</div>
+            </div>
+
+            <!-- ẢNH VỎ TỦ + PG25 -->
+            <div class="sub-heading">1.2 – Vỏ tủ Boxco BC-AGQ-203018G và ốc siết cáp PG25</div>
+            <div class="img-grid-2">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/canva_img_28_MAHLwxJYWpI.png" alt="Vỏ tủ Boxco 180D" style="width:100%; display:block; object-fit:contain; max-height:280px;">
+                    <div class="caption">Vỏ tủ nhựa Boxco IP67 mã BC-AGQ-203018G – có 2 mặt bản lề và 1 mặt khóa. <strong>Lưu kho trước 6–8 tuần</strong></div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/canva_img_30_MAHLxLjDOuk.png" alt="Túi PG25 88 cái" style="width:100%; display:block; object-fit:contain; max-height:280px;">
+                    <div class="caption">Ốc siết cáp PG25 (88 cái/túi) – dùng để siết chặt cáp vào thành tủ, chống nước vào tủ</div>
+                </div>
+            </div>
+
+            <!-- ẢNH DÂY -->
+            <div class="sub-heading">1.3 – Dây và cáp điều khiển</div>
+            <div class="img-grid-2">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/user_img_day_cuon.jpg" alt="3 cuộn dây điều khiển" style="width:100%; display:block; object-fit:contain; max-height:320px;">
+                    <div class="caption">Dây điều khiển cuộn: <strong style="color:#555;">⬛ Vỏ ĐEN</strong> – cáp 10 lõi 0.5mm² (tín hiệu Digital PLC) &amp; cáp 2 lõi 0.5mm² Shield chống nhiễu (Analog EC±) &nbsp;|&nbsp; <strong style="color:#555;">▪ Vỏ XÁM</strong> – cáp 2×1.0mm² nguồn AC 220V (lõi 🔴 Đỏ = L, 🔵 Xanh blue = N)</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/user_img_day_bam_cos.jpg" alt="Dây đã bấm cos hàng loạt" style="width:100%; display:block; object-fit:contain; max-height:320px;">
+                    <div class="caption">Dây đã cắt, tuốt đầu và bấm cos kim hàng loạt – <strong>vỏ xám</strong> (lõi 🔴 đỏ = L 220V, 🔵 xanh blue = N), <strong>vỏ đen</strong> (lõi trắng = +24V / tín hiệu, lõi đen = 0V) – đã gắn tag số sẵn sàng lắp ráp</div>
+                </div>
+            </div>
+
+            <!-- ỐC VÍT -->
+            <div class="sub-heading">1.4 – Ốc vít Inox 304 gá thiết bị (mua từ Nam Hải)</div>
+            <div class="img-grid-3">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/canva_img_35_MAHLxMtk4qw.png" alt="Vít gỗ dù M4x10" style="width:100%; display:block; object-fit:contain; max-height:200px;">
+                    <div class="caption"><strong>Vít gỗ dù M4×10</strong> Inox 304 – bắt tấm đế lưới vào vỏ tủ nhựa 4 góc</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/canva_img_33_MAHLxKCtiOo.png" alt="Ecu liền long đen M4" style="width:100%; display:block; object-fit:contain; max-height:200px;">
+                    <div class="caption"><strong>Ecu liền long đen M4</strong> Inox 304 – kèm vít pake gá Gateway lên tấm đế</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/canva_img_34_MAHLxIWTbxM.png" alt="Vít pake dù M4x10" style="width:100%; display:block; object-fit:contain; max-height:200px;">
+                    <div class="caption"><strong>Vít pake dù M4×10</strong> Inox 304 – gá thanh ray DIN lên tấm đế lưới</div>
+                </div>
+            </div>
+
+            <!-- KHO VẬT TƯ HÀNG LOẠT -->
+            <div class="sub-heading">1.5 – Kết quả nhập kho và sản xuất hàng loạt</div>
+            <div class="img-single">
+                <img src="images/ec-iot-test/canva_img_23_MAHLw6uu4h4.png" alt="Kho vật tư hàng loạt" style="width:100%; display:block; object-fit:contain; max-height:350px;">
+                <div class="caption">Kho vật tư: nhiều bộ đế ray đã lắp thiết bị (PLC, nguồn, DAM3102, Gateway) được sản xuất hàng loạt, chờ cho vào vỏ tủ Boxco</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== BƯỚC 2: CẮT DÂY, BẤM COS, GẮN TAG ===== -->
+    <div class="section">
+        <div class="section-header">✂️ Bước 2: Gia Công Dây – Cắt, Bấm Cos, Gắn Tag 9 Bộ Dây</div>
+        <div class="section-body">
+            <p style="margin-bottom:7px;">Gia công dây hàng loạt trước khi lắp thiết bị. Cắt đúng chiều dài theo bảng bó dây, tuốt đầu, bấm cos kim, lồng ống tag tên trước khi đấu nối.</p>
+
+            <!-- Sơ đồ bó dây 01-07 -->
+            <div class="sub-heading">2.1 – Sơ đồ gia công 7 bó dây chính (01ok → 07ok)</div>
+            <div class="img-single">
+                <img src="images/ec-iot-test/canva_img_18_MAHLwxgmQGc.png" alt="Sơ đồ 9 bó dây đầy đủ" class="full">
+                <div class="caption">Bảng gia công hàng loạt 7 bó dây (01ok→07ok): dây nguồn 220V (L01–L04), dây 24V (L05–L08), dây tín hiệu trắng 0.5mm² (L09–L16) – GIA CÔNG TỦ EC TÂN PHẠM NGUYỄN</div>
+            </div>
+
+            <!-- Sơ đồ bó dây 08-09 -->
+            <div class="sub-heading">2.2 – Sơ đồ bó dây 08ok và 09ok (cáp 10 lõi và cáp analog shield)</div>
+            <div class="img-single">
+                <img src="images/ec-iot-test/canva_img_19_MAHLw-rkVQY.png" alt="Sơ đồ bó dây 08ok 09ok" class="full">
+                <div class="caption">Bó dây 08ok: Cáp 10 lõi trắng 0.5mm² (L17-10C, dài 1600mm) cho 10 tín hiệu Digital PLC (X0–X6, RORI). <strong>Lưu ý: EC.R.COM và EC.R.NO được làm dây sẵn, quấn keo cách điện đầu dây – để khách tự đấu vào thiết bị của họ, KHÔNG test IoT.</strong> Bó dây 09ok: Cáp 2 lõi chống nhiễu (L18-2C-Shield, dài 210mm) cho tín hiệu Analog EC± đấu vào DAM3102</div>
+            </div>
+
+            <!-- Quy chuẩn tag 9 bộ dây -->
+            <div class="sub-heading">2.3 – Quy chuẩn tag tên 9 đầu dây tín hiệu đầu nối tủ</div>
+            <div class="tag-grid">
+                <div class="tag-item"><div class="tag-num">1</div>RO1,2 – Bơm RO 1&amp;2</div>
+                <div class="tag-item"><div class="tag-num">2</div>RO3,4 – Bơm RO 3&amp;4</div>
+                <div class="tag-item"><div class="tag-num">3</div>ÁP CAO</div>
+                <div class="tag-item"><div class="tag-num">4</div>ÁP THẤP</div>
+                <div class="tag-item"><div class="tag-num">5</div>EC – Tín hiệu EC relay</div>
+                <div class="tag-item"><div class="tag-num">6</div>ĐẦY – Phao bồn đầy</div>
+                <div class="tag-item"><div class="tag-num">7</div>CẠN – Phao bồn cạn</div>
+                <div class="tag-item"><div class="tag-num">8</div>RORI – Rò rỉ nước</div>
+                <div class="tag-item" style="grid-column: span 4;"><div class="tag-num">9</div>EC ANALOG (4–20mA) – Cáp chống nhiễu Shield → DAM3102 (EC.I+ và EC.I–)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BƯỚC 3: KHOAN VỎ TỦ ===== -->
+    <div class="section">
+        <div class="section-header">🕳️ Bước 3: Khoan Vỏ Tủ Điện (Boxco 180D)</div>
+        <div class="section-body">
+            <p style="margin-bottom:7px;">Thực hiện khoan các lỗ trên vỏ tủ Boxco và trên tấm đế lưới nhựa. Phải xác định đúng <strong>mặt có khóa</strong> và <strong>mặt bản lề</strong> trước khi khoan.</p>
+
+            <!-- Bước 3.1 Xác định + Chấm điểm + Khoan lỗ pát EC (gộp) -->
+            <div class="sub-heading">3.1 – Khoan 2 lỗ pát EC trên mặt có khóa</div>
+            <div class="img-grid-2">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-2-LO-PAT-EC--BUOC-1.jpg" alt="Chấm điểm 2 lỗ pát EC trên mặt có khóa" style="width:100%; display:block; object-fit:contain; max-height:400px;">
+                    <div class="caption">Mặt có khóa: Chấm 2 điểm nhỏ không khoanh hết cho 2 lỗ pát EC (ghi số nhận biết)</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-2-LO-PAT-EC--BUOC-2.jpg" alt="Định tâm vít nhọn" style="width:100%; display:block; object-fit:contain; max-height:400px;">
+                    <div class="caption"><strong>B1:</strong> Dùng vít nhọn định tâm chính xác tại vị trí đã chấm – tránh mũi khoan bị trượt</div>
+                </div>
+            </div>
+            <div class="img-grid-2">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-2-LO-PAT-EC--BUOC-3.jpg" alt="Khoan lỗ 3mm mức đầu tiên" style="width:100%; display:block; object-fit:contain; max-height:400px;">
+                    <div class="caption"><strong>B2:</strong> Khoan lỗ 3mm mức đầu tiên – bắt đầu từ mũi nhỏ nhất</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-2-LO-PAT-EC--BUOC-4.jpg" alt="Khoan mở rộng bằng mũi tam giác" style="width:100%; display:block; object-fit:contain; max-height:400px;">
+                    <div class="caption"><strong>B3:</strong> Khoan mở rộng bằng mũi tam giác (step drill) – khoan dần từng bước đến đúng kích thước</div>
+                </div>
+            </div>
+
+            <!-- Bước 3.2 Khoan lỗ Gateway -->
+            <div class="sub-heading">3.2 – Khoan 2 lỗ gá Gateway (trên mặt bản lề)</div>
+            <div class="img-grid-2">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-2-LO-PAT-GATEWAY--BUOC-1.jpg" alt="Khoan 2 lỗ pát Gateway" style="width:100%; display:block; object-fit:contain; max-height:420px;">
+                    <div class="caption">Khoan 2 lỗ pát Gateway NM03 – giống như lỗ pát EC. Mũi khoan 4mm. Vị trí 2 mũi tên đỏ trên mặt bản lề</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-2-LO-PAT-GATEWAY--BUOC-2.jpg" alt="Khoan xong lỗ Gateway mặt bản lề" style="width:100%; display:block; object-fit:contain; max-height:420px;">
+                    <div class="caption">Khoan xong: 3 mũi tên đỏ chỉ các lỗ đã xong trên mặt bản lề. Sẵn sàng gá Gateway bằng vít M4</div>
+                </div>
+            </div>
+
+            <!-- Bước 3.3 Khoan tấm đế PG25 -->
+            <div class="sub-heading">3.3 – Khoan lỗ PG25 trên tấm đế lưới nhựa</div>
+            <div class="img-grid-2">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-LO-CHO-PG-25-B1.jpg" alt="Xác định vị trí lỗ PG25 trên tấm đế" style="width:100%; display:block; object-fit:contain; max-height:420px;">
+                    <div class="caption">Xác định vị trí lỗ PG25 trên tấm đế lưới: đánh số (27 → PG25) và vạch dấu marker cổng ra cáp đi vào</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-LO-CHO-PG-25-B12jpg.jpg" alt="Vị trí lỗ PG đánh số" style="width:100%; display:block; object-fit:contain; max-height:420px;">
+                    <div class="caption">Tấm đế nhìn từ mặt sau: đánh số vị trí lỗ PG (số 5, mũi tên đỏ "vị trí lỗ PG"), cạnh lỗ PG sẵn có trên tấm đế</div>
+                </div>
+            </div>
+            <div class="img-grid-3">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-LO-CHO-PG-25-B3.jpg" alt="Khoan trước mũi 25" style="width:100%; display:block; object-fit:contain; max-height:340px;">
+                    <div class="caption">Khoan trước bằng mũi 25 – dùng mũi tam giác bước (step drill) khoan từ giữa ra</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-LO-CHO-PG-25-B4.jpg" alt="Bấm xéo 2 lỗ" style="width:100%; display:block; object-fit:contain; max-height:340px;">
+                    <div class="caption">Dùng kìm bấm xéo 2 lỗ nhỏ ("bấm xéo 2 lỗ") trên tấm đế nhựa – tạo chỗ bắt đai PG25</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-LO-CHO-PG-25-B5.jpg" alt="Khoan tiếp tới mức kẻ cuối" style="width:100%; display:block; object-fit:contain; max-height:340px;">
+                    <div class="caption">Khoan tiếp đến mức kẻ cuối cùng bằng mũi tam giác – mở rộng dần đến đúng kích thước PG25 (Ø25mm)</div>
+                </div>
+            </div>
+            <div class="img-grid-3">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-LO-CHO-PG-25-B6.jpg" alt="Gắn PG25 vào lỗ" style="width:100%; display:block; object-fit:contain; max-height:340px;">
+                    <div class="caption">Gắn PG25 vào lỗ vừa khoan trên tấm đế ("gắn PG25") – vặn chặt đai ốc PG25 từ mặt sau</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/canva_img_5_MAHLxHO5QTs.jpg" alt="Xác định mặt khóa mặt bản lề tủ Boxco" style="width:100%; display:block; object-fit:contain; max-height:340px;">
+                    <div class="caption">Nhìn vào tủ Boxco xác định <strong>mặt khóa</strong> và <strong>mặt bản lề</strong> – khoét lỗ PG25 phía mặt bản lề (đáy tủ)</div>
+                </div>
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-LO-CHO-PG-25-B8.jpg" alt="Khoan mặt bản lề khoét mũi 25" style="width:100%; display:block; object-fit:contain; max-height:340px;">
+                    <div class="caption">Khoan thân tủ Boxco mặt bản lề bằng mũi khoét 25 – mở rộng lỗ để luồn PG25 vào ("khoét mũi lỗ 25")</div>
+                </div>
+            </div>
+            <div class="img-single">
+                <img src="images/ec-iot-test/KHOAN-LO-CHO-PG-25-B9.jpg" alt="Lỗ Boxco hoàn thiện" style="width:100%; display:block; object-fit:contain; max-height:420px;">
+                <div class="caption">Lỗ Ø27 trên thân tủ Boxco hoàn thiện sau khi khoan (mũi tên đỏ chỉ lỗ tròn trong tủ BOXCO)</div>
+            </div>
+
+            <!-- Bước 3.5 Bắt thanh ray DIN -->
+            <div class="sub-heading">3.5 – Bắt thanh ray DIN lên tấm đế và kết quả hoàn thiện</div>
+            <div class="img-grid-2">
+                <div class="img-box">
+                    <img src="images/ec-iot-test/KHOAN-KHOAN-LO-BAT-RAY.jpg" alt="Bắt thanh ray DIN lên tấm đế" style="width:100%; display:block; object-fit:contain; max-height:520px;">
+                    <div class="caption">Tấm đế hoàn thiện: thanh ray DIN đã được bắt cố định bằng vít pake dù M4×10 Inox 304. Sẵn sàng gá thiết bị lên ray</div>
+                </div>
+                <div class="img-box">
+                    <div style="position:relative; display:inline-block; width:100%;">
+                        <img src="images/ec-iot-test/KHOAN-TU-180D-HOAN-THIIEN.jpg" alt="Tủ 180D hoàn thiện cả dây" style="width:100%; display:block; object-fit:contain; max-height:520px;">
+                        <!-- Che mã QR bảo mật -->
+                        <div style="position:absolute; top:3%; left:3%; width:16%; height:13%; background:#1a1a1a; border-radius:4px;"></div>
+                    </div>
+                    <div class="caption">Tủ Boxco 180D đã hoàn thiện đầy đủ: Gateway (trên), DAM3102 (xanh), PLC XINJE (phải), nguồn MDR-60-24 và CB CHINT (dưới)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BƯỚC 4: LẮP THIẾT BỊ VÀ ĐI DÂY ===== -->
+    <div class="section">
+        <div class="section-header">🔌 Bước 4: Lắp Thiết Bị Lên Ray DIN Và Đấu Dây</div>
+        <div class="section-body">
+            <p style="margin-bottom:7px;">Gá thiết bị lên ray DIN rail theo bố cục: CB CHINT → Nguồn Meanwell 24V → PLC XINJE. Gắn DAM3102 và Gateway NavisMod bằng vít M4. Đấu nối dây theo sơ đồ bên dưới.</p>
+
+            <!-- SƠ ĐỒ ĐẤU DÂY -->
+            <div class="sub-heading">4.0 – Sơ đồ điện tủ giám sát EC Online (xem trước khi đấu dây)</div>
+            <div class="img-single">
+                <img src="images/ec-iot-test/canva_img_31_MAHLxBZG8Zs.png" alt="Sơ đồ điện tủ giám sát EC Online" style="width:100%; display:block; object-fit:contain;">
+                <div class="caption"><strong>SƠ ĐỒ ĐIỆN TỦ GIÁM SÁT EC ONLINE</strong> – Tham chiếu toàn bộ các đường dây L01–L19 trước khi đấu nối. EC Sensor nằm ngoài tủ, cáp analog Shield (L18/L19) đi qua PG25 ra ngoài tủ.</div>
+            </div>
+
+            <!-- ẢNH THỰC TẾ -->
+            <div class="sub-heading">4.1 – Lắp thiết bị lên tấm đế và đi dây thực tế</div>
+            <div class="img-single">
+                <img src="images/ec-iot-test/canva_img_26_MAHLxMMjdWI.png" alt="Thiết bị lắp ray thực tế đang đi dây" style="width:100%; display:block; object-fit:contain;">
+                <div class="caption">Thực tế lắp thiết bị và đi dây: PLC XINJE (góc trên trái), Nguồn MDR-60-24 (trên phải), CB CHINT xanh (phải), DAM3102 xanh (dưới giữa), Gateway NavisMod (ngoài khung). Dây đã bấm cos kim và gắn tag số sẵn sàng lắp ráp</div>
+            </div>
+            <div class="img-single" style="margin-top:8px;">
+                <img src="images/ec-iot-test/canva_img_10_MAHLw3peyiw.jpg" alt="Tủ hoàn thiện bên trong" style="width:100%; display:block; object-fit:contain;">
+                <div class="caption">Tủ hoàn thiện bên trong: DAM3102 xanh (trên), PLC XINJE (giữa-dưới), Nguồn MDR-60-24 (phải), CB CHINT (trái), Gateway NavisMod (trên cùng)</div>
+            </div>
+
+            <!-- PHÂN LOẠI DÂY THỰC TẾ -->
+            <div class="sub-heading">4.2 – Phân loại dây theo vỏ bọc thực tế</div>
+            <div class="info-box" style="margin-bottom:8px;">
+                <strong>⚠️ Lưu ý nhận dạng dây:</strong> Tủ 180D chỉ dùng <strong>2 loại vỏ dây</strong>. Không có dây hồng hay màu khác.
+            </div>
+            <table class="wire-table" style="margin-bottom:10px;">
+                <thead>
+                    <tr>
+                        <th>Vỏ dây</th>
+                        <th>Dùng cho</th>
+                        <th>Màu lõi bên trong</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🔘 Vỏ XÁM</strong></td>
+                        <td>Dây nguồn AC 220V (2×1.0mm²)</td>
+                        <td>
+                            <span style="display:inline-block;width:11px;height:11px;background:#D32F2F;border-radius:2px;vertical-align:middle;margin-right:3px;"></span><strong style="color:#D32F2F;">Đỏ</strong> = L (pha nóng) &nbsp;|&nbsp;
+                            <span style="display:inline-block;width:11px;height:11px;background:#1565C0;border-radius:2px;vertical-align:middle;margin-right:3px;"></span><strong style="color:#1565C0;">Xanh blue</strong> = N (trung tính)
+                        </td>
+                        <td>CB CHINT → PLC và Nguồn Meanwell</td>
+                    </tr>
+                    <tr>
+                        <td><strong>⬛ Vỏ ĐEN</strong></td>
+                        <td>Dây nguồn DC 24V + Tín hiệu 10 lõi</td>
+                        <td>
+                            <span style="display:inline-block;width:11px;height:11px;background:#F5F5F5;border:1px solid #999;border-radius:2px;vertical-align:middle;margin-right:3px;"></span><strong>Trắng</strong> = V+ (24V) / A+ (Modbus) / tín hiệu &nbsp;|&nbsp;
+                            <span style="display:inline-block;width:11px;height:11px;background:#212121;border-radius:2px;vertical-align:middle;margin-right:3px;"></span><strong>Đen</strong> = V– (0V) / B– (Modbus)
+                        </td>
+                        <td>Nguồn 24V, Modbus RS485, tín hiệu DI</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- QUY TẮC ĐẤU DÂY -->
+            <div class="success-box" style="margin-top:8px;">
+                <strong>📐 Quy tắc đi dây và đấu nối:</strong>
+                <ul style="margin-top:4px;">
+                    <li><strong>Dây nguồn AC 220V (vỏ xám):</strong>
+                        <span style="display:inline-block;width:12px;height:12px;background:#D32F2F;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#D32F2F;font-weight:700;">Đỏ (L – pha nóng)</span> +
+                        <span style="display:inline-block;width:12px;height:12px;background:#1565C0;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#1565C0;font-weight:700;">Xanh Blue (N – trung tính)</span>
+                        từ CB CHINT → chân L-N của PLC và nguồn Meanwell
+                    </li>
+                    <li><strong>Dây nguồn DC 24V (vỏ đen 2 lõi):</strong>
+                        <span style="display:inline-block;width:12px;height:12px;background:#F5F5F5;border:1px solid #999;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#555;font-weight:700;">Trắng (V+)</span> +
+                        <span style="display:inline-block;width:12px;height:12px;background:#212121;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#333;font-weight:700;">Đen (V–)</span>
+                        từ Meanwell → DAM3102, Gateway, cổng COM PLC
+                    </li>
+                    <li><strong>Cáp Modbus RS485 (vỏ đen 2 lõi):</strong>
+                        <span style="display:inline-block;width:12px;height:12px;background:#F5F5F5;border:1px solid #999;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#555;font-weight:700;">Trắng (A+)</span> +
+                        <span style="display:inline-block;width:12px;height:12px;background:#212121;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#333;font-weight:700;">Đen (B–)</span>
+                        cáp xoắn đôi chống nhiễu giữa Gateway, PLC (COM1) và DAM3102 (485+/485–)
+                    </li>
+                    <li><strong>Cáp Analog EC – Shield (vỏ đen 2 lõi chống nhiễu):</strong>
+                        <span style="display:inline-block;width:12px;height:12px;background:#F5F5F5;border:1px solid #999;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#555;font-weight:700;">Trắng (EC.I+)</span> +
+                        <span style="display:inline-block;width:12px;height:12px;background:#212121;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#333;font-weight:700;">Đen (EC.I–)</span>
+                        cáp Shield 2 lõi 0.5mm²
+                    </li>
+                    <li><strong>Dây tín hiệu Digital PLC X0–X7 (cáp 10 lõi vỏ đen):</strong>
+                        <span style="display:inline-block;width:12px;height:12px;background:#F5F5F5;border:1px solid #999;border-radius:2px;vertical-align:middle;margin:0 2px;"></span><span style="color:#555;font-weight:700;">Trắng 0.5mm² × 10 lõi</span>
+                        – mang tín hiệu ON/OFF từ máy RO vào PLC, gắn tag số 1–8
+                    </li>
+                </ul>
+            </div>
+
+            <!-- LƯU Ý EC SENSOR -->
+            <div class="warning-box" style="margin-top:8px;">
+                <div class="icon">📏</div>
+                <div>
+                    <strong>Tủ 180D – Cảm biến EC để NGOÀI tủ:</strong>
+                    <ul style="margin-top:4px;">
+                        <li>Cáp analog Shield (L18/L19) phải cắt dài <strong>≥ 1.2m</strong> – đủ đi từ DAM3102 trong tủ ra đến vị trí cảm biến EC ngoài tủ</li>
+                        <li>Cáp đi qua <strong>PG25</strong> trên thân tủ mặt bản lề – siết chặt đai ốc PG25 chống nước, chống kéo đứt</li>
+                        <li>Bấm cos kim đầu trong (nối DAM3102), đầu ngoài để trần hoặc dùng terminal chống nước tùy vị trí lắp đặt</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="danger-box" style="margin-top:8px;">
+                <div class="icon">⚡</div>
+                <div>
+                    <h3>CẢNH BÁO ĐẤU DÂY – ĐỌC KỸ TRƯỚC KHI ĐẤU NỐI</h3>
+                    <ul>
+                        <li><strong>Chỉ PLC XINJE</strong> dùng nguồn <strong>220VAC</strong> trực tiếp. Tất cả thiết bị còn lại (Gateway, DAM3102, cảm biến) đều dùng <strong>24VDC</strong></li>
+                        <li>Dây tín hiệu <strong>Modbus RS485</strong> phải đi riêng, <strong>tuyệt đối không chập vào đường 24VDC hoặc 220VAC</strong></li>
+                        <li>Dây tín hiệu <strong>Analog 4–20mA</strong> (cáp Shield EC±) phải đi riêng, <strong>không được chập vào 24VDC hoặc 220VAC</strong></li>
+                        <li>Lớp Shield của cáp analog chỉ nối đất (<em>GND</em>) ở <strong>một đầu duy nhất</strong> để tránh tạo vòng nhiễu</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bảng đấu dây chi tiết -->
+            <div class="sub-heading">4.3 – Bảng đấu nối chi tiết theo sơ đồ (L01–L19)</div>
+            <table class="wire-table">
+                <thead>
+                    <tr>
+                        <th>Bó dây</th>
+                        <th>Từ (Nguồn)</th>
+                        <th>Đến (Đích)</th>
+                        <th>Loại dây</th>
+                        <th>Màu lõi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>01ok</td><td>CB.L220V / CB.N220V</td><td>PLC.N220V / NG.N220V</td><td>Dây đơn 1.0mm² vỏ xám</td><td>🔵 Xanh Blue (N – L01,L02) + 🔴 Đỏ (L – L01.1)</td></tr>
+                    <tr><td>02ok</td><td>CB.L220V</td><td>NG.L220V / PLC.L220V</td><td>Dây đơn 1.0mm² vỏ xám</td><td>🔴 Đỏ (L03, L04)</td></tr>
+                    <tr><td>03ok</td><td>NG.24VDC / NG.0VDC</td><td>24VDC / 0VDC / PLC.0V</td><td>Cáp 2 lõi vỏ đen 0.5mm²</td><td>Trắng (V+) + Đen (V–)</td></tr>
+                    <tr><td>04ok</td><td>EC.24V / NG.24VDC</td><td>PLC.C0 / BCD.24V</td><td>Đơn trắng 0.5mm² vỏ đen</td><td>Trắng (L07, L08, L09)</td></tr>
+                    <tr><td>04aok</td><td>PLC.Y0</td><td>GW.24VDC</td><td>Đơn trắng 0.5mm² vỏ đen</td><td>Trắng (L08a)</td></tr>
+                    <tr><td>05ok</td><td>EC.0V / NG.0VDC</td><td>GW.0V / BCD.0V</td><td>Đơn đen 0.5mm² vỏ đen</td><td>Đen (L10, L11, L12)</td></tr>
+                    <tr><td>06ok</td><td>BCD.A</td><td>GW.A / PLC.D+</td><td>Đơn trắng 0.5mm² vỏ đen</td><td>Trắng (L13, L14)</td></tr>
+                    <tr><td>07ok</td><td>BCD.B</td><td>PLC.D– / GW.B</td><td>Đơn đen 0.5mm² vỏ đen</td><td>Đen (L15, L16)</td></tr>
+                    <tr><td>08ok</td><td>PLC.X0–X6, RORI</td><td>Tag 1–8 (Đầu nối tủ)</td><td>Cáp 10 lõi vỏ đen 0.5mm²</td><td>Trắng × 10 lõi (L17)</td></tr>
+                    <tr style="background:#FFF8E1;"><td>09ok</td><td>EC.I+ / EC.I–</td><td>BCD.I+ / BCD.I–</td><td>Cáp 2 lõi Shield vỏ đen 0.5mm²</td><td>Trắng (EC.I+) + Đen (EC.I–) – L18 <strong>dài 1.2m ra ngoài tủ</strong></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ===== BƯỚC 5: CHO VÀO VỎ HỘP ===== -->
+    <div class="section">
+        <div class="section-header">📦 Bước 5: Gắn Tấm Đế Vào Vỏ Hộp Tủ Boxco</div>
+        <div class="section-body">
+            <p style="margin-bottom:7px;">Sau khi lắp thiết bị và đi dây xong trên tấm đế, luồn các bó dây qua PG25 đã gắn, đặt tấm đế khít vào vỏ hộp Boxco 180D và bắt 4 vít góc để cố định.</p>
+            <div class="info-box">
+                <strong>Lưu ý:</strong> Luồn cáp qua PG25 trước khi đặt tấm đế vào vỏ. Siết chặt đai ốc PG25 để chống nước vào tủ. Cáp 10 lõi (L17) và cáp analog Shield (L18) đi qua PG25 riêng biệt, không đi chung.
+            </div>
+            <div class="img-single">
+                <img src="images/ec-iot-test/canva_img_10_MAHLw3peyiw.jpg" alt="Tủ hoàn thiện đặt vào vỏ" class="full" style="max-height:320px; object-fit:contain;">
+                <div class="caption">Tủ hoàn thiện đã đặt vào vỏ hộp: CB CHNT (trái), Nguồn MDR-60-24 (phải trên), PLC XINJE (giữa), DAM3102 xanh (dưới), Gateway NavisMod (trên cùng có QR)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== QUY TRÌNH TEST TỦ ===== -->
+    <div class="section" style="border:2px solid #C62828;">
+        <div class="section-header red">🔬 Quy Trình Kiểm Tra Chất Lượng &amp; Test Tủ Xuất Xưởng (QC)</div>
+        <div class="section-body">
+
+            <!-- CẢNH BÁO AN TOÀN -->
+            <div class="danger-box">
+                <div class="icon">⚡</div>
+                <div>
+                    <h3>CẢNH BÁO AN TOÀN ĐIỆN &amp; TIÊU CHUẨN ĐẤU DÂY</h3>
+                    <p>Tủ nhận nguồn <strong>220VAC</strong> đầu vào. Bên trong nguồn Meanwell chuyển đổi ra <strong>24VDC</strong>. <strong>PHẢI kiểm tra tránh chập mạch trước khi cấp điện.</strong></p>
+                    <ul>
+                        <li><strong>Chỉ PLC</strong> dùng <strong>220VAC</strong>. Gateway, DAM3102, cảm biến dùng <strong>24VDC</strong></li>
+                        <li>Dây Modbus RS485 và Analog 4–20mA <strong>KHÔNG được chập vào 24VDC hoặc 220VAC</strong></li>
+                        <li>Đảm bảo dây 0V (GND) ngõ ra nguồn 24V đã <strong>quấn keo cách điện</strong> trước khi test</li>
+                        <li>Chỉ sử dụng đầu dây <strong>+24VDC</strong> để kích test các cổng PLC (PNP input)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dụng cụ test -->
+            <p style="font-weight:600; font-size:12px; margin:8px 0 5px;">Chuẩn bị dụng cụ test:</p>
+            <div class="tools-grid">
+                <div class="tool-chip">🔌 Đồng hồ VOM</div>
+                <div class="tool-chip">💻 Máy tính + phần mềm XDPPro</div>
+                <div class="tool-chip">📶 SIM 4G (đã đăng ký data)</div>
+                <div class="tool-chip">🔧 Keo cách điện</div>
+                <div class="tool-chip">📱 Điện thoại cài App IoT</div>
+                <div class="tool-chip">🎛️ Bộ giả lập Analog 4–20mA</div>
+            </div>
+
+            <!-- Hình ảnh test tủ thực tế -->
+            <div class="img-single" style="margin:8px 0;">
+                <img src="images/ec-iot-test/canva_img_22_MAHLxAgusH8.png" alt="Test tủ thực tế" class="full" style="max-height:280px; object-fit:contain;">
+                <div class="caption">Test tủ thực tế: Bộ giả lập analog (đồng hồ DAM3102 hiển thị 30.80), điện thoại chạy App IoT scan QR trạm, cáp kết nối đầy đủ</div>
+            </div>
+
+            <!-- 9 BƯỚC TEST CHI TIẾT -->
+            <p style="font-weight:600; font-size:12px; margin:8px 0 6px;">9 bước kiểm thử chi tiết:</p>
+            <div class="steps">
+
+                <div class="step">
+                    <div class="step-num red">1</div>
+                    <div class="step-content">
+                        <h3>Đo điện – 220V và 24V không được chập nhau</h3>
+                        <p>Dùng VOM đo thông mạch hoặc đo điện trở cách điện:</p>
+                        <ul>
+                            <li>Đo ngõ vào L–N của CB: không thông mạch</li>
+                            <li>Đo V+/V– ngõ ra 24VDC: không thông mạch</li>
+                            <li><strong style="color:#C62828;">220VAC và 24VDC tuyệt đối không thông điện với nhau</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num orange">2</div>
+                    <div class="step-content">
+                        <h3>Quấn keo cách điện dây 0V (GND) ngõ ra nguồn 24V</h3>
+                        <p>PLC dùng PNP input – chỉ dùng đầu <strong>+24VDC</strong> để kích test. Dây <strong>0V (GND)</strong> ngõ ra nguồn 24V phải quấn keo cách điện kỹ để tránh khi thao tác chạm 2 đầu vào nhau gây chập cháy nguồn.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num green">3</div>
+                    <div class="step-content">
+                        <h3>Cấp điện 220V cho tủ – Bật CB CHINT</h3>
+                        <ul>
+                            <li>Cắm phích điện 220VAC, bật CB CHINT lên</li>
+                            <li>Đèn <strong>DC OK</strong> trên nguồn Meanwell sáng xanh ổn định</li>
+                            <li>Đèn LED nguồn trên PLC XINJE và Gateway NM03 sáng lên</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h3>Lấy máy tính nạp code PLC</h3>
+                        <ul>
+                            <li>Kết nối cáp lập trình từ PC → PLC XINJE</li>
+                            <li>Mở phần mềm <strong>XDPPro</strong>, nạp file code .xdp vào PLC</li>
+                            <li>Kiểm tra đèn <strong>RUN</strong> sáng → PLC hoạt động</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <div class="step-content">
+                        <h3>Cắm SIM 4G cho Gateway</h3>
+                        <ul>
+                            <li>Tắt nguồn Gateway, cắm thẻ SIM 4G (đã đăng ký data)</li>
+                            <li>Bật nguồn lại, quan sát đèn mạng: nhấp nháy nhanh → đang kết nối; nhấp nháy chậm → đã kết nối internet</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num green">6</div>
+                    <div class="step-content">
+                        <h3>Dán và Scan mã QR – Bắt đầu test trên App</h3>
+                        <ul>
+                            <li>Dán tem QR Code mã hóa trạm lên mặt trước tủ (cạnh DAM3102)</li>
+                            <li>Mở App IoT trên điện thoại, quét QR Code</li>
+                            <li>Xác nhận trạm hiển thị trạng thái <strong>Online</strong> trên App</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num">7</div>
+                    <div class="step-content">
+                        <h3>Test 8 tín hiệu input đầu dây – Xem khớp với IoT không</h3>
+                        <div class="info-box" style="margin:5px 0;">
+                            <strong>Thao tác:</strong> Lấy đầu dây <strong>+24VDC</strong> của tủ chạm vào từng tag cos từ 1 đến 8. Khi chạm, đèn cổng tương ứng trên PLC phải sáng và trạng thái trên App chuyển <strong>ON (sáng xanh)</strong> đúng tên tag.
+                        </div>
+                        <p style="font-weight:600; margin:4px 0 3px;">Danh sách 8 cổng Digital kiểm thử:</p>
+                        <div class="status-grid">
+                            <div class="status-item"><div class="led led-off"></div>RO1,2</div>
+                            <div class="status-item"><div class="led led-off"></div>RO3,4</div>
+                            <div class="status-item"><div class="led led-off"></div>ÁP CAO</div>
+                            <div class="status-item"><div class="led led-off"></div>ÁP THẤP</div>
+                            <div class="status-item"><div class="led led-off"></div>EC relay</div>
+                            <div class="status-item"><div class="led led-off"></div>ĐẦY</div>
+                            <div class="status-item"><div class="led led-off"></div>CẠN</div>
+                            <div class="status-item"><div class="led led-off"></div>RORI</div>
+                        </div>
+                        <div class="warning-box" style="margin-top:6px;">
+                            <div class="icon">⚠️</div>
+                            <div><strong>EC.R.COM / EC.R.NO:</strong> Không test IoT – 2 chân này đã làm dây sẵn, quấn keo cách điện đầu dây. Khách tự đấu vào thiết bị của họ khi lắp đặt thực tế.</div>
+                        </div>
+                        <!-- Ảnh App IoT bước 7 - xem DI kỹch hoạt -->
+                        <p style="font-weight:600; margin:8px 0 5px;">📱 Giao diện App IoT khi test tín hiệu Digital:</p>
+                        <div class="img-single">
+                            <img src="images/ec-iot-test/iot-screen-2.png" alt="App IoT hiển thị trạng thái 8 tín hiệu DI" style="width:100%; display:block; object-fit:contain; max-height:420px;">
+                            <div class="caption">App IoT – Xem trạng thái từng tín hiệu chuyển <strong>ON (sáng xanh ✅)</strong> khi chạm dây +24V vào đầu cos tag tương ứng</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num orange">8</div>
+                    <div class="step-content">
+                        <h3>Test tín hiệu Analog EC – Theo dõi thông số trên IoT</h3>
+                        <p style="margin-bottom:5px;">Kiểm thử cổng nhận dòng 4–20mA của DAM3102. Có 2 phương án:</p>
+
+                        <!-- Phương án 1 -->
+                        <div class="success-box">
+                            <strong>✅ Phương án 1 – Dùng cảm biến EC thật:</strong> Đấu cảm biến EC vào module DAM3102. Nhúng điện cực vào mẫu nước. Quan sát chỉ số EC trên App nhảy. Cho thêm muối để kiểm nghiệm chỉ số tăng.
+                        </div>
+
+                        <!-- Phương án 2 - Bộ giả lập -->
+                        <div class="warning-box" style="margin-top:8px; display:block; padding:10px 12px;">
+                            <strong>🔧 Phương án 2 – Dùng bộ giả lập dòng 4–20mA (JS-VISG-M-S):</strong>
+                        </div>
+
+                        <!-- Ảnh bộ giả lập + sơ đồ đấu dây -->
+                        <div class="img-grid-2" style="margin:8px 0;">
+                            <div class="img-box">
+                                <img src="images/ec-iot-test/analog-simulator.png" alt="Bộ giả lập Analog 4-20mA JS-VISG-M-S" style="width:100%; display:block; object-fit:contain; max-height:320px;">
+                                <div class="caption">Bộ giả lập JS-VISG-M-S – DC0–10V / 0–22mA. Núm xoay chỉnh giá trị, nút MODE chọn Voltage/Current</div>
+                            </div>
+                            <div class="img-box" style="background:#1e1e2e; border-radius:8px; padding:12px; font-family:monospace; font-size:11px; color:#e2e8f0; line-height:1.7; display:flex; flex-direction:column; justify-content:center;">
+                                <div style="color:#7dd3fc; font-weight:700; margin-bottom:8px;">📌 Sơ đồ đấu nối → DAM3102</div>
+<pre style="margin:0; color:#e2e8f0; font-size:10.5px;">┌──────────────────┐   ┌──────────────────┐
+│  BỘ GIẢ LẬP      │   │  MODULE DAM3102   │
+│  JS-VISG-M-S     │   │  (Analog Input)   │
+│                  │   │                  │
+│  AIo (Out) ●────────────● 1+ (Input +)  │
+│  GND (Mass)●────────────● 1- (Input -)  │
+│                  │   │                  │
+└──────────────────┘   └──────────────────┘</pre>
+                                <div style="margin-top:10px; color:#86efac; font-size:10px;">
+                                    ⚙️ Cài đặt:<br>
+                                    • Nhấn MODE → chọn <strong style="color:#fde047;">Current</strong> (dòng mA)<br>
+                                    • Vặn núm: <strong style="color:#fde047;">4mA</strong> = EC min · <strong style="color:#fde047;">20mA</strong> = EC max<br>
+                                    • Test lần lượt: 4mA → 12mA → 20mA
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ảnh App IoT bước 8 - xem EC analog -->
+                        <p style="font-weight:600; margin:8px 0 5px;">📱 Giao diện App IoT khi test Analog EC – Xem giá trị EC nhảy số:</p>
+                        <div class="img-single">
+                            <img src="images/ec-iot-test/iot-screen-1.png" alt="App IoT hiển thị EC µS/cm" style="width:100%; display:block; object-fit:contain; max-height:420px;">
+                            <div class="caption">App IoT – Giá trị <strong>EC (µS/cm)</strong> nhay số tuyến tính theo bộ giả lập 4–20mA. Vặn núm từ 4mA → 20mA, số trên App phải tăng dần.</div>
+                        </div>
+                        <div class="info-box" style="margin-top:6px;">
+                            Giá trị EC trên IoT phải <strong>thay đổi mượt mà</strong> khi vặn núm xoay. Nếu không nhảy → kiểm tra lại đấu nối chân 1+/1– DAM3102 hoặc cấu hình Modbus Gateway.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num green">9</div>
+                    <div class="step-content">
+                        <h3>Kết thúc test – Tháo SIM, đóng tủ</h3>
+                        <p>Test đạt tất cả hạng mục → Ngắt điện CB, <strong>rút thẻ SIM 4G khỏi Gateway</strong> để cất kho tái sử dụng. Khóa tủ lại và chuyển sang bước đóng gói.</p>
+                    </div>
+                </div>
+
+            </div><!-- end .steps -->
+
+            <!-- QC CHECKLIST TABLE -->
+            <h3 style="font-size:12.5px; font-weight:600; margin:14px 0 6px;">Biên Bản Checklist Kiểm Thử QC Xuất Xưởng</h3>
+            <table class="qc-table">
+                <thead>
+                    <tr>
+                        <th style="width:38px;">STT</th>
+                        <th>Hạng mục kiểm thử</th>
+                        <th style="width:110px; text-align:center;">Kết quả</th>
+                        <th>Ghi chú lỗi (nếu có)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Đo điện trở CB L-N và V+/V– nguồn 24V – Không chập mạch 220V/24V</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>2</td><td>Quấn keo cách điện đầu dây 0V ngõ ra nguồn 24V</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>3</td><td>Bật CB 220VAC: Đèn DC OK nguồn Meanwell, đèn PLC, đèn Gateway sáng</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>4</td><td>Nạp code .xdp vào PLC thành công – Đèn RUN sáng</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>5</td><td>Cắm SIM 4G Gateway: Đèn mạng nhấp nháy → kết nối internet</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>6</td><td>Scan QR App IoT: Trạm hiển thị "Online"</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>7.1</td><td>Test DI 1: <strong>RO1,2</strong> – PLC sáng đèn + App báo ON</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>7.2</td><td>Test DI 2: <strong>RO3,4</strong> – PLC sáng đèn + App báo ON</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>7.3</td><td>Test DI 3: <strong>Áp Cao</strong> – PLC sáng đèn + App báo ON</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>7.4</td><td>Test DI 4: <strong>Áp Thấp</strong> – PLC sáng đèn + App báo ON</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>7.5</td><td>Test DI 5: <strong>EC relay</strong> – PLC sáng đèn + App báo ON</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>7.6</td><td>Test DI 6: <strong>ĐẦY (phao bồn)</strong> – PLC sáng đèn + App báo ON</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>7.7</td><td>Test DI 7: <strong>CẠN (phao bồn)</strong> – PLC sáng đèn + App báo ON</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>7.8</td><td>Test DI 8: <strong>RORI – Rò rỉ nước</strong> – PLC sáng đèn + App báo ON</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr style="background:#FFF8E1;"><td colspan="4" style="padding:4px 8px; font-size:11px; color:#795548;">⚠️ <strong>EC.R.COM / EC.R.NO:</strong> Không test – dây đã làm sẵn, quấn keo cách điện, để khách tự đấu vào thiết bị khi lắp đặt thực tế</td></tr>
+                    <tr><td>8</td><td>Test Analog EC: DAM3102 nhận 4–20mA, App hiển thị giá trị EC thay đổi</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                    <tr><td>9</td><td>Ngắt CB 220V, rút SIM 4G khỏi Gateway, khóa tủ</td><td class="result">☐ Đạt &nbsp; ☐ Lỗi</td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="sign-area">
+                <div class="sign-box">
+                    <p>Kỹ thuật viên thực hiện test:</p>
+                    <div class="sign-line"></div>
+                </div>
+                <div class="sign-box">
+                    <p>QC Quản lý chất lượng xác nhận:</p>
+                    <div class="sign-line"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== BƯỚC 6: CHỤP HÌNH + ĐÓNG GÓI ===== -->
+    <div class="section">
+        <div class="section-header green">📦 Bước 6: Chụp Hình Lưu Hồ Sơ & Đóng Gói Giao Hàng</div>
+        <div class="section-body">
+
+            <!-- 6.1 Chụp hình trước khi quấn co -->
+            <div class="sub-heading">6.1 – Chụp hình tủ hoàn thiện trước khi quấn màng co</div>
+            <div class="warning-box" style="margin-bottom:10px;">
+                <div class="icon">📸</div>
+                <div>
+                    <strong>BẮT BUỘC chụp hình trước khi đóng gói</strong> – Ảnh dùng để:
+                    <ul style="margin-top:4px; margin-left:14px;">
+                        <li>Lưu hồ sơ <strong>bảo hành</strong> – xác nhận tình trạng tủ khi xuất xưởng</li>
+                        <li>Kiểm tra <strong>lỗi kết nối</strong> từ xa sau khi giao hàng mà không cần mở tủ</li>
+                        <li>Đối chiếu khi <strong>phát sinh sự cố</strong> về đấu nối, thiếu thiết bị, nhầm dây</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="img-grid-3" style="margin-bottom:8px;">
+                <div class="img-box" style="border:2px dashed #4CAF50; border-radius:8px; padding:8px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:180px; background:#F1F8E9;">
+                    <div style="font-size:36px; margin-bottom:6px;">📷</div>
+                    <div style="font-weight:700; color:#2E7D32; font-size:12px;">Mặt trước tủ<br>(đóng nắp)</div>
+                    <div style="font-size:10px; color:#555; margin-top:4px;">Chụp toàn bộ mặt ngoài, rõ tên/mã tủ</div>
+                </div>
+                <div class="img-box" style="border:2px dashed #4CAF50; border-radius:8px; padding:8px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:180px; background:#F1F8E9;">
+                    <div style="font-size:36px; margin-bottom:6px;">📷</div>
+                    <div style="font-weight:700; color:#2E7D32; font-size:12px;">Bên trong tủ<br>(mở nắp)</div>
+                    <div style="font-size:10px; color:#555; margin-top:4px;">Chụp đầy đủ thiết bị, dây, tag số rõ ràng</div>
+                </div>
+                <div class="img-box" style="border:2px dashed #4CAF50; border-radius:8px; padding:8px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:180px; background:#F1F8E9;">
+                    <div style="font-size:36px; margin-bottom:6px;">📷</div>
+                    <div style="font-weight:700; color:#2E7D32; font-size:12px;">Màn hình IoT App<br>(đang kết nối)</div>
+                    <div style="font-size:10px; color:#555; margin-top:4px;">Chụp màn hình App hiển thị dữ liệu PASS</div>
+                </div>
+            </div>
+            <div class="success-box" style="margin-bottom:10px;">
+                <strong>📁 Lưu ảnh vào Drive / Zalo nhóm</strong> với tên file: <code>A-TPN-[MÃ_TỦ]_ngay-xuat-xuong.jpg</code> – đính kèm kèm biên bản QC khi bàn giao cho khách
+            </div>
+
+            <!-- 6.2 Quấn màng co đóng gói -->
+            <div class="sub-heading">6.2 – Quấn màng co PE và đóng thùng giao hàng</div>
+            <p style="margin-bottom:7px;">Sau khi chụp hình xong và biên bản QC đã ký <strong>PASS</strong>:</p>
+            <ul style="margin-left:14px; margin-bottom:10px;">
+                <li>Lau sạch bề mặt tủ, cuộn dây gọn gàng vào tủ</li>
+                <li>Dùng <strong>màng bọc PE / màng co</strong> quấn chặt toàn bộ vỏ ngoài – chống trầy và chống ẩm khi vận chuyển</li>
+                <li>Đặt tủ đã quấn vào thùng carton, lót mút xốp 4 mặt chống va đập</li>
+                <li>Dán nhãn địa chỉ, thông tin tủ ra ngoài thùng</li>
+                <li>Giao hàng kèm <strong>biên bản QC đã ký xác nhận</strong></li>
+            </ul>
+            <div class="img-single">
+                <img src="images/ec-iot-test/dong-goi-mang-co-giao-hang.jpg" alt="Đóng gói tủ EC-IoT quấn màng co trong thùng carton" style="width:100%; display:block; object-fit:contain; max-height:550px;">
+                <div class="caption">Hàng loạt tủ EC-IoT đã quấn màng co PE bảo vệ – xếp gọn vào thùng carton lớn chuẩn bị giao hàng. Mỗi tủ quấn riêng, dây cáp cuộn vào trong, kèm tem nhãn và biên bản QC</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+        <p class="company">CÔNG TY TNHH TM DV KT SX O &amp; M – omwater.vn</p>
+        <p>Tài liệu kỹ thuật nội bộ QC | Tủ Giám Sát EC-IoT Máy Lọc Nước RO</p>
+        <p style="font-size:10px; opacity:0.7; margin-top:2px;">Phiên bản cập nhật tháng 6/2026 – Nghiêm cấm sao chép/phát tán ra bên ngoài</p>
+    </div>
+
+</div>
+</body>
+</html>
