@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Thay Thế Bộ Chuyển Đổi Xung Modbus — DI JIANG</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #0F766E;
+            --primary-light: #14B8A6;
+            --primary-dark: #0D5E58;
+            --secondary: #1565C0;
+            --danger: #DC2626;
+            --danger-bg: #FEF2F2;
+            --warning: #EA580C;
+            --warning-bg: #FFF7ED;
+            --success: #16A34A;
+            --success-bg: #F0FDF4;
+            --info-bg: #EFF6FF;
+            --background: #FFFFFF;
+            --surface: #F8FAFC;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --accent-gradient: linear-gradient(135deg, #0F766E 0%, #14B8A6 100%);
+            --danger-gradient: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+            --warning-gradient: linear-gradient(135deg, #EA580C 0%, #F97316 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 12px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+        }
+
+        .header-text {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        .header .subtitle {
+            font-size: 12px;
+            opacity: 0.92;
+            font-weight: 400;
+        }
+
+        .header .meta {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 6px;
+        }
+
+        .header img {
+            max-height: 60px;
+            border-radius: 8px;
+            background: white;
+            padding: 4px 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── PROJECT INFO BANNER ── */
+        .project-banner {
+            background: linear-gradient(135deg, #F0FDFA, #CCFBF1);
+            border: 1px solid #99F6E4;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .project-banner .info-item {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .project-banner .info-icon {
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .project-banner .info-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .project-banner .info-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        /* ── SECTION ── */
+        .section {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+        }
+
+        .section-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            border-radius: 50%;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .section h2 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h3 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 12px 0 8px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary-light);
+        }
+
+        /* ── ALERTS ── */
+        .alert-danger {
+            background: var(--danger-bg);
+            border-left: 4px solid var(--danger);
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+
+        .alert-danger strong {
+            color: var(--danger);
+        }
+
+        .alert-danger-full {
+            background: var(--danger-gradient);
+            color: white;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .alert-danger-full strong {
+            font-size: 13px;
+        }
+
+        .alert-warning {
+            background: var(--warning-bg);
+            border-left: 4px solid var(--warning);
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+
+        .alert-warning strong {
+            color: #C2410C;
+        }
+
+        .info-box {
+            background: var(--success-bg);
+            border-left: 3px solid var(--success);
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+
+        .info-box strong {
+            color: var(--success);
+        }
+
+        .info-blue {
+            background: var(--info-bg);
+            border-left: 3px solid var(--secondary);
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+
+        .info-blue strong {
+            color: var(--secondary);
+        }
+
+        /* ── TABLES ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 8px 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 7px 10px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        tr:nth-child(even) {
+            background: var(--surface);
+        }
+
+        /* ── DEVICE GRID ── */
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 8px 0;
+        }
+
+        .device-card {
+            background: linear-gradient(135deg, #F0FDFA, #E0F2FE);
+            border: 1px solid #BAE6FD;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .device-card h4 {
+            font-size: 11px;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .device-card .specs {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .device-card .specs div {
+            margin: 3px 0;
+        }
+
+        /* ── STEP ITEMS ── */
+        .step-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border);
+            font-size: 11px;
+            align-items: flex-start;
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+        }
+
+        .step-num-small {
+            width: 22px;
+            height: 22px;
+            background: var(--accent-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .step-num-danger {
+            width: 22px;
+            height: 22px;
+            background: var(--danger-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .step-num-blue {
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #1565C0, #42A5F5);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ── PIN / CODE LABELS ── */
+        .wire-red {
+            display: inline-block;
+            background: #FEE2E2;
+            color: #DC2626;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+
+        .wire-black {
+            display: inline-block;
+            background: #1E293B;
+            color: #F1F5F9;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+
+        .wire-yellow {
+            display: inline-block;
+            background: #FEF9C3;
+            color: #A16207;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+
+        .wire-green {
+            display: inline-block;
+            background: #DCFCE7;
+            color: #16A34A;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+
+        .pin-label {
+            font-family: 'Consolas', monospace;
+            background: #DBEAFE;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .code {
+            font-family: 'Consolas', monospace;
+            background: #FFF7ED;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+            color: #C2410C;
+        }
+
+        /* ── CHECKLIST ── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0;
+        }
+
+        .checklist li {
+            padding: 5px 0;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            font-size: 14px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        /* ── TOOL CHECKLIST GRID ── */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        .tool-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+
+        .tool-card h4 {
+            font-size: 11px;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .tool-card ul {
+            list-style: none;
+            padding: 0;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .tool-card ul li {
+            padding: 2px 0;
+        }
+
+        .tool-card ul li::before {
+            content: '✓ ';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* ── CANVAS ── */
+        canvas {
+            display: block;
+            margin: 8px auto;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #FAFBFC;
+        }
+
+        /* ── PHASE BANNER ── */
+        .phase-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .phase-banner.phase-prep {
+            background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
+            color: #1E40AF;
+        }
+
+        .phase-banner.phase-work {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            color: #92400E;
+        }
+
+        .phase-banner.phase-test {
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+            color: #065F46;
+        }
+
+        .phase-banner .phase-icon {
+            font-size: 20px;
+        }
+
+        /* ── CONTACT ── */
+        .contact-box {
+            background: linear-gradient(135deg, #F3E8FF, #E9D5FF);
+            border-left: 4px solid #7C3AED;
+            padding: 14px 18px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .contact-box strong {
+            color: #6D28D9;
+        }
+
+        .contact-box .phone {
+            font-size: 16px;
+            font-weight: 800;
+            color: #4C1D95;
+        }
+
+        /* ── SPEC TABLE ── */
+        .spec-highlight {
+            display: inline-block;
+            background: linear-gradient(135deg, #0F766E, #14B8A6);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 10px;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 12px;
+            color: var(--text-secondary);
+            font-size: 10px;
+            border-top: 1px solid var(--border);
+            margin-top: 14px;
+        }
+
+        .footer img {
+            max-height: 30px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* ── PHOTO GALLERY ── */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .photo-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--surface);
+            transition: box-shadow 0.2s;
+        }
+
+        .photo-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            background: #fff;
+            display: block;
+            padding: 6px;
+        }
+
+        .photo-card .photo-caption {
+            padding: 8px 12px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            background: linear-gradient(135deg, #F0FDFA, #CCFBF1);
+            text-align: center;
+            border-top: 1px solid #99F6E4;
+        }
+
+        .photo-card .photo-caption .photo-num {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 9px;
+            line-height: 18px;
+            text-align: center;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+
+        .photo-single {
+            grid-column: 1 / -1;
+        }
+
+        .photo-single img {
+            height: auto;
+            max-height: 400px;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body { font-size: 9pt; }
+            .container { padding: 8px; }
+            .section { break-inside: avoid; }
+            .header, th, .alert-danger-full, .phase-banner {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .photo-card img {
+                height: auto;
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- ═══════════════════════ HEADER ═══════════════════════ -->
+        <div class="header">
+            <div class="header-text">
+                <h1>🔧 HƯỚNG DẪN THI CÔNG THAY THẾ BỘ CHUYỂN ĐỔI XUNG MODBUS</h1>
+                <p class="subtitle">Thay thế PLC đọc xung bằng Bộ Chuyển Đổi Xung → Modbus RS485 (DI JIANG) — Kết nối về Navis</p>
+                <p class="meta">CÔNG TY TNHH TM DV KT SX O & M | Phiên bản 1.0 | Ngày: 09/06/2026</p>
+            </div>
+            <img src="LOGO-omwater.png" alt="O&M Water Logo">
+        </div>
+
+        <!-- ═══════════════════════ PROJECT INFO ═══════════════════════ -->
+        <div class="project-banner">
+            <div class="info-item">
+                <span class="info-icon">📋</span>
+                <div>
+                    <div class="info-label">Dự án</div>
+                    <div class="info-value">Nâng cấp hệ thống đo lưu lượng</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">🎯</span>
+                <div>
+                    <div class="info-label">Mục đích</div>
+                    <div class="info-value">Thay PLC đọc xung bằng bộ DI JIANG → Modbus</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">⚙️</span>
+                <div>
+                    <div class="info-label">Thiết bị mới</div>
+                    <div class="info-value">Bộ chuyển đổi xung Modbus DI JIANG (epcb.vn)</div>
+                </div>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">📡</span>
+                <div>
+                    <div class="info-label">Giao tiếp</div>
+                    <div class="info-value">RS485 Modbus → Navis IoT Gateway</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════ 1. TỔNG QUAN ═══════════════════════ -->
+        <div class="section">
+            <h2><span class="section-num">1</span>Tổng Quan Dự Án</h2>
+
+            <div class="info-blue">
+                <strong>📌 Bối cảnh:</strong> Dự án cũ đã có cảm biến lưu lượng xung lắp sẵn trên đường ống. Tuy nhiên, PLC hiện tại <b>không đọc được tín hiệu xung chính xác nữa</b>. Giải pháp: thay thế bằng <b>bộ chuyển đổi xung → Modbus RS485 (DI JIANG)</b> để truyền dữ liệu về <b>bộ Navis IoT Gateway</b> trong tủ điện.
+            </div>
+
+            <div class="info-box">
+                <strong>✅ Tóm tắt công việc:</strong>
+                <ul style="margin: 4px 0 0 16px;">
+                    <li>Dò và xác định <b>3 dây cảm biến lưu lượng xung</b> hiện đang kéo về tủ điện</li>
+                    <li><b>Cúp CB</b>, gỡ 3 dây ra khỏi PLC cũ</li>
+                    <li>Đấu 3 dây vào <b>bộ chuyển đổi xung DI JIANG</b></li>
+                    <li>Cấp nguồn cho bộ DI JIANG (5-24VDC)</li>
+                    <li>Kéo dây <b>Modbus RS485</b> từ bộ DI JIANG về <b>bộ Navis</b> trong tủ</li>
+                </ul>
+            </div>
+
+            <h3>1.1 Hình ảnh hiện trạng & thiết bị</h3>
+            <div class="photo-gallery">
+                <div class="photo-card">
+                    <img src="images/anh1-cambien-luuluong-xung.png" alt="Cảm biến lưu lượng xung hiện tại">
+                    <div class="photo-caption"><span class="photo-num">1</span> Cảm biến lưu lượng xung — đã lắp trên đường ống</div>
+                </div>
+                <div class="photo-card">
+                    <img src="images/anh2-tu-dien-hien-tai.jpg" alt="Tủ điện hiện tại">
+                    <div class="photo-caption"><span class="photo-num">2</span> Tủ điện hiện tại — cần dò 3 dây cảm biến trong tủ</div>
+                </div>
+                <div class="photo-card">
+                    <img src="images/anh3-bo-chuyen-doi-dijiang.png" alt="Bộ chuyển đổi xung Modbus DI JIANG">
+                    <div class="photo-caption"><span class="photo-num">3</span> Bộ chuyển đổi xung → Modbus DI JIANG (thiết bị mới)</div>
+                </div>
+                <div class="photo-card">
+                    <img src="images/anh4-so-do-dau-day-dijiang.png" alt="Sơ đồ đấu dây bộ DI JIANG">
+                    <div class="photo-caption"><span class="photo-num">4</span> Sơ đồ đấu dây bộ chuyển đổi DI JIANG</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════ 2. DỤNG CỤ ═══════════════════════ -->
+        <div class="section">
+            <h2><span class="section-num">2</span>Dụng Cụ & Vật Tư Cần Chuẩn Bị</h2>
+
+            <div class="alert-warning">
+                <strong>⚠️ QUAN TRỌNG:</strong> Chuẩn bị đầy đủ trước khi ra dự án. Thiếu dụng cụ sẽ ảnh hưởng tiến độ thi công!
+            </div>
+
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h4>🔌 Dụng cụ đo</h4>
+                    <ul>
+                        <li>Đồng hồ vạn năng (VOM)</li>
+                        <li>Bút thử điện</li>
+                        <li>Ampe kìm (nếu có)</li>
+                    </ul>
+                </div>
+                <div class="tool-card">
+                    <h4>🔧 Dụng cụ cơ khí</h4>
+                    <ul>
+                        <li>Tua vít dẹt (2mm, 4mm)</li>
+                        <li>Tua vít bake (+, -)</li>
+                        <li>Kìm cắt, kìm tuốt dây</li>
+                        <li>Kìm bấm đầu cos</li>
+                    </ul>
+                </div>
+                <div class="tool-card">
+                    <h4>📦 Vật tư tiêu hao</h4>
+                    <ul>
+                        <li>Dây điện 0.5~1.0mm²</li>
+                        <li>Dây Modbus RS485 (xoắn đôi)</li>
+                        <li>Đầu cos pin / cos Y</li>
+                        <li>Băng keo điện</li>
+                        <li>Dây rút (cable ties)</li>
+                        <li>Ống gen co nhiệt</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>2.1 Thiết bị chính</h3>
+            <div class="device-grid">
+                <div class="device-card">
+                    <h4>💧 Cảm Biến Lưu Lượng Xung (Có sẵn)</h4>
+                    <div class="specs">
+                        <div><b>Loại:</b> Hall Effect — NPN</div>
+                        <div><b>Nguồn:</b> 5-24VDC</div>
+                        <div><b>Dây:</b> <span class="wire-red">Đỏ (+)</span> <span class="wire-black">Đen (GND)</span> <span class="wire-yellow">Vàng (Signal)</span></div>
+                        <div><b>Trạng thái:</b> Đã lắp trên ống</div>
+                    </div>
+                </div>
+                <div class="device-card">
+                    <h4>🔄 Bộ Chuyển Đổi Xung Modbus DI JIANG (Mới)</h4>
+                    <div class="specs">
+                        <div><b>Hãng:</b> DI JIANG (epcb.vn)</div>
+                        <div><b>Nguồn:</b> 5-24 VDC</div>
+                        <div><b>Giao tiếp:</b> RS485 Modbus</div>
+                        <div><b>Baudrate:</b> 115200 bps</div>
+                        <div><b>Kênh:</b> 8 CH</div>
+                    </div>
+                </div>
+                <div class="device-card">
+                    <h4>📡 Bộ Navis IoT Gateway (Có sẵn)</h4>
+                    <div class="specs">
+                        <div><b>Model:</b> NavisMod NM03</div>
+                        <div><b>Giao tiếp:</b> Modbus RS485</div>
+                        <div><b>Kết nối:</b> WiFi / 4G → Cloud</div>
+                        <div><b>Trạng thái:</b> Đã lắp trong tủ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════ 3. THÔNG SỐ KỸ THUẬT ═══════════════════════ -->
+        <div class="section">
+            <h2><span class="section-num">3</span>Thông Số Kỹ Thuật — Bộ Chuyển Đổi DI JIANG</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
+                <div>
+                    <div class="photo-card">
+                        <img src="images/anh3-bo-chuyen-doi-dijiang.png" alt="Bộ DI JIANG" style="height: 180px;">
+                        <div class="photo-caption">Bộ chuyển đổi xung Modbus DI JIANG</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="photo-card">
+                        <img src="images/anh4-so-do-dau-day-dijiang.png" alt="Sơ đồ đấu dây" style="height: 180px;">
+                        <div class="photo-caption">Sơ đồ đấu dây (Wire Connection)</div>
+                    </div>
+                </div>
+            </div>
+
+            <table>
+                <tr>
+                    <th style="width:35%">Thông số</th>
+                    <th>Giá trị</th>
+                </tr>
+                <tr>
+                    <td><b>Nguồn cấp (Power Supply)</b></td>
+                    <td><span class="spec-highlight">5 — 24 VDC</span></td>
+                </tr>
+                <tr>
+                    <td><b>Giao thức truyền thông</b></td>
+                    <td>Modbus RTU qua RS485</td>
+                </tr>
+                <tr>
+                    <td><b>Tốc độ truyền (Baudrate)</b></td>
+                    <td><span class="spec-highlight">115200 bps</span></td>
+                </tr>
+                <tr>
+                    <td><b>Số kênh (Channel)</b></td>
+                    <td>8 CH</td>
+                </tr>
+                <tr>
+                    <td><b>Kích thước</b></td>
+                    <td>39mm × 35mm × 14mm</td>
+                </tr>
+            </table>
+
+            <h3>3.1 Sơ đồ đầu dây (Wire Connection)</h3>
+
+            <table>
+                <tr>
+                    <th>Đầu connector</th>
+                    <th>Chức năng</th>
+                    <th>Màu dây</th>
+                    <th>Ghi chú</th>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #DBEAFE; color: #1E40AF; font-weight: 700; text-align: center;">BÊN TRÁI — NGÕ VÀO CẢM BIẾN (SM2.54-3p)</td>
+                </tr>
+                <tr>
+                    <td><b>Pressure Sensor</b> (WH)</td>
+                    <td>Ngõ vào cảm biến áp suất</td>
+                    <td><span class="wire-red">Trắng (WH)</span></td>
+                    <td>Không sử dụng trong dự án này</td>
+                </tr>
+                <tr>
+                    <td><b>Flow Sensor</b> (BK)</td>
+                    <td>Ngõ vào cảm biến lưu lượng</td>
+                    <td><span class="wire-black">Đen (BK)</span></td>
+                    <td><b>→ Đấu dây tín hiệu xung vào đây</b></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #FEF3C7; color: #92400E; font-weight: 700; text-align: center;">BÊN PHẢI — NGUỒN + RS485 (SM2.54-2p)</td>
+                </tr>
+                <tr>
+                    <td><b>Power</b></td>
+                    <td>Nguồn cấp 5-24VDC</td>
+                    <td><span class="wire-red">Đỏ (+)</span> + <span class="wire-black">Đen (−)</span></td>
+                    <td>Lấy nguồn 24VDC từ tủ điện</td>
+                </tr>
+                <tr>
+                    <td><b>485 (RS485)</b></td>
+                    <td>Truyền thông Modbus</td>
+                    <td><span class="wire-red">Đỏ (A+)</span> + <span class="wire-black">Đen (B−)</span></td>
+                    <td><b>→ Kéo về bộ Navis</b></td>
+                </tr>
+            </table>
+
+            <h3>3.2 Sơ đồ đấu dây tổng quan</h3>
+            <canvas id="wiringDiagram" width="880" height="420"></canvas>
+        </div>
+
+        <!-- ═══════════════════════ 4. AN TOÀN ĐIỆN ═══════════════════════ -->
+        <div class="section">
+            <h2><span class="section-num">4</span>An Toàn Điện — CỰC KỲ QUAN TRỌNG</h2>
+
+            <div class="alert-danger-full">
+                <strong>⚡ CẢNH BÁO NGUY HIỂM — ĐỌC KỸ TRƯỚC KHI THAO TÁC</strong>
+                <div style="margin-top: 8px; font-size: 11px; line-height: 1.6;">
+                    Khi cúp CB cảm biến để thao tác, <b>dây điện INPUT (nguồn vào tủ) VẪN CÒN ĐIỆN!</b><br>
+                    Phải luôn <b>né tránh dây điện input</b> trong quá trình làm việc bên trong tủ điện.<br>
+                    Sử dụng <b>bút thử điện</b> kiểm tra trước khi chạm vào bất kỳ dây nào!
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-danger">1</div>
+                <div><b>Xác định CB cảm biến lưu lượng</b> — Tìm đúng CB đang cấp nguồn cho mạch cảm biến xung. Xem kỹ label/nhãn trên CB.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-danger">2</div>
+                <div><b>CÚP CB</b> — Ngắt CB liên quan, đợi ít nhất <b>10 giây</b> trước khi thao tác.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-danger">3</div>
+                <div><b>Dùng bút thử điện</b> — Kiểm tra tất cả dây định thao tác. <b>Chắc chắn KHÔNG CÒN ĐIỆN</b> mới được chạm.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-danger">4</div>
+                <div><b>Né dây input</b> — Dây điện nguồn input (trước CB tổng) <b>LUÔN CÓ ĐIỆN</b>. Tuyệt đối không chạm vào!</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-danger">5</div>
+                <div><b>Làm việc bằng tay khô</b> — Đảm bảo tay khô, đứng trên nền khô, không đeo nhẫn/đồ kim loại.</div>
+            </div>
+
+            <div class="alert-warning" style="margin-top: 8px;">
+                <strong>⚠️ LƯU Ý THÊM:</strong> Trong tủ điện có nhiều loại dây chạy song song. Phải <b>dò kỹ từng dây</b> bằng đồng hồ VOM để xác định đúng 3 dây cảm biến lưu lượng trước khi gỡ. Sai dây có thể gây hư thiết bị hoặc nguy hiểm.
+            </div>
+        </div>
+
+        <!-- ═══════════════════════ 5. QUY TRÌNH THI CÔNG ═══════════════════════ -->
+        <div class="section">
+            <h2><span class="section-num">5</span>Quy Trình Thi Công Chi Tiết</h2>
+
+            <!-- PHASE A: CHUẨN BỊ -->
+            <div class="phase-banner phase-prep">
+                <span class="phase-icon">🔍</span>
+                <div>GIAI ĐOẠN A — DÒ DÂY & CHUẨN BỊ</div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-small">1</div>
+                <div>
+                    <b>Mở tủ điện, quan sát tổng thể</b> — Xác định vị trí:
+                    <ul style="margin: 4px 0 0 16px; font-size: 11px;">
+                        <li>CB cấp nguồn cho mạch cảm biến lưu lượng</li>
+                        <li>3 dây cảm biến (Đỏ, Đen, Vàng) đang kéo về đâu trong tủ</li>
+                        <li>Vị trí bộ Navis IoT Gateway</li>
+                        <li>Nguồn 24VDC có sẵn trong tủ</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">2</div>
+                <div>
+                    <b>Dò 3 dây cảm biến lưu lượng xung</b> — Dùng đồng hồ VOM chế độ thông mạch (continuity) để xác nhận:
+                    <ul style="margin: 4px 0 0 16px; font-size: 11px;">
+                        <li><span class="wire-red">Dây Đỏ</span> = VCC (+) — nguồn dương cảm biến</li>
+                        <li><span class="wire-black">Dây Đen</span> = GND (−) — nguồn âm cảm biến</li>
+                        <li><span class="wire-yellow">Dây Vàng</span> = Signal — tín hiệu xung ra</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">3</div>
+                <div>
+                    <b>Xác định chỗ 3 dây đang đấu vào PLC cũ</b> — Ghi nhận chính xác vị trí terminal/chân PLC mà 3 dây này đang gắn vào, chụp ảnh lại trước khi gỡ.
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>📸 Mẹo:</strong> Chụp ảnh toàn bộ kết nối hiện tại trước khi gỡ bất kỳ dây nào. Phòng trường hợp cần khôi phục lại.
+            </div>
+
+            <!-- PHASE B: THAO TÁC -->
+            <div class="phase-banner phase-work">
+                <span class="phase-icon">⚡</span>
+                <div>GIAI ĐOẠN B — CÚP ĐIỆN & ĐẤU DÂY</div>
+            </div>
+
+            <div class="alert-danger">
+                <strong>⚠️ NHẮC LẠI:</strong> Cúp CB xong, dùng bút thử điện kiểm tra. <b>Dây INPUT vẫn còn điện — NÉ!</b>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-small">4</div>
+                <div><b>CÚP CB</b> — Ngắt CB cấp nguồn mạch cảm biến. Đợi 10 giây. Kiểm tra bằng bút thử điện.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">5</div>
+                <div><b>Gỡ 3 dây cảm biến khỏi PLC cũ</b> — Tháo cẩn thận từng dây, đánh dấu lại nếu cần (dán nhãn hoặc viết băng keo).</div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-small">6</div>
+                <div>
+                    <b>Đấu 3 dây cảm biến vào bộ chuyển đổi DI JIANG</b> — Theo sơ đồ:
+                    <table style="margin-top: 6px;">
+                        <tr>
+                            <th>Dây cảm biến</th>
+                            <th>Màu</th>
+                            <th>Đấu vào DI JIANG</th>
+                            <th>Connector</th>
+                        </tr>
+                        <tr>
+                            <td>VCC (+)</td>
+                            <td><span class="wire-red">Đỏ</span></td>
+                            <td>Nguồn cấp cho cảm biến — lấy từ nguồn 24VDC trong tủ</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>GND (−)</td>
+                            <td><span class="wire-black">Đen</span></td>
+                            <td>GND chung — nối chung mass nguồn 24VDC</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Signal (Xung)</td>
+                            <td><span class="wire-yellow">Vàng</span></td>
+                            <td><b>Flow Sensor (BK)</b> — Ngõ vào xung lưu lượng</td>
+                            <td>SM2.54-3p (Trái)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-small">7</div>
+                <div>
+                    <b>Cấp nguồn cho bộ DI JIANG</b> — Lấy nguồn 24VDC có sẵn trong tủ:
+                    <table style="margin-top: 6px;">
+                        <tr>
+                            <th>Chân DI JIANG</th>
+                            <th>Đấu vào</th>
+                        </tr>
+                        <tr>
+                            <td>Power <span class="wire-red">Đỏ (+)</span></td>
+                            <td>Nguồn 24VDC (+) trong tủ</td>
+                        </tr>
+                        <tr>
+                            <td>Power <span class="wire-black">Đen (−)</span></td>
+                            <td>Nguồn 24VDC (−) / GND trong tủ</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-small">8</div>
+                <div>
+                    <b>Kéo dây Modbus RS485 từ DI JIANG về bộ Navis</b>:
+                    <table style="margin-top: 6px;">
+                        <tr>
+                            <th>Chân DI JIANG (RS485)</th>
+                            <th>Màu</th>
+                            <th>Đấu vào bộ Navis</th>
+                        </tr>
+                        <tr>
+                            <td>485 A+</td>
+                            <td><span class="wire-red">Đỏ</span></td>
+                            <td>RS485 A+ trên Navis</td>
+                        </tr>
+                        <tr>
+                            <td>485 B−</td>
+                            <td><span class="wire-black">Đen</span></td>
+                            <td>RS485 B− trên Navis</td>
+                        </tr>
+                    </table>
+                    <div class="info-blue" style="margin-top: 6px;">
+                        <strong>💡 Lưu ý RS485:</strong> Dây RS485 nên dùng <b>dây xoắn đôi có shield</b>. Nối shield vào GND một đầu (phía Navis). Đảm bảo A+ nối A+, B− nối B−.
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHASE C: KIỂM TRA -->
+            <div class="phase-banner phase-test">
+                <span class="phase-icon">✅</span>
+                <div>GIAI ĐOẠN C — ĐÓNG ĐIỆN & KIỂM TRA</div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num-small">9</div>
+                <div><b>Kiểm tra lại toàn bộ kết nối</b> — Rà soát từng mối nối, đảm bảo chắc chắn, không chập, không lỏng.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">10</div>
+                <div><b>Đóng CB lại</b> — Bật CB cấp nguồn. Quan sát:
+                    <ul style="margin: 4px 0 0 16px; font-size: 11px;">
+                        <li>Đèn LED trên bộ DI JIANG sáng = nguồn OK</li>
+                        <li>Đèn LED trên Navis hoạt động bình thường</li>
+                        <li>Không có mùi khét, không có tiếng kêu bất thường</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">11</div>
+                <div><b>Test lưu lượng</b> — Cho nước chảy qua cảm biến (hoặc thổi gió) → Kiểm tra trên Navis xem có nhận được dữ liệu Modbus không.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num-small">12</div>
+                <div><b>Thu dọn, bó gọn dây</b> — Dùng dây rút buộc gọn dây, dán nhãn, đóng tủ.</div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════ 6. CẤU HÌNH MODBUS ═══════════════════════ -->
+        <div class="section">
+            <h2><span class="section-num">6</span>Cấu Hình Modbus Trên Navis</h2>
+
+            <div class="info-blue">
+                <strong>📡 Thông số kết nối Modbus RTU:</strong>
+                <table style="margin-top: 6px;">
+                    <tr>
+                        <th>Thông số</th>
+                        <th>Giá trị</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                    <tr>
+                        <td>Baudrate</td>
+                        <td><span class="spec-highlight">115200</span></td>
+                        <td>Tốc độ mặc định của DI JIANG</td>
+                    </tr>
+                    <tr>
+                        <td>Data Bits</td>
+                        <td>8</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>Parity</td>
+                        <td>None</td>
+                        <td>Kiểm tra lại tài liệu DI JIANG</td>
+                    </tr>
+                    <tr>
+                        <td>Stop Bits</td>
+                        <td>1</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>Slave Address</td>
+                        <td>1 (mặc định)</td>
+                        <td>Có thể thay đổi qua cấu hình</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="alert-warning">
+                <strong>⚠️ LƯU Ý:</strong> Baudrate <b>115200 bps</b> khá cao. Nếu Navis không hỗ trợ, cần cấu hình lại DI JIANG về <b>9600 bps</b> (kiểm tra tài liệu DI JIANG để thay đổi baudrate qua lệnh Modbus).
+            </div>
+
+            <div class="contact-box">
+                <strong>☁️ CẤU HÌNH TỪ XA:</strong> Sau khi hoàn tất đấu dây phần cứng, liên lạc kỹ thuật IoT để cấu hình Modbus trên Navis và cập nhật dashboard:
+                <div style="margin-top: 8px;">
+                    <div style="font-size: 13px; font-weight: 600;">👤 Trí Nguyễn — Kỹ thuật IoT</div>
+                    <div class="phone" style="margin-top: 4px;">📞 0387 226 446</div>
+                </div>
+                <div style="margin-top: 8px; font-size: 11px; opacity: 0.85;">
+                    Nội dung cần hỗ trợ: Cấu hình thanh ghi Modbus, map địa chỉ slave, thêm biểu đồ lưu lượng trên dashboard, cài cảnh báo ngưỡng.
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════ 7. TROUBLESHOOTING ═══════════════════════ -->
+        <div class="section">
+            <h2><span class="section-num">7</span>Xử Lý Sự Cố</h2>
+
+            <table>
+                <tr>
+                    <th style="width:30%">Hiện tượng</th>
+                    <th style="width:35%">Nguyên nhân có thể</th>
+                    <th>Cách khắc phục</th>
+                </tr>
+                <tr>
+                    <td>LED DI JIANG không sáng</td>
+                    <td>Chưa cấp nguồn / sai cực</td>
+                    <td>Kiểm tra lại nguồn 24VDC. Đảm bảo (+) vào Đỏ, (−) vào Đen</td>
+                </tr>
+                <tr>
+                    <td>Navis không nhận dữ liệu Modbus</td>
+                    <td>Sai dây A+/B−, sai baudrate, sai slave address</td>
+                    <td>Đảo dây A+ ↔ B−. Kiểm tra baudrate = 115200. Kiểm tra slave address</td>
+                </tr>
+                <tr>
+                    <td>Giá trị lưu lượng = 0</td>
+                    <td>Dây signal chưa đấu vào đúng ngõ Flow Sensor</td>
+                    <td>Kiểm tra dây Vàng (Signal) đã vào connector Flow Sensor (BK) chưa</td>
+                </tr>
+                <tr>
+                    <td>Giá trị nhảy lung tung</td>
+                    <td>Nhiễu, dây RS485 chạy song song dây động lực</td>
+                    <td>Dùng dây xoắn đôi có shield. Tách xa dây động lực. Nối shield vào GND</td>
+                </tr>
+                <tr>
+                    <td>DI JIANG nóng bất thường</td>
+                    <td>Quá áp hoặc ngắn mạch</td>
+                    <td>Ngắt nguồn ngay! Kiểm tra lại sơ đồ đấu dây</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ═══════════════════════ 8. CHECKLIST ═══════════════════════ -->
+        <div class="section">
+            <h2><span class="section-num">8</span>Checklist Hoàn Thành Công Việc</h2>
+            <div class="two-col">
+                <div>
+                    <h3>🔧 Trước khi đi dự án</h3>
+                    <ul class="checklist">
+                        <li>Đồng hồ VOM (pin đầy)</li>
+                        <li>Bút thử điện</li>
+                        <li>Tua vít dẹt + bake</li>
+                        <li>Kìm cắt, kìm tuốt, kìm bấm cos</li>
+                        <li>Dây điện 0.5~1.0mm²</li>
+                        <li>Dây Modbus RS485 (đủ dài)</li>
+                        <li>Đầu cos pin, băng keo, dây rút</li>
+                        <li>Bộ chuyển đổi DI JIANG (mới)</li>
+                        <li>Điện thoại (chụp ảnh)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>✅ Sau khi thi công xong</h3>
+                    <ul class="checklist">
+                        <li>Đã chụp ảnh trước khi gỡ dây</li>
+                        <li>Đã dò đúng 3 dây cảm biến</li>
+                        <li>Đã cúp CB trước khi thao tác</li>
+                        <li>3 dây đã gỡ khỏi PLC cũ</li>
+                        <li>Signal (Vàng) → Flow Sensor (BK)</li>
+                        <li>Nguồn 24VDC → Power DI JIANG</li>
+                        <li>RS485 A+/B− → Navis A+/B−</li>
+                        <li>LED DI JIANG sáng khi đóng điện</li>
+                        <li>Test có nước → Navis nhận dữ liệu</li>
+                        <li>Dây bó gọn, dán nhãn</li>
+                        <li>Đã liên lạc kỹ thuật IoT cấu hình</li>
+                        <li>Chụp ảnh sau khi hoàn thành</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+        <div class="footer">
+            <img src="LOGO-omwater.png" alt="O&M Water">
+            <strong>CÔNG TY TNHH TM DV KT SX O & M</strong> |
+            <a href="https://omwater.vn">omwater.vn</a>
+            <div style="margin-top: 4px;">Tài liệu nội bộ — Không phổ biến ra bên ngoài</div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ JAVASCRIPT — WIRING DIAGRAM ═══════════════════════ -->
+    <script>
+        const canvas = document.getElementById('wiringDiagram');
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = 880 * dpr;
+        canvas.height = 420 * dpr;
+        canvas.style.width = '880px';
+        canvas.style.height = '420px';
+        ctx.scale(dpr, dpr);
+
+        // ── Helpers ──
+        function roundRect(x, y, w, h, r, fill, stroke, lineW) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.closePath();
+            if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+            if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lineW || 1.5; ctx.stroke(); }
+        }
+
+        function txt(text, x, y, color, size, align, bold) {
+            ctx.fillStyle = color || '#1E293B';
+            ctx.font = (bold ? 'bold ' : '') + (size || 11) + 'px "Be Vietnam Pro", sans-serif';
+            ctx.textAlign = align || 'left';
+            ctx.fillText(text, x, y);
+        }
+
+        function drawArrow(fromX, fromY, toX, toY, color, width, dashed) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width || 2;
+            if (dashed) ctx.setLineDash([6, 4]);
+            else ctx.setLineDash([]);
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // arrowhead
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+            const headLen = 8;
+            ctx.beginPath();
+            ctx.fillStyle = color;
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function drawWire(points, color, width) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width || 2.5;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.moveTo(points[0][0], points[0][1]);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i][0], points[i][1]);
+            }
+            ctx.stroke();
+        }
+
+        function drawPipe(x, y, w, h) {
+            // Draw a pipe-like cylinder
+            const grad = ctx.createLinearGradient(x, y, x, y + h);
+            grad.addColorStop(0, '#94A3B8');
+            grad.addColorStop(0.3, '#CBD5E1');
+            grad.addColorStop(0.5, '#E2E8F0');
+            grad.addColorStop(0.7, '#CBD5E1');
+            grad.addColorStop(1, '#94A3B8');
+            roundRect(x, y, w, h, 4, grad, '#64748B', 1);
+        }
+
+        // ── Background ──
+        const bgGrad = ctx.createLinearGradient(0, 0, 880, 420);
+        bgGrad.addColorStop(0, '#F8FAFC');
+        bgGrad.addColorStop(1, '#F1F5F9');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, 880, 420);
+
+        // ── Title ──
+        txt('SƠ ĐỒ ĐẤU DÂY TỔNG QUAN', 440, 24, '#0F766E', 14, 'center', true);
+
+        // ═══ 1. CẢM BIẾN LƯU LƯỢNG (Left) ═══
+        const sensorX = 30, sensorY = 55;
+
+        // Pipe
+        drawPipe(sensorX, sensorY + 15, 18, 120);
+        // Arrow for flow direction
+        txt('↓ Nước', sensorX + 2, sensorY + 8, '#3B82F6', 9, 'left', true);
+
+        // Sensor on pipe
+        roundRect(sensorX - 8, sensorY + 50, 50, 40, 6, '#E0F2FE', '#0EA5E9', 2);
+        txt('⚡', sensorX + 7, sensorY + 76, '#0EA5E9', 16, 'left', false);
+
+        // Sensor label
+        roundRect(sensorX - 15, sensorY + 100, 70, 30, 5, '#0EA5E9', null);
+        txt('CẢM BIẾN', sensorX + 20, sensorY + 115, '#FFF', 9, 'center', true);
+        txt('LƯU LƯỢNG', sensorX + 20, sensorY + 126, '#FFF', 8, 'center', false);
+
+        // 3 wires from sensor
+        const wireStartX = sensorX + 50;
+        const wireStartY = sensorY + 60;
+
+        // Wire labels near sensor
+        txt('3 dây:', wireStartX + 5, wireStartY - 8, '#475569', 9, 'left', true);
+
+        // ═══ 2. BỘ CHUYỂN ĐỔI DI JIANG (Center) ═══
+        const djX = 280, djY = 45;
+        const djW = 200, djH = 120;
+
+        // Shadow
+        roundRect(djX + 3, djY + 3, djW, djH, 10, 'rgba(0,0,0,0.08)', null);
+        // Main box
+        const djGrad = ctx.createLinearGradient(djX, djY, djX, djY + djH);
+        djGrad.addColorStop(0, '#374151');
+        djGrad.addColorStop(1, '#1F2937');
+        roundRect(djX, djY, djW, djH, 10, djGrad, '#6B7280', 2);
+
+        // Brand text
+        txt('帝 江', djX + djW / 2, djY + 35, '#E5E7EB', 18, 'center', true);
+        txt('DI JIANG', djX + djW / 2, djY + 52, '#9CA3AF', 10, 'center', false);
+
+        // Left connector label
+        roundRect(djX - 5, djY + 65, 85, 18, 3, '#1E40AF', null);
+        txt('Flow Sensor (BK)', djX + 38, djY + 78, '#FFF', 8, 'center', true);
+
+        // Right connector labels
+        roundRect(djX + djW - 80, djY + 65, 85, 18, 3, '#92400E', null);
+        txt('Power + 485', djX + djW - 38, djY + 78, '#FFF', 8, 'center', true);
+
+        // Top label
+        roundRect(djX + 20, djY - 20, djW - 40, 18, 4, '#14B8A6', null);
+        txt('BỘ CHUYỂN ĐỔI XUNG → MODBUS', djX + djW / 2, djY - 7, '#FFF', 8, 'center', true);
+
+        // Specs under box
+        txt('5-24VDC | 115200bps | 8CH', djX + djW / 2, djY + djH + 16, '#64748B', 9, 'center', false);
+
+        // ═══ 3. BỘ NAVIS (Right) ═══
+        const navX = 640, navY = 45;
+        const navW = 200, navH = 120;
+
+        // Shadow
+        roundRect(navX + 3, navY + 3, navW, navH, 10, 'rgba(0,0,0,0.08)', null);
+        // Main box
+        const navGrad = ctx.createLinearGradient(navX, navY, navX, navY + navH);
+        navGrad.addColorStop(0, '#1E3A5F');
+        navGrad.addColorStop(1, '#0F2B46');
+        roundRect(navX, navY, navW, navH, 10, navGrad, '#3B82F6', 2);
+
+        // Brand
+        txt('📡', navX + navW / 2 - 10, navY + 38, '#FFF', 18, 'left', false);
+        txt('NAVIS', navX + navW / 2, navY + 55, '#93C5FD', 14, 'center', true);
+        txt('IoT Gateway', navX + navW / 2, navY + 68, '#60A5FA', 9, 'center', false);
+
+        // RS485 port label
+        roundRect(navX - 5, navY + 80, 75, 18, 3, '#1D4ED8', null);
+        txt('RS485 A+/B−', navX + 33, navY + 93, '#FFF', 8, 'center', true);
+
+        // Top label
+        roundRect(navX + 30, navY - 20, navW - 60, 18, 4, '#3B82F6', null);
+        txt('BỘ NAVIS (CÓ SẴN)', navX + navW / 2, navY - 7, '#FFF', 8, 'center', true);
+
+        // WiFi/Cloud arrow
+        txt('☁️ → Cloud / Dashboard', navX + navW / 2, navY + navH + 16, '#3B82F6', 9, 'center', true);
+
+        // ═══ 4. NGUỒN 24VDC (Bottom Center) ═══
+        const pwrX = 320, pwrY = 260;
+        const pwrW = 140, pwrH = 50;
+        roundRect(pwrX, pwrY, pwrW, pwrH, 8, '#FEF3C7', '#F59E0B', 2);
+        txt('⚡ NGUỒN 24VDC', pwrX + pwrW / 2, pwrY + 22, '#92400E', 11, 'center', true);
+        txt('(Có sẵn trong tủ)', pwrX + pwrW / 2, pwrY + 36, '#B45309', 9, 'center', false);
+
+        // ═══ WIRES ═══
+
+        // Wire 1: Sensor Signal (Yellow) → DI JIANG Flow Sensor
+        drawWire([
+            [wireStartX, wireStartY + 5],
+            [wireStartX + 40, wireStartY + 5],
+            [wireStartX + 80, wireStartY - 15],
+            [djX - 5, djY + 75]
+        ], '#EAB308', 3);
+        // Label
+        roundRect(wireStartX + 30, wireStartY - 32, 80, 16, 3, '#FEF9C3', '#EAB308', 1);
+        txt('Vàng (Signal)', wireStartX + 70, wireStartY - 20, '#A16207', 8, 'center', true);
+
+        // Wire 2: Sensor VCC (Red) → 24VDC+
+        drawWire([
+            [wireStartX, wireStartY + 20],
+            [wireStartX + 60, wireStartY + 20],
+            [wireStartX + 100, wireStartY + 80],
+            [wireStartX + 140, wireStartY + 150],
+            [pwrX, pwrY + 15]
+        ], '#EF4444', 2.5);
+        roundRect(wireStartX + 60, wireStartY + 55, 65, 16, 3, '#FEE2E2', '#EF4444', 1);
+        txt('Đỏ (VCC+)', wireStartX + 92, wireStartY + 67, '#DC2626', 8, 'center', true);
+
+        // Wire 3: Sensor GND (Black) → 24VDC−
+        drawWire([
+            [wireStartX, wireStartY + 35],
+            [wireStartX + 50, wireStartY + 35],
+            [wireStartX + 80, wireStartY + 100],
+            [wireStartX + 120, wireStartY + 170],
+            [pwrX, pwrY + 35]
+        ], '#1E293B', 2.5);
+        roundRect(wireStartX + 40, wireStartY + 80, 65, 16, 3, '#E2E8F0', '#475569', 1);
+        txt('Đen (GND)', wireStartX + 72, wireStartY + 92, '#1E293B', 8, 'center', true);
+
+        // Wire 4: 24VDC+ (Red) → DI JIANG Power+
+        drawWire([
+            [pwrX + pwrW, pwrY + 15],
+            [pwrX + pwrW + 40, pwrY + 15],
+            [djX + djW - 40, djY + djH + 35],
+            [djX + djW - 40, djY + djH]
+        ], '#EF4444', 2);
+        txt('24V+', pwrX + pwrW + 25, pwrY + 8, '#DC2626', 8, 'center', true);
+
+        // Wire 5: 24VDC− (Black) → DI JIANG Power−
+        drawWire([
+            [pwrX + pwrW, pwrY + 35],
+            [pwrX + pwrW + 60, pwrY + 35],
+            [djX + djW - 15, djY + djH + 45],
+            [djX + djW - 15, djY + djH]
+        ], '#1E293B', 2);
+        txt('24V−', pwrX + pwrW + 45, pwrY + 48, '#475569', 8, 'center', true);
+
+        // Wire 6: DI JIANG RS485 A+ (Red) → Navis A+
+        drawWire([
+            [djX + djW, djY + 85],
+            [djX + djW + 30, djY + 85],
+            [navX - 30, djY + 85],
+            [navX - 5, navY + 85]
+        ], '#EF4444', 2.5);
+
+        // Wire 7: DI JIANG RS485 B− (Black) → Navis B−
+        drawWire([
+            [djX + djW, djY + 95],
+            [djX + djW + 30, djY + 95],
+            [navX - 30, djY + 95],
+            [navX - 5, navY + 95]
+        ], '#1E293B', 2.5);
+
+        // RS485 label in the middle
+        roundRect(djX + djW + 40, djY + 70, 100, 22, 4, '#DBEAFE', '#3B82F6', 1.5);
+        txt('RS485 Modbus', djX + djW + 90, djY + 85, '#1D4ED8', 9, 'center', true);
+        txt('A+ (Đỏ)  B− (Đen)', djX + djW + 90, djY + 108, '#64748B', 8, 'center', false);
+
+        // ═══ LEGEND ═══
+        const legX = 30, legY = 330;
+        roundRect(legX, legY, 820, 70, 8, '#F8FAFC', '#E2E8F0', 1);
+        txt('CHÚ THÍCH:', legX + 12, legY + 18, '#0F172A', 10, 'left', true);
+
+        // Legend items
+        const items = [
+            { color: '#EAB308', label: 'Dây Vàng — Signal (Xung)' },
+            { color: '#EF4444', label: 'Dây Đỏ — VCC (+) / A+' },
+            { color: '#1E293B', label: 'Dây Đen — GND (−) / B−' }
+        ];
+
+        items.forEach((item, i) => {
+            const ix = legX + 12 + i * 250;
+            const iy = legY + 36;
+            ctx.beginPath();
+            ctx.strokeStyle = item.color;
+            ctx.lineWidth = 3;
+            ctx.moveTo(ix, iy);
+            ctx.lineTo(ix + 30, iy);
+            ctx.stroke();
+            txt(item.label, ix + 38, iy + 4, '#475569', 9, 'left', false);
+        });
+
+        // Additional note
+        txt('⚠️ Tất cả GND phải nối chung mass. Dây RS485 nên dùng dây xoắn đôi có shield.', legX + 12, legY + 58, '#DC2626', 9, 'left', true);
+    </script>
+</body>
+
+</html>
