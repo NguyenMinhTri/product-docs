@@ -329,6 +329,9 @@
     <h1>GIẢI ĐÁP CÁC CÂU HỎI KỸ THUẬT</h1>
     <div class="subtitle">Nền tảng Giám sát IoT Công nghiệp — Navis Smart Industry</div>
     <div class="badge">📋 Tài liệu kỹ thuật &nbsp;•&nbsp; Đại Việt IoT</div>
+    <div style="margin-top: 14px;">
+        <a href="file:///C:/Users/Tri/Docs/giai_dap_bo_sung_khach_hang.html" style="color: #00BFA5; text-decoration: none; font-weight: 600; font-size: 13.5px; display: inline-block; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 4px; border: 1px dashed rgba(255,255,255,0.25);">🔒 Xem Tài liệu Giải Đáp Bổ Sung & Cam Kết Bảo Mật →</a>
+    </div>
 </div>
 
 <div class="container">
@@ -491,9 +494,11 @@
         <div class="qa-item">
             <div class="qa-question"><span class="q-num">1.4</span> Gateway đọc tối đa bao nhiêu thiết bị/cảm biến/tag?</div>
             <div class="qa-answer">
-                <p>Gateway hỗ trợ tối đa <strong>100 tag</strong> cho mỗi trạm.</p>
+                <p>Gateway hỗ trợ tối đa <strong>100 tag điểm logic</strong> cho mỗi trạm.</p>
+                <p><strong>Làm rõ về định nghĩa Tag:</strong> 100 tag ở đây là <strong>100 thông số logic đầu ra</strong> (ví dụ: pH, độ đục, nhiệt độ, lưu lượng, trạng thái chạy/dừng/lỗi của bơm, v.v.), không giới hạn số lượng thanh ghi vật lý (Modbus registers) tương ứng. Ví dụ, một thông số float 32-bit chiếm 2 thanh ghi Modbus nhưng chỉ tính là 1 tag logic.</p>
+                <p><strong>Đối chiếu quy mô thực tế:</strong> Quy mô trung bình của một trạm quan trắc nước thải hoặc tủ điều khiển trạm bơm thông thường chỉ cần từ <strong>10 – 30 tag logic</strong>. Do đó, hạn mức 100 tag/trạm là cực kỳ dư dả và hoàn toàn đáp ứng tốt các yêu cầu vận hành thực tế tại nhà máy.</p>
                 <div class="note success">
-                    <strong>Khuyến nghị:</strong> Nên ưu tiên chọn các <strong>tag quan trọng</strong> để giám sát (tag cảnh báo lỗi, cảm biến chất lượng, thông số vận hành chính...) thay vì đọc toàn bộ thanh ghi. Điều này giúp tối ưu tốc độ và đảm bảo dữ liệu cập nhật kịp thời.
+                    <strong>Khuyến nghị:</strong> Nên ưu tiên chọn các <strong>tag quan trọng</strong> để giám sát (thông số chất lượng nước, lỗi hệ thống, lưu lượng tổng, điện năng tiêu thụ...) thay vì đọc các thanh ghi cấu hình tĩnh của thiết bị. Điều này giúp tối ưu hóa băng thông truyền dữ liệu và tăng tốc độ cập nhật thời gian thực.
                 </div>
             </div>
         </div>
@@ -551,7 +556,7 @@
                     <tr><td>Kích thước</td><td>10 × 7.5 × 3 cm</td></tr>
                     <tr><td>LED chỉ thị</td><td>WiFi, TX/RX, Power</td></tr>
                     <tr><td>Giao thức</td><td>Modbus RTU / Modbus TCP</td></tr>
-                    <tr><td>Số tag tối đa</td><td>100 tag/trạm</td></tr>
+                    <tr><td>Số tag tối đa</td><td>100 tag logic/trạm (xem chi tiết tại 1.4)</td></tr>
                     <tr><td>Bảo mật</td><td>Mã hóa dữ liệu, xác thực JWT</td></tr>
                 </table>
             </div>
@@ -778,8 +783,17 @@
         </div>
 
         <div class="qa-item">
-            <div class="qa-question"><span class="q-num">5.3</span> Có backup dữ liệu không?</div>
-            <div class="qa-answer"><p><strong>Có</strong>. Hệ thống cloud có backup dữ liệu, đảm bảo an toàn và khả năng phục hồi khi cần.</p></div>
+            <div class="qa-question"><span class="q-num">5.3</span> Có backup dữ liệu không? Chu kỳ retention, chỉ số RTO và RPO như thế nào?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>. Hệ thống Cloud Server (Google Cloud) được cấu hình sao lưu tự động và dự phòng thảm họa (Disaster Recovery) với các thông số cam kết như sau:</p>
+                <table class="qa-table">
+                    <tr><th>Thông số kỹ thuật</th><th>Cam kết giải pháp</th><th>Chi tiết cơ chế</th></tr>
+                    <tr><td><strong>Chu kỳ Backup</strong></td><td class="yes">Hàng ngày (Daily)</td><td>Tự động backup vào lúc 02:00 AM mỗi ngày. Dữ liệu lịch sử đo lường chính (Timeseries DB) được nhân bản thời gian thực (Realtime Replication).</td></tr>
+                    <tr><td><strong>Retention Period</strong> (Thời gian lưu)</td><td><strong>30 ngày gần nhất</strong></td><td>Cho phép khôi phục (rollback) hệ thống về bất kỳ thời điểm nào trong vòng 30 ngày gần nhất nếu xảy ra sự cố lỗi phần mềm hoặc dữ liệu. Dữ liệu vận hành thô được lưu trữ dài hạn/vĩnh viễn trên cơ sở dữ liệu chính.</td></tr>
+                    <tr><td><strong>RPO</strong> (Recovery Point Objective)</td><td><strong>&le; 24 giờ</strong> (restore từ backup ngày)<br><strong>&le; 5 phút</strong> (đồng bộ thời gian thực)</td><td>Trong trường hợp tệ nhất cần khôi phục từ bản backup ngày, dữ liệu hao hụt tối đa là 24 giờ. Nếu chỉ hỏng server vật lý của Google Cloud, cơ chế tự động chuyển đổi sang node dự phòng giúp RPO đạt dưới 5 phút.</td></tr>
+                    <tr><td><strong>RTO</strong> (Recovery Time Objective)</td><td><strong>&le; 4 giờ</strong> (Sự cố thông thường)<br><strong>&le; 12 giờ</strong> (Thảm họa diện rộng)</td><td>Thời gian tối đa để khôi phục toàn bộ dịch vụ và đưa hệ thống hoạt động bình thường trở lại sau khi phát hiện sự cố nghiêm trọng.</td></tr>
+                </table>
+            </div>
         </div>
 
         <div class="qa-item">
@@ -842,8 +856,19 @@
         </div>
 
         <div class="qa-item">
-            <div class="qa-question"><span class="q-num">6.3</span> Có xác thực 2 lớp không?</div>
-            <div class="qa-answer"><p><strong>Có</strong>. Hỗ trợ: SĐT + OTP, đăng nhập Google, Apple, Email + Mật khẩu.</p></div>
+            <div class="qa-question"><span class="q-num">6.3</span> Có xác thực 2 lớp không? Có bắt buộc cho tài khoản Admin không?</div>
+            <div class="qa-answer">
+                <p><strong>Có</strong>. Hệ thống hỗ trợ nhiều phương thức xác thực bảo mật nâng cao bao gồm:</p>
+                <ul class="check-list">
+                    <li>Đăng nhập liên kết: Google Auth, Apple ID (kế thừa cơ chế xác thực 2 lớp có sẵn của Google/Apple).</li>
+                    <li>Đăng nhập truyền thống: Email/Số điện thoại kết hợp mã OTP gửi qua Email hoặc SMS/App Authenticator.</li>
+                </ul>
+                <p><strong>Quy định bắt buộc đối với Admin:</strong></p>
+                <ul class="check-list">
+                    <li><strong>Cấu hình linh hoạt:</strong> Hệ thống cho phép Chủ sở hữu (Owner/Super Admin) cấu hình <strong>bắt buộc kích hoạt xác thực 2 lớp (MFA/2FA)</strong> cho toàn bộ nhóm tài khoản quản trị viên (Admin, Operator) trước khi truy cập các chức năng cấu hình thiết bị, cài đặt ngưỡng cảnh báo hoặc điều khiển từ xa.</li>
+                    <li>Đối với tài khoản Viewer (chỉ xem dữ liệu), có thể tùy chọn bật/tắt 2FA để thuận tiện cho việc thao tác nhanh trên hiện trường.</li>
+                </ul>
+            </div>
         </div>
 
         <div class="qa-item">
@@ -852,8 +877,24 @@
         </div>
 
         <div class="qa-item">
-            <div class="qa-question"><span class="q-num">6.7</span> Nhân sự Đại Việt có xem/sửa dữ liệu không?</div>
-            <div class="qa-answer"><p>Chỉ truy cập để <strong>hỗ trợ kỹ thuật</strong>. Không can thiệp dữ liệu đo. Mọi thao tác có log. Có thể ký cam kết bảo mật.</p></div>
+            <div class="qa-question"><span class="q-num">6.7</span> Nhân sự Đại Việt có quyền truy cập dữ liệu không? Cơ chế Audit và ký kết bảo mật NDA thế nào?</div>
+            <div class="qa-answer">
+                <p><strong>Quy định truy cập hệ thống của Đại Việt IoT:</strong></p>
+                <ul class="check-list">
+                    <li><strong>Nguyên tắc bảo mật:</strong> Đại Việt IoT tôn trọng quyền sở hữu dữ liệu của khách hàng. Nhân sự của chúng tôi <strong>không có quyền tự ý truy cập hoặc sửa đổi</strong> bất kỳ dữ liệu vận hành hay dữ liệu đo lường nào của khách hàng.</li>
+                    <li><strong>Trường hợp ngoại lệ:</strong> Chỉ khi nhận được yêu cầu hỗ trợ kỹ thuật từ phía khách hàng (qua Hotline, Email hoặc Ticket hỗ trợ), nhân sự được chỉ định mới sử dụng tài khoản kỹ thuật (Support Account) để truy cập cấu hình hoặc kiểm tra tín hiệu trạm.</li>
+                </ul>
+                <p><strong>Cơ chế giám sát Audit log:</strong></p>
+                <ul class="check-list">
+                    <li>Mọi hành động đăng nhập, chỉnh sửa cấu hình hệ thống, hoặc truy xuất dữ liệu của kỹ thuật viên Đại Việt đều được <strong>hệ thống ghi nhật ký tự động (Audit Log / Activity Log)</strong> thời gian thực.</li>
+                    <li>Bản ghi Audit Log được lưu trữ độc lập trên cloud, không thể xóa hoặc sửa đổi bởi bất kỳ nhân viên nào (kể cả kỹ thuật viên). Chủ đầu tư (Owner) có thể trực tiếp giám sát, kiểm tra hoặc xuất file nhật ký này để đối chiếu khi cần.</li>
+                </ul>
+                <p><strong>Cam kết bảo mật thông tin (NDA):</strong></p>
+                <ul class="check-list">
+                    <li>Đại Việt IoT cam kết ký kết <strong>Thỏa thuận bảo mật thông tin (NDA - Non-Disclosure Agreement)</strong> pháp lý chính thức trước khi triển khai dự án.</li>
+                    <li>Cam kết không chia sẻ dữ liệu vận hành, thiết kế hệ thống, thông tin kinh doanh của khách hàng cho bất kỳ bên thứ ba nào. Mọi hành vi vi phạm sẽ chịu hoàn toàn trách nhiệm trước pháp luật và bồi thường thiệt hại theo điều khoản hợp đồng.</li>
+                </ul>
+            </div>
         </div>
 
     </div>
@@ -904,7 +945,10 @@
 
         <div class="qa-item">
             <div class="qa-question"><span class="q-num">7.6</span> Tăng tag/cảm biến thì tính phí thế nào?</div>
-            <div class="qa-answer"><p>Trong giới hạn <strong>100 tag/gateway</strong> → miễn phí. Vượt giới hạn cần thêm gateway → phí gateway + duy trì.</p></div>
+            <div class="qa-answer">
+                <p>Trong giới hạn <strong>100 tag logic/gateway</strong> → hoàn toàn miễn phí. Như đã làm rõ ở mục 1.4, 100 tag logic tương đương với 100 thông số đo lường hoặc trạng thái thiết bị thực tế, đáp ứng thoải mái cho các trạm hiện hữu.</p>
+                <p>Trường hợp vượt quá 100 tag logic hoặc cần lắp thêm ở khu vực vật lý khác, hệ thống cần bổ sung thêm thiết bị Gateway thứ hai. Khi đó sẽ tính phí thiết bị Gateway mới + phí duy trì trạm phát sinh hàng năm.</p>
+            </div>
         </div>
 
         <div class="qa-item">

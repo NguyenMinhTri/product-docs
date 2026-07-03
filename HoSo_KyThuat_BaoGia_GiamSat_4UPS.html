@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Kỹ Thuật & Báo Giá — Giám Sát 4 UPS qua App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d7c3d;
+            --primary-light: #15a050;
+            --primary-pale: #e8f7ee;
+            --accent: #1a6fb5;
+            --accent-light: #2196F3;
+            --accent-pale: #e3f2fd;
+            --purple: #7c3aed;
+            --purple-pale: #f0e7ff;
+            --orange: #e67e22;
+            --orange-pale: #fef3e2;
+            --red: #d32f2f;
+            --red-pale: #fdeaea;
+            --bg: #f8fafb;
+            --bg-white: #ffffff;
+            --bg-section: #f1f5f8;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .header {
+            background: var(--bg-white);
+            border-bottom: 2px solid var(--primary);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-group img {
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .logo-divider {
+            width: 2px;
+            height: 36px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+        }
+
+        .header-title { text-align: right; }
+
+        .header-title h2 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-title p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #e3f2fd 0%, #e8f5e9 50%, #fef3e2 100%);
+            padding: 30px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(13, 124, 61, 0.1);
+            border: 1px solid rgba(13, 124, 61, 0.25);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .hero-badge .dot {
+            width: 8px; height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
+        }
+
+        .hero h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .hero .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .section { padding: 28px 0; }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .section-title .icon {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .icon.green { background: var(--primary); }
+        .icon.blue { background: var(--accent); }
+        .icon.purple { background: var(--purple); }
+        .icon.orange { background: var(--orange); }
+        .icon.red { background: var(--red); }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 16px;
+            padding-left: 50px;
+        }
+
+        .item-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .item-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .item-header {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .item-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .item-icon.green { background: linear-gradient(135deg, #0d7c3d, #15a050); }
+        .item-icon.blue { background: linear-gradient(135deg, #1a6fb5, #2196F3); }
+        .item-icon.purple { background: linear-gradient(135deg, #7c3aed, #9333ea); }
+        .item-icon.orange { background: linear-gradient(135deg, #e67e22, #f39c12); }
+        .item-icon.red { background: linear-gradient(135deg, #d32f2f, #ef5350); }
+
+        .item-info h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+        .item-info p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+        .item-body { padding: 10px 16px; }
+
+        .item-body .desc-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .item-body ul { list-style: none; display: grid; gap: 5px; }
+
+        .item-body li {
+            padding: 6px 12px;
+            background: var(--bg-section);
+            border-radius: 6px;
+            border-left: 3px solid var(--primary);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .item-body li.blue-accent { border-left-color: var(--accent); }
+        .item-body li.purple-accent { border-left-color: var(--purple); }
+        .item-body li.orange-accent { border-left-color: var(--orange); }
+        .item-body li.red-accent { border-left-color: var(--red); }
+
+        .item-body li strong { color: var(--primary); }
+        .item-body li.blue-accent strong { color: var(--accent); }
+        .item-body li.purple-accent strong { color: var(--purple); }
+        .item-body li.orange-accent strong { color: var(--orange); }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag.green { background: var(--primary-pale); color: var(--primary); }
+        .tag.blue { background: var(--accent-pale); color: var(--accent); }
+        .tag.purple { background: var(--purple-pale); color: var(--purple); }
+        .tag.orange { background: var(--orange-pale); color: var(--orange); }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            background: var(--bg-white);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .specs-table thead th {
+            background: var(--primary);
+            color: #fff;
+            padding: 8px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .specs-table tbody td {
+            padding: 6px 14px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text);
+        }
+
+        .specs-table tbody tr:hover { background: var(--bg-section); }
+        .specs-table tbody tr:last-child td { border-bottom: none; }
+
+        .specs-table .label-col {
+            font-weight: 600;
+            color: var(--primary);
+            width: 35%;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .feature-card:hover { box-shadow: var(--shadow-sm); }
+
+        .feature-icon { font-size: 18px; margin-bottom: 2px; display: inline; margin-right: 4px; }
+
+        .feature-card h4 { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; display: inline; }
+
+        .feature-card p { font-size: 11px; color: var(--text-secondary); line-height: 1.4; }
+
+        .two-col {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .two-col .col-text { flex: 1; min-width: 0; }
+
+        .two-col .col-img { flex: 0 0 auto; text-align: center; }
+
+        .two-col .col-img img {
+            max-width: 180px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .two-col .col-img .caption {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .diagram-wrapper {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .diagram-title {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+        }
+
+        /* === QUOTATION TABLE === */
+        .quote-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            background: var(--bg-white);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .quote-table thead th {
+            background: var(--accent);
+            color: #fff;
+            padding: 10px 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .quote-table tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text);
+            vertical-align: top;
+        }
+
+        .quote-table tbody tr:hover { background: var(--bg-section); }
+
+        .quote-table .num { text-align: center; font-weight: 600; width: 40px; }
+        .quote-table .qty { text-align: center; width: 50px; }
+        .quote-table .unit { text-align: center; width: 50px; }
+        .quote-table .price { text-align: right; width: 110px; font-family: 'Consolas', monospace; font-size: 11px; }
+        .quote-table .amount { text-align: right; width: 120px; font-family: 'Consolas', monospace; font-size: 11px; font-weight: 600; }
+
+        .quote-table .group-row td {
+            background: var(--accent-pale);
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .quote-table .total-row td {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 12px;
+        }
+
+        .quote-table .subtotal-row td {
+            background: var(--bg-section);
+            font-weight: 600;
+            color: var(--text);
+            border-top: 2px solid var(--border);
+        }
+
+        .quote-note {
+            background: var(--orange-pale);
+            border-left: 3px solid var(--orange);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-top: 12px;
+            color: var(--text-secondary);
+        }
+
+        .quote-note strong { color: var(--orange); }
+
+        .screenshots-row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .screenshots-row .screenshot { text-align: center; }
+
+        .screenshots-row .screenshot img {
+            max-height: 500px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+
+        .screenshots-row .screenshot .caption {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .footer {
+            background: var(--bg-white);
+            padding: 20px 40px;
+            text-align: center;
+            border-top: 2px solid var(--primary);
+            margin-top: 10px;
+        }
+
+        .footer .company { font-size: 14px; font-weight: 700; color: var(--primary); }
+        .footer p { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
+
+        .option-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, var(--accent), #1976D2);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--accent-pale), #e8f5e9);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin: 12px 0;
+        }
+
+        .highlight-box h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .highlight-box p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        @media print {
+            @page { margin: 8mm; size: A4; }
+            body { background: #fff; }
+            .header { position: relative; padding: 10px 0; }
+            .hero { padding: 16px 30px; }
+            .hero h1 { font-size: 22px; margin-bottom: 6px; }
+            .hero .subtitle { font-size: 12px; }
+            .hero-badge { display: none; }
+            .section { padding: 16px 0; }
+            .section-title { font-size: 16px; }
+            .section-desc { font-size: 12px; margin-bottom: 10px; }
+            .item-card { margin-bottom: 10px; }
+            .item-body { padding: 12px 16px; }
+            .feature-grid { gap: 8px; }
+            .feature-card { padding: 10px; }
+            .feature-card h4 { font-size: 12px; }
+            .feature-card p { font-size: 11px; }
+            .specs-table { font-size: 12px; }
+            .specs-table thead th { padding: 8px 14px; font-size: 11px; }
+            .specs-table tbody td { padding: 6px 14px; }
+            .quote-table { font-size: 11px; }
+            .diagram-wrapper { padding: 14px; }
+            canvas { max-width: 100%; height: auto !important; }
+            .footer { padding: 12px 20px; margin-top: 5px; }
+            .footer .company { font-size: 12px; }
+            .footer p { font-size: 10px; }
+            .item-card, .feature-card, .diagram-wrapper { box-shadow: none; break-inside: avoid; }
+            .item-card:hover, .feature-card:hover { transform: none; box-shadow: none; }
+        }
+
+        @media (max-width:768px) {
+            .header-content { flex-direction: column; gap: 14px; }
+            .header-title { text-align: center; }
+            .hero { padding: 40px 20px; }
+            .hero h1 { font-size: 24px; }
+            .container { padding: 0 20px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .section-desc { padding-left: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============ HEADER ============ -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-group">
+                <img src="LOGO-omwater.png" alt="O&M Logo">
+                <div class="logo-divider"></div>
+                <img src="navis-logo.png" alt="Navis IoT Logo">
+            </div>
+            <div class="header-title">
+                <h2>Hồ Sơ Kỹ Thuật & Báo Giá</h2>
+                <p>Ngày: 01/07/2026 • Phiên bản: 1.0</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            O&M × Navis Smart Industry
+        </div>
+        <h1>Hệ Thống Giám Sát Trạng Thái 4 UPS<br>Cảnh Báo Sự Cố Qua App & Web</h1>
+        <p class="subtitle">
+            Giải pháp IoT giám sát từ xa theo thời gian thực — kết nối 4 UPS qua Modbus TCP/IP,
+            cảnh báo sự cố bất thường qua App điện thoại & Web, lưu trữ dữ liệu Cloud.
+        </p>
+    </section>
+
+    <!-- ============ OPTION BADGE ============ -->
+    <div class="container" style="padding-top: 20px;">
+        <div style="text-align: center; margin-bottom: 10px;">
+            <span class="option-badge">📱 OPTION 2 — BÁO ĐỘNG QUA APP + GIÁM SÁT TRỰC TUYẾN</span>
+        </div>
+    </div>
+
+    <!-- ============ 1. TỔNG QUAN ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">📋</div>
+                Tổng Quan Hệ Thống
+            </div>
+            <p class="section-desc">
+                Hệ thống giám sát trạng thái 4 bộ UPS thông qua giao thức Modbus TCP/IP, sử dụng Gateway Navis MOD
+                NM03 làm trung tâm thu thập dữ liệu, truyền lên Cloud qua Internet (Ethernet/4G), hiển thị trên App &
+                Web với cảnh báo Push Notification khi có sự cố bất thường.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔋</div>
+                    <h4>4 Bộ UPS</h4>
+                    <p>Giám sát đồng thời trạng thái 4 UPS — điện áp vào/ra, tải (%), pin, nhiệt độ, cảnh báo
+                        lỗi, chế độ hoạt động.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>App Điện Thoại</h4>
+                    <p>Ứng dụng Navis Smart Industry trên Android & iOS — xem giá trị real-time, biểu đồ lịch sử,
+                        cài ngưỡng cảnh báo.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h4>Phần Mềm Web</h4>
+                    <p>Giao diện trên máy tính qua trình duyệt — quản lý dữ liệu tập trung, xem tất cả UPS, xuất
+                        báo cáo Excel/PDF.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4>Cảnh Báo Sự Cố</h4>
+                    <p>Push Notification trực tiếp lên điện thoại khi UPS gặp sự cố: mất điện lưới, pin yếu, quá tải,
+                        nhiệt độ cao.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Báo Cáo & Lịch Sử</h4>
+                    <p>Lưu trữ dữ liệu lịch sử trên Cloud, biểu đồ xu hướng, thống kê MAX/MIN/AVG, xuất báo cáo theo
+                        ngày/tháng.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h4>Modbus TCP/IP</h4>
+                    <p>Kết nối 4 UPS qua mạng Ethernet — giao thức Modbus TCP, đọc thanh ghi trạng thái
+                        realtime, không cần kéo dây RS485.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ 2. GIẢI THÍCH KỸ THUẬT ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">⚙️</div>
+                Giải Thích Kỹ Thuật — Kiến Trúc Mạng
+            </div>
+            <p class="section-desc">
+                Giải thích chi tiết cách kết nối 4 UPS với 1 Gateway Navis MOD qua mạng Ethernet/Modbus TCP/IP.
+            </p>
+
+            <!-- VẤN ĐỀ & GIẢI PHÁP -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon orange">❓</div>
+                    <div class="item-info">
+                        <h3>Vấn Đề: Gateway NM03 chỉ có 1 cổng Ethernet</h3>
+                        <p>Cần kết nối 4 UPS + cấp Internet cho Gateway → tối thiểu 6 cổng Ethernet</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Gateway Navis MOD NM03 chỉ có <strong>1 cổng Ethernet (RJ45)</strong>. Trong khi đó, hệ thống
+                        cần:
+                    </p>
+                    <ul>
+                        <li class="orange-accent"><strong>4 kết nối Modbus TCP</strong> — mỗi UPS cần 1 kết nối Ethernet để
+                            Gateway đọc dữ liệu qua Modbus TCP/IP</li>
+                        <li class="orange-accent"><strong>1 kết nối Internet</strong> — Gateway cần Internet (Ethernet
+                            từ Router) để đẩy dữ liệu lên Cloud</li>
+                        <li class="orange-accent"><strong>Tổng cần: 6 cổng Ethernet</strong> — 4 UPS + 1 Gateway + 1
+                            đường Internet từ Router</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon green">✅</div>
+                    <div class="item-info">
+                        <h3>Giải Pháp: Router 4G + Switch Ethernet 8 port</h3>
+                        <p>Dùng Router cấp Internet & Switch gom mạng Ethernet cho tất cả thiết bị</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Sử dụng <strong>Switch Ethernet công nghiệp 8 port</strong> làm trung tâm kết nối mạng nội bộ,
+                        kết hợp <strong>Router 4G</strong> cấp Internet cho Gateway đẩy dữ liệu lên Cloud:
+                    </p>
+                    <ul>
+                        <li><strong>Switch 8 port</strong> — Gom tất cả thiết bị vào 1 mạng LAN:
+                            Port 1→UPS #1, Port 2→UPS #2, Port 3→UPS #3, Port 4→UPS #4,
+                            Port 5→Gateway NM03, Port 6→Router (Uplink Internet)</li>
+                        <li class="blue-accent"><strong>Router 4G</strong> — Lắp SIM Data, cấp Internet cho Switch →
+                            Gateway NM03 lấy Internet đẩy dữ liệu lên Cloud. Router cũng cấp DHCP cho toàn bộ mạng LAN</li>
+                        <li class="purple-accent"><strong>Cấu hình IP tĩnh</strong> — Mỗi UPS cần được đặt IP tĩnh
+                            (ví dụ: 192.168.1.101 ~ 104). Gateway NM03 cũng đặt IP tĩnh (192.168.1.100).
+                            Router: 192.168.1.1 (Gateway mặc định)</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <h4>📌 Cách hoạt động</h4>
+                        <p>
+                            Gateway NM03 kết nối vào Switch → qua mạng LAN đọc thanh ghi Modbus TCP của 4 UPS
+                            (mỗi UPS là 1 Modbus Slave với IP riêng). Đồng thời, NM03 lấy Internet từ Router 4G
+                            (qua Switch) để đẩy dữ liệu lên Navis Cloud → hiển thị trên App & Web.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BẢNG IP -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon blue">🔧</div>
+                    <div class="item-info">
+                        <h3>Bảng Cấu Hình IP & Modbus TCP</h3>
+                        <p>Sơ đồ địa chỉ IP tĩnh cho toàn bộ hệ thống</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <table class="specs-table">
+                        <thead>
+                            <tr>
+                                <th>Thiết Bị</th>
+                                <th>Địa Chỉ IP</th>
+                                <th>Modbus Port</th>
+                                <th>Slave ID</th>
+                                <th>Ghi Chú</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="label-col">Router 4G</td>
+                                <td>192.168.1.1</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>Gateway mặc định, DHCP Server, NAT Internet</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">Gateway NM03</td>
+                                <td>192.168.1.100</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>Modbus TCP Master — đọc 4 UPS</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">UPS #1</td>
+                                <td>192.168.1.101</td>
+                                <td>502</td>
+                                <td>1</td>
+                                <td>Modbus TCP Slave — UPS thứ 1</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">UPS #2</td>
+                                <td>192.168.1.102</td>
+                                <td>502</td>
+                                <td>2</td>
+                                <td>Modbus TCP Slave — UPS thứ 2</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">UPS #3</td>
+                                <td>192.168.1.103</td>
+                                <td>502</td>
+                                <td>3</td>
+                                <td>Modbus TCP Slave — UPS thứ 3</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">UPS #4</td>
+                                <td>192.168.1.104</td>
+                                <td>502</td>
+                                <td>4</td>
+                                <td>Modbus TCP Slave — UPS thứ 4</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">Switch 8 port</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>Không quản lý (Unmanaged) — không cần IP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ 3. THÔNG SỐ GIÁM SÁT UPS ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon purple">🔋</div>
+                Thông Số Giám Sát UPS — Qua Modbus TCP
+            </div>
+            <p class="section-desc">
+                Các thông số chính có thể đọc được từ UPS qua giao thức Modbus TCP/IP, dựa trên bảng thanh ghi
+                của UPS (tham khảo datasheet LFLG-A32FWS).
+            </p>
+
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon purple">📊</div>
+                    <div class="item-info">
+                        <h3>Bảng Thanh Ghi Giám Sát UPS (Modbus TCP)</h3>
+                        <p>Các thông số chính sẽ được cấu hình trên Gateway NM03 → hiển thị trên App/Web</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <table class="specs-table">
+                        <thead>
+                            <tr>
+                                <th>Nhóm</th>
+                                <th>Thông Số</th>
+                                <th>Đơn Vị</th>
+                                <th>Mô Tả</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="label-col" rowspan="3">📥 Input (Đầu vào)</td>
+                                <td>Điện áp đầu vào</td>
+                                <td>V</td>
+                                <td>Điện áp lưới cấp vào UPS (220VAC)</td>
+                            </tr>
+                            <tr>
+                                <td>Dòng điện đầu vào</td>
+                                <td>A</td>
+                                <td>Dòng điện lưới</td>
+                            </tr>
+                            <tr>
+                                <td>Tần số đầu vào</td>
+                                <td>Hz</td>
+                                <td>Tần số nguồn lưới (50Hz)</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col" rowspan="3">📤 Output (Đầu ra)</td>
+                                <td>Điện áp đầu ra</td>
+                                <td>V</td>
+                                <td>Điện áp UPS cấp cho tải</td>
+                            </tr>
+                            <tr>
+                                <td>Dòng điện đầu ra</td>
+                                <td>A</td>
+                                <td>Dòng điện UPS cấp cho tải</td>
+                            </tr>
+                            <tr>
+                                <td>Công suất tải</td>
+                                <td>%</td>
+                                <td>Phần trăm tải hiện tại so với công suất UPS</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col" rowspan="3">🔋 Battery (Pin)</td>
+                                <td>Điện áp pin</td>
+                                <td>V</td>
+                                <td>Điện áp bộ pin/ắc quy</td>
+                            </tr>
+                            <tr>
+                                <td>Dung lượng pin</td>
+                                <td>%</td>
+                                <td>Phần trăm dung lượng pin còn lại</td>
+                            </tr>
+                            <tr>
+                                <td>Thời gian lưu trữ</td>
+                                <td>phút</td>
+                                <td>Thời gian dự phòng còn lại</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col" rowspan="3">⚠️ Trạng Thái & Alarm</td>
+                                <td>Chế độ hoạt động</td>
+                                <td>—</td>
+                                <td>Normal / Battery / Bypass / Fault</td>
+                            </tr>
+                            <tr>
+                                <td>Nhiệt độ UPS</td>
+                                <td>°C</td>
+                                <td>Nhiệt độ bên trong UPS</td>
+                            </tr>
+                            <tr>
+                                <td>Mã lỗi / Alarm</td>
+                                <td>—</td>
+                                <td>Mã sự cố: quá tải, pin yếu, quạt lỗi, v.v.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box" style="margin-top: 12px;">
+                        <h4>📌 Lưu ý quan trọng</h4>
+                        <p>
+                            Bảng thanh ghi cụ thể (địa chỉ register, function code) sẽ được cấu hình <strong>sau khi nhận datasheet
+                            Modbus</strong> chính xác từ hãng UPS. Kỹ thuật Navis sẽ mapping thanh ghi trên App
+                            trong quá trình triển khai lắp đặt. Các thông số trên là <strong>tham khảo</strong> dựa trên
+                            datasheet LFLG-A32FWS.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ 4. THIẾT BỊ PHẦN CỨNG ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">🔧</div>
+                Thiết Bị Phần Cứng
+            </div>
+            <p class="section-desc">
+                Chi tiết các thiết bị sử dụng trong hệ thống giám sát 4 UPS qua Modbus TCP/IP.
+            </p>
+
+            <!-- GATEWAY -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon blue">📶</div>
+                    <div class="item-info">
+                        <h3>Gateway Navis MOD — NM03</h3>
+                        <p><span class="tag blue">Gateway IoT</span> 1 bộ — thu thập dữ liệu 4 UPS qua Modbus TCP</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <div class="two-col">
+                        <div class="col-text">
+                            <p class="desc-text">
+                                Gateway Navis MOD NM03 là bộ thu thập dữ liệu trung tâm, đóng vai trò
+                                <strong>Modbus TCP Master</strong> — kết nối qua mạng Ethernet đọc thanh ghi từ 4 UPS,
+                                sau đó đẩy dữ liệu lên Cloud qua Internet.
+                            </p>
+                            <table class="specs-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Thông Số — Gateway Navis MOD NM03</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="label-col">Nguồn cấp</td>
+                                        <td>12–24VDC</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Giao tiếp field</td>
+                                        <td>RS485 Modbus RTU + <strong>Modbus TCP/IP</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Kết nối Internet</td>
+                                        <td>WiFi 2.4GHz / LAN Ethernet / 4G LTE</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Cổng Ethernet</td>
+                                        <td>1 × RJ45 10/100Mbps</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Max tags</td>
+                                        <td>100 tags/gateway</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Cloud Protocol</td>
+                                        <td>MQTT + TLS/SSL (bảo mật)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Kích thước</td>
+                                        <td>10 × 7.5 × 3 cm</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Cập nhật</td>
+                                        <td>OTA (Over-The-Air)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-col">Bảo hành</td>
+                                        <td>12 tháng</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-img">
+                            <img src="images/navis-mod-gateway.png" alt="Gateway Navis MOD">
+                            <p class="caption">Gateway Navis MOD NM03</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SWITCH -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon green">🔗</div>
+                    <div class="item-info">
+                        <h3>Switch Ethernet Công Nghiệp — 8 Port</h3>
+                        <p><span class="tag green">Mạng</span> 1 bộ — gom kết nối LAN cho 4 UPS + Gateway + Router</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Switch Ethernet công nghiệp 8 port RJ45 10/100Mbps, Unmanaged (không cần cấu hình). Gom tất cả
+                        thiết bị trong hệ thống vào 1 mạng LAN để Gateway đọc Modbus TCP từ 4 UPS và lấy Internet từ
+                        Router.
+                    </p>
+                    <ul>
+                        <li class="blue-accent"><strong>Loại:</strong> Unmanaged Industrial Ethernet Switch</li>
+                        <li class="blue-accent"><strong>Cổng:</strong> 8 × RJ45 10/100Mbps</li>
+                        <li class="blue-accent"><strong>Nguồn:</strong> 12–48VDC hoặc 220VAC (tùy model)</li>
+                        <li class="blue-accent"><strong>Lắp đặt:</strong> DIN Rail hoặc vít</li>
+                        <li class="blue-accent"><strong>Phân bổ port:</strong> Port 1~4: UPS #1~4 | Port 5: Gateway NM03 |
+                            Port 6: Router 4G | Port 7~8: dự phòng</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ROUTER -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon purple">📡</div>
+                    <div class="item-info">
+                        <h3>Router 4G Công Nghiệp</h3>
+                        <p><span class="tag purple">Internet</span> 1 bộ — cấp Internet cho Gateway đẩy dữ liệu lên
+                            Cloud</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Router 4G LTE công nghiệp, lắp SIM Data Viettel/Mobifone, cấp Internet cho toàn bộ mạng LAN.
+                        Gateway NM03 lấy Internet từ Router qua Switch để đẩy dữ liệu lên Navis Cloud.
+                    </p>
+                    <ul>
+                        <li class="purple-accent"><strong>Kết nối:</strong> 4G LTE (Cat 4) — SIM Data di động</li>
+                        <li class="purple-accent"><strong>Cổng LAN:</strong> 1~4 × RJ45 (nối vào Switch)</li>
+                        <li class="purple-accent"><strong>Chức năng:</strong> NAT, DHCP Server, Firewall, VPN (tùy model)
+                        </li>
+                        <li class="purple-accent"><strong>Nguồn:</strong> 12VDC hoặc 9–36VDC (tùy model)</li>
+                        <li class="purple-accent"><strong>SIM Data:</strong> Gói Data 4G hàng tháng (ước tính ~2GB/tháng
+                            cho IoT)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- TỦ ĐIỆN -->
+            <div class="item-card">
+                <div class="item-header">
+                    <div class="item-icon orange">🗄️</div>
+                    <div class="item-info">
+                        <h3>Tủ Điện & Vật Tư Phụ</h3>
+                        <p><span class="tag orange">Tủ điện</span> 1 tủ — chứa Gateway, Switch, Router, nguồn 24V, CB,
+                            phụ kiện</p>
+                    </div>
+                </div>
+                <div class="item-body">
+                    <p class="desc-text">
+                        Tủ điện chứa toàn bộ thiết bị hệ thống giám sát (Gateway, Switch, Router, nguồn, CB).
+                        Vật tư phụ bao gồm cáp mạng, đầu bấm RJ45, nguồn 24VDC, CB bảo vệ, rail DIN, máng cáp, v.v.
+                    </p>
+                    <ul>
+                        <li class="orange-accent"><strong>Tủ điện</strong> — Tủ sắt sơn tĩnh điện hoặc tủ nhựa IP65,
+                            kích thước ~W300×H400×D200mm</li>
+                        <li class="orange-accent"><strong>Nguồn 24VDC</strong> — Meanwell MDR-60-24, 24VDC/2.5A, DIN
+                            Rail — cấp nguồn cho Gateway NM03</li>
+                        <li class="orange-accent"><strong>CB bảo vệ</strong> — 1P 6A, bảo vệ ngắn mạch cho nguồn 24VDC
+                        </li>
+                        <li class="orange-accent"><strong>Cáp mạng Cat5e/Cat6</strong> — 5 sợi (4 UPS + 1 Router),
+                            chiều dài tùy thực tế hiện trường. Đầu bấm RJ45</li>
+                        <li class="orange-accent"><strong>Anten 4G</strong> — Anten ngoài cho Router 4G (nếu tín hiệu
+                            yếu)</li>
+                        <li class="orange-accent"><strong>Rail DIN</strong> — Thanh ray lắp thiết bị trong tủ</li>
+                        <li class="orange-accent"><strong>Phụ kiện</strong> — Domino, đầu cos, dây rút, ống luồn, ốc
+                            vít lắp đặt</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ 5. SƠ ĐỒ KẾT NỐI ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">📐</div>
+                Sơ Đồ Kết Nối Hệ Thống
+            </div>
+            <p class="section-desc">
+                Kiến trúc tổng quan: 4 UPS → Switch Ethernet → Gateway NM03 → Cloud → App & Web.
+            </p>
+
+            <div class="diagram-wrapper">
+                <p class="diagram-title">System Architecture — 4 UPS Monitoring via Modbus TCP/IP</p>
+                <canvas id="systemDiagram" width="1020" height="580"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ 6. GIAO DIỆN APP ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">📱</div>
+                Giao Diện App & Web — Navis Smart Industry
+            </div>
+            <p class="section-desc">
+                Ứng dụng Navis Smart Industry trên Android & iOS, hiển thị trạng thái 4 UPS theo thời gian thực,
+                cảnh báo sự cố, biểu đồ lịch sử.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Dashboard Realtime</h4>
+                    <p>Xem trạng thái 4 UPS đồng thời: điện áp, tải, pin, nhiệt độ. Cập nhật liên tục qua MQTT.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h4>Biểu Đồ Xu Hướng</h4>
+                    <p>Biểu đồ lịch sử theo ngày/tuần/tháng. Hiển thị Hi/Lo-Limit, MAX/MIN/AVG cho từng thông số.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4>Push Notification</h4>
+                    <p>Cảnh báo tức thì khi UPS gặp sự cố. 4 mức: HighAlarm2 🔴, HighAlarm1 🟠, LowAlarm1 🟡,
+                        LowAlarm2 🔴.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h4>Bản Đồ Google Maps</h4>
+                    <p>Hiển thị vị trí trạm UPS trên bản đồ: 🟢 bình thường, 🔴 sự cố, 🟡 mất kết nối.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <h4>Xuất Báo Cáo</h4>
+                    <p>Xuất báo cáo Excel/PDF theo ngày/tuần/tháng. Lịch sử lưu trữ trên Cloud 3–5 năm.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h4>Phân Quyền 4 Cấp</h4>
+                    <p>Owner → Admin → Technician → Viewer. Chia sẻ quyền truy cập cho nhiều người qua QR/Link.</p>
+                </div>
+            </div>
+
+            <!-- Screenshots -->
+            <div class="screenshots-row">
+                <div class="screenshot">
+                    <img src="anh1_app.png" alt="App Dashboard"
+                        style="max-height: 400px;">
+                    <p class="caption">Hình 1: App Dashboard — Giám sát Realtime</p>
+                </div>
+                <div class="screenshot">
+                    <img src="anh2_pc.png" alt="Web Dashboard"
+                        style="max-height: 400px;">
+                    <p class="caption">Hình 2: Web Dashboard — Quản lý dữ liệu trên PC</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ 7. SO SÁNH 2 OPTION ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon orange">⚖️</div>
+                So Sánh 2 Phương Án Cảnh Báo
+            </div>
+            <p class="section-desc">
+                So sánh Option 1 (SMS) và Option 2 (App) để khách hàng đánh giá lựa chọn phù hợp.
+            </p>
+
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th style="width:30%;">Tiêu Chí</th>
+                        <th style="width:35%;">Option 1 — SMS</th>
+                        <th style="width:35%;">Option 2 — App & Web ⭐</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label-col">Phương thức cảnh báo</td>
+                        <td>Tin nhắn SMS</td>
+                        <td><strong>Push Notification + Email + Zalo (tùy chọn)</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Giám sát realtime</td>
+                        <td>❌ Không — chỉ nhận SMS khi có sự cố</td>
+                        <td><strong>✅ Có — xem trạng thái UPS mọi lúc trên điện thoại/PC</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Biểu đồ lịch sử</td>
+                        <td>❌ Không</td>
+                        <td><strong>✅ Có — biểu đồ xu hướng, thống kê MAX/MIN/AVG</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Báo cáo Excel/PDF</td>
+                        <td>❌ Không</td>
+                        <td><strong>✅ Có — xuất báo cáo theo ngày/tuần/tháng</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Chi phí vận hành</td>
+                        <td>Phí SMS hàng tháng (tùy số lượng SMS)</td>
+                        <td><strong>Phí Cloud 5.500.000đ/năm + SIM Data ~100.000đ/tháng</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Phân quyền nhiều người</td>
+                        <td>❌ Chỉ số điện thoại nhận SMS</td>
+                        <td><strong>✅ Có — 4 cấp quyền, nhiều người cùng xem</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Bản đồ vị trí</td>
+                        <td>❌ Không</td>
+                        <td><strong>✅ Google Maps</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Đánh giá</td>
+                        <td>Cơ bản — phù hợp nếu chỉ cần báo sự cố</td>
+                        <td><strong>⭐ Toàn diện — giám sát + cảnh báo + báo cáo + quản lý</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- ============ 8. BẢNG BÁO GIÁ — OPTION 2 ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">💰</div>
+                Bảng Báo Giá — Option 2: Giám Sát Qua App & Web
+            </div>
+            <p class="section-desc">
+                Báo giá chi tiết phần cứng, phần mềm, và dịch vụ cho hệ thống giám sát 4 UPS. Giá đã bao gồm VAT 10%.
+            </p>
+
+            <table class="quote-table">
+                <thead>
+                    <tr>
+                        <th class="num">STT</th>
+                        <th>Hạng Mục</th>
+                        <th class="qty">SL</th>
+                        <th class="unit">ĐVT</th>
+                        <th class="price">Đơn Giá (VNĐ)</th>
+                        <th class="amount">Thành Tiền (VNĐ)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- NHÓM A: THIẾT BỊ CHÍNH -->
+                    <tr class="group-row">
+                        <td colspan="6">A. THIẾT BỊ CHÍNH</td>
+                    </tr>
+                    <tr>
+                        <td class="num">1</td>
+                        <td>
+                            <strong>Gateway Navis MOD NM03</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                IoT Gateway, Modbus TCP/RTU Master, WiFi/LAN/4G → Cloud MQTT.
+                                Thu thập dữ liệu 4 UPS, đẩy lên Navis Cloud.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Bộ</td>
+                        <td class="price">4,500,000</td>
+                        <td class="amount">4,500,000</td>
+                    </tr>
+                    <tr>
+                        <td class="num">2</td>
+                        <td>
+                            <strong>Switch Ethernet Công Nghiệp 8 Port</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                Unmanaged, 8×RJ45 10/100Mbps, DIN Rail.
+                                Gom mạng LAN cho 4 UPS + Gateway + Router.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                        <td class="price">1,200,000</td>
+                        <td class="amount">1,200,000</td>
+                    </tr>
+                    <tr>
+                        <td class="num">3</td>
+                        <td>
+                            <strong>Router 4G Công Nghiệp</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                4G LTE Cat4, 1~2 LAN port, DHCP, NAT, SIM slot.
+                                Cấp Internet cho Gateway → Cloud. Kèm anten 4G.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                        <td class="price">2,500,000</td>
+                        <td class="amount">2,500,000</td>
+                    </tr>
+
+                    <!-- NHÓM B: TỦ ĐIỆN & VẬT TƯ PHỤ -->
+                    <tr class="group-row">
+                        <td colspan="6">B. TỦ ĐIỆN & VẬT TƯ PHỤ</td>
+                    </tr>
+                    <tr>
+                        <td class="num">4</td>
+                        <td>
+                            <strong>Tủ điện sắt sơn tĩnh điện</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                W300×H400×D200mm, IP54, sơn tĩnh điện.
+                                Chứa Gateway, Switch, Router, Nguồn 24V, CB.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                        <td class="price">800,000</td>
+                        <td class="amount">800,000</td>
+                    </tr>
+                    <tr>
+                        <td class="num">5</td>
+                        <td>
+                            <strong>Nguồn 24VDC — Meanwell MDR-60-24</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                24VDC/2.5A, DIN Rail. Cấp nguồn cho Gateway NM03.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                        <td class="price">450,000</td>
+                        <td class="amount">450,000</td>
+                    </tr>
+                    <tr>
+                        <td class="num">6</td>
+                        <td>
+                            <strong>CB 1P 6A</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                CB bảo vệ ngắn mạch cho mạch nguồn 24VDC.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                        <td class="price">80,000</td>
+                        <td class="amount">80,000</td>
+                    </tr>
+                    <tr>
+                        <td class="num">7</td>
+                        <td>
+                            <strong>Cáp mạng Cat5e UTP</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                Kéo từ tủ giám sát đến 4 UPS. Chiều dài ước tính ~100m
+                                (tùy thực tế). Kèm đầu bấm RJ45 (10 đầu).
+                            </span>
+                        </td>
+                        <td class="qty">100</td>
+                        <td class="unit">mét</td>
+                        <td class="price">8,000</td>
+                        <td class="amount">800,000</td>
+                    </tr>
+                    <tr>
+                        <td class="num">8</td>
+                        <td>
+                            <strong>Phụ kiện tủ điện</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                Rail DIN, domino, đầu cos, dây rút, ống luồn,
+                                ốc vít, máng cáp, nhãn dán. Lắp đặt gọn gàng.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Bộ</td>
+                        <td class="price">500,000</td>
+                        <td class="amount">500,000</td>
+                    </tr>
+
+                    <!-- NHÓM C: PHẦN MỀM & CLOUD -->
+                    <tr class="group-row">
+                        <td colspan="6">C. PHẦN MỀM, CLOUD & DỊCH VỤ</td>
+                    </tr>
+                    <tr>
+                        <td class="num">9</td>
+                        <td>
+                            <strong>Phí Cloud Navis — Năm đầu tiên</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                Bao gồm: App (Android & iOS), Web Dashboard, Cloud Server
+                                (Google Cloud), Push Notification, Email Alert,
+                                biểu đồ lịch sử, xuất báo cáo, phân quyền,
+                                hỗ trợ kỹ thuật, cập nhật phần mềm, SSL.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Năm</td>
+                        <td class="price">5,500,000</td>
+                        <td class="amount">5,500,000</td>
+                    </tr>
+                    <tr>
+                        <td class="num">10</td>
+                        <td>
+                            <strong>Cấu hình & Cài đặt hệ thống</strong><br>
+                            <span style="font-size:11px; color: var(--text-muted);">
+                                Cấu hình IP tĩnh 4 UPS + Gateway + Router.
+                                Mapping thanh ghi Modbus TCP.
+                                Cài đặt ngưỡng cảnh báo trên App.
+                                Test vận hành toàn bộ hệ thống. Hướng dẫn sử dụng.
+                            </span>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Gói</td>
+                        <td class="price">3,000,000</td>
+                        <td class="amount">3,000,000</td>
+                    </tr>
+
+                    <!-- SUBTOTAL -->
+                    <tr class="subtotal-row">
+                        <td colspan="4"></td>
+                        <td style="text-align:right; font-weight:700;">Tạm Tính:</td>
+                        <td class="amount" style="font-size:14px;">18,830,000</td>
+                    </tr>
+
+                    <!-- TOTAL -->
+                    <tr class="total-row">
+                        <td colspan="4"></td>
+                        <td style="text-align:right;">TỔNG CỘNG (ĐÃ VAT):</td>
+                        <td class="amount" style="font-size:15px; letter-spacing: 0.5px;">18,830,000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="quote-note">
+                <strong>📌 Ghi chú:</strong>
+                <ul style="margin-top: 6px; padding-left: 16px; list-style: disc;">
+                    <li>Giá trên đã bao gồm VAT 10%.</li>
+                    <li>Chiều dài cáp mạng 100m là <strong>ước tính</strong> — sẽ điều chỉnh theo thực tế hiện trường.
+                    </li>
+                    <li><strong>Chưa bao gồm:</strong> Phí SIM Data hàng tháng (~100.000–150.000 VNĐ/tháng), phí Cloud
+                        năm thứ 2 trở đi (5.500.000 VNĐ/năm).</li>
+                    <li><strong>Chưa bao gồm:</strong> Chi phí vận chuyển, lắp đặt tại hiện trường (báo giá riêng sau
+                        khảo sát).</li>
+                    <li>Bảo hành thiết bị: <strong>12 tháng</strong> kể từ ngày nghiệm thu.</li>
+                    <li>Báo giá có hiệu lực trong <strong>30 ngày</strong>.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ 9. CHI PHÍ VẬN HÀNH HÀNG NĂM ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon purple">📅</div>
+                Chi Phí Vận Hành Hàng Năm (Từ Năm Thứ 2)
+            </div>
+            <p class="section-desc">
+                Các khoản chi phí định kỳ cần duy trì để hệ thống hoạt động ổn định.
+            </p>
+
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th style="width:5%;">STT</th>
+                        <th>Hạng Mục</th>
+                        <th style="width:15%;">Chu Kỳ</th>
+                        <th style="width:20%;">Chi Phí (VNĐ)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center; font-weight:600;">1</td>
+                        <td><strong>Phí Cloud Navis</strong> — App + Web + Cloud + Alerts + Reports + Support</td>
+                        <td style="text-align:center;">Năm</td>
+                        <td style="text-align:right; font-weight:600; font-family: Consolas, monospace;">5,500,000</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:600;">2</td>
+                        <td><strong>SIM Data 4G</strong> — Gói data ~2GB/tháng (Viettel/Mobi)</td>
+                        <td style="text-align:center;">Tháng</td>
+                        <td style="text-align:right; font-weight:600; font-family: Consolas, monospace;">
+                            ~100,000–150,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- ============ 10. TÓM TẮT CUNG CẤP ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon blue">✅</div>
+                Tóm Tắt Hạng Mục Cung Cấp
+            </div>
+            <p class="section-desc">
+                Tổng hợp các hạng mục phần cứng, phần mềm, và dịch vụ cung cấp cho hệ thống giám sát 4 UPS.
+            </p>
+
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th style="width:5%;">STT</th>
+                        <th style="width:30%;">Hạng Mục</th>
+                        <th style="width:8%;">SL</th>
+                        <th>Mô Tả Chi Tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center; font-weight:600;">1</td>
+                        <td><strong>Tủ Giám Sát UPS</strong></td>
+                        <td style="text-align:center;">1 tủ</td>
+                        <td>
+                            Tủ trung tâm chứa toàn bộ thiết bị giám sát, gồm:<br>
+                            • Gateway Navis MOD NM03 (thu thập 4 UPS → Cloud)<br>
+                            • Switch Ethernet 8 port (gom mạng LAN)<br>
+                            • Router 4G (cấp Internet)<br>
+                            • Nguồn 24VDC Meanwell MDR-60-24<br>
+                            • CB bảo vệ 1P 6A<br>
+                            • Cáp mạng Cat5e + đầu bấm RJ45<br>
+                            • Tủ sắt sơn tĩnh điện IP54<br>
+                            • Rail DIN, domino, phụ kiện lắp đặt
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:600;">2</td>
+                        <td><strong>Phần Mềm & Cloud</strong></td>
+                        <td style="text-align:center;">1 gói</td>
+                        <td>
+                            • App Navis Smart Industry (Android & iOS)<br>
+                            • Web Dashboard (PC/Tablet)<br>
+                            • Cloud Server (Google Cloud)<br>
+                            • Push Notification + Email Alert<br>
+                            • Biểu đồ xu hướng, thống kê MAX/MIN/AVG<br>
+                            • Xuất báo cáo Excel/PDF<br>
+                            • Phân quyền 4 cấp (Owner/Admin/Tech/Viewer)<br>
+                            • Bản đồ Google Maps<br>
+                            • Hỗ trợ kỹ thuật + cập nhật phần mềm
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:600;">3</td>
+                        <td><strong>Cấu Hình & Lắp Đặt</strong></td>
+                        <td style="text-align:center;">1 gói</td>
+                        <td>
+                            • Cấu hình IP tĩnh cho 4 UPS + Gateway + Router<br>
+                            • Mapping thanh ghi Modbus TCP trên App<br>
+                            • Cài đặt ngưỡng cảnh báo sự cố<br>
+                            • Test vận hành toàn bộ hệ thống<br>
+                            • Hướng dẫn sử dụng App/Web cho nhân viên
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- ============ LIÊN HỆ ============ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="icon green">📞</div>
+                Liên Hệ Hỗ Trợ
+            </div>
+            <div class="item-card">
+                <div class="item-body">
+                    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px;">
+                                👤 Mr. Cường — Kinh Doanh</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">📞 0932 786 579 (Zalo)</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">📧 omwater.vn@gmail.com</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px;">
+                                👤 Trí Nguyễn — Kỹ Thuật IoT</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">📞 0387 226 446</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">🔧 Cấu hình Modbus, Dashboard,
+                                Gateway</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 4px;">
+                                🌐 Website</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">
+                                <a href="https://omwater.vn" style="color: var(--primary);">omwater.vn</a> |
+                                <a href="https://navis.iotdaiviet.com"
+                                    style="color: var(--accent);">navis.iotdaiviet.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <p class="company">CÔNG TY TNHH TM DV KT SX O & M</p>
+        <p>Giải pháp IoT Công Nghiệp — Navis Smart Industry</p>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">
+            🌐 omwater.vn &nbsp;|&nbsp; 🌐 navis.iotdaiviet.com
+        </p>
+    </footer>
+
+    <!-- ============ CANVAS DIAGRAM SCRIPT ============ -->
+    <script>
+        (function () {
+            const canvas = document.getElementById('systemDiagram');
+            if (!canvas) return;
+            const W = 1020, H = 580;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            canvas.style.width = W + 'px';
+            canvas.style.height = H + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            const C = {
+                bg: '#f8fafb', card: '#ffffff',
+                green: '#0d7c3d', greenPale: '#e8f7ee',
+                blue: '#1a6fb5', bluePale: '#e3f2fd',
+                purple: '#7c3aed', purplePale: '#f0e7ff',
+                orange: '#e67e22', orangePale: '#fef3e2',
+                red: '#d32f2f', redPale: '#fdeaea',
+                text: '#1e293b', textMuted: '#64748b', line: '#94a3b8',
+            };
+
+            function rr(x, y, w, h, r, fill, stroke, lw) {
+                ctx.beginPath();
+                ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+                ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+                ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+                if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+                if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw || 1.5; ctx.stroke(); }
+            }
+
+            function box(x, y, w, h, label, sub, color, bg, icon) {
+                ctx.shadowColor = 'rgba(0,0,0,0.06)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2;
+                rr(x, y, w, h, 8, bg || C.card, color, 1.5);
+                ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+                ctx.save(); ctx.beginPath();
+                ctx.moveTo(x + 8, y); ctx.lineTo(x + w - 8, y); ctx.quadraticCurveTo(x + w, y, x + w, y + 8);
+                ctx.lineTo(x + w, y + 4); ctx.lineTo(x, y + 4); ctx.lineTo(x, y + 8);
+                ctx.quadraticCurveTo(x, y, x + 8, y); ctx.closePath();
+                ctx.fillStyle = color; ctx.fill(); ctx.restore();
+                ctx.textAlign = 'center';
+                var cy = y + h / 2;
+                if (icon && sub) {
+                    ctx.font = '14px sans-serif'; ctx.fillStyle = C.text; ctx.fillText(icon, x + w / 2, cy - 10);
+                    ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.fillText(label, x + w / 2, cy + 5);
+                    ctx.font = '9px Inter,sans-serif'; ctx.fillStyle = C.textMuted; ctx.fillText(sub, x + w / 2, cy + 17);
+                } else if (icon) {
+                    ctx.font = '14px sans-serif'; ctx.fillStyle = C.text; ctx.fillText(icon, x + w / 2, cy - 4);
+                    ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.fillText(label, x + w / 2, cy + 10);
+                } else if (sub) {
+                    ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.fillText(label, x + w / 2, cy - 2);
+                    ctx.font = '9px Inter,sans-serif'; ctx.fillStyle = C.textMuted; ctx.fillText(sub, x + w / 2, cy + 12);
+                } else {
+                    ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.fillText(label, x + w / 2, cy + 4);
+                }
+                return { cx: x + w / 2, cy: cy, x, y, w, h, r: x + w, b: y + h };
+            }
+
+            function arrow(x1, y1, x2, y2, color) {
+                ctx.beginPath(); ctx.strokeStyle = color || C.line; ctx.lineWidth = 2; ctx.setLineDash([]);
+                ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+                const a = Math.atan2(y2 - y1, x2 - x1);
+                ctx.beginPath(); ctx.fillStyle = color || C.line; ctx.moveTo(x2, y2);
+                ctx.lineTo(x2 - 8 * Math.cos(a - Math.PI / 6), y2 - 8 * Math.sin(a - Math.PI / 6));
+                ctx.lineTo(x2 - 8 * Math.cos(a + Math.PI / 6), y2 - 8 * Math.sin(a + Math.PI / 6));
+                ctx.closePath(); ctx.fill();
+            }
+
+            function tag(x, y, text, color) {
+                ctx.font = 'bold 9px Inter,sans-serif';
+                const tw = ctx.measureText(text).width + 12;
+                rr(x - tw / 2, y - 9, tw, 18, 4, '#fff', color || C.line, 1);
+                ctx.fillStyle = color || C.textMuted; ctx.textAlign = 'center';
+                ctx.fillText(text, x, y + 3);
+            }
+
+            function cab(x, y, w, h, label, color) {
+                ctx.setLineDash([6, 4]); ctx.strokeStyle = color; ctx.lineWidth = 2;
+                rr(x, y, w, h, 10, null, color, 2); ctx.setLineDash([]);
+                ctx.font = 'bold 12px Inter,sans-serif'; ctx.fillStyle = color; ctx.textAlign = 'center';
+                ctx.fillText(label, x + w / 2, y - 6);
+            }
+
+            // BACKGROUND
+            ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+            // === UPS COLUMN (LEFT) ===
+            var upsX = 30;
+            var upsW = 180, upsH = 60;
+            var upsGap = 20;
+            var upsStartY = 60;
+
+            for (var i = 0; i < 4; i++) {
+                var uy = upsStartY + i * (upsH + upsGap);
+                box(upsX, uy, upsW, upsH, 'UPS #' + (i + 1), '192.168.1.10' + (i + 1) + ':502', C.blue, C.bluePale, '🔋');
+            }
+            // Label
+            ctx.font = 'bold 13px Inter,sans-serif'; ctx.fillStyle = C.blue; ctx.textAlign = 'center';
+            ctx.fillText('4 × UPS — Modbus TCP Slave', upsX + upsW / 2, upsStartY - 16);
+
+            // === TỦ GIÁM SÁT (CENTER) ===
+            var cabX = 300, cabY = 30, cabW = 310, cabH = 400;
+            cab(cabX, cabY, cabW, cabH, 'TỦ GIÁM SÁT', C.green);
+
+            // Switch inside cabinet
+            var swB = box(cabX + 20, cabY + 30, 270, 55, 'Switch Ethernet 8 Port', 'Unmanaged — Gom mạng LAN', C.green, C.greenPale, '🔗');
+
+            // Gateway
+            var gwB = box(cabX + 20, cabY + 110, 130, 55, 'Gateway NM03', '192.168.1.100', C.blue, C.bluePale, '📶');
+
+            // Router
+            var rtB = box(cabX + 160, cabY + 110, 130, 55, 'Router 4G', '192.168.1.1', C.purple, C.purplePale, '📡');
+
+            // Nguon 24V
+            box(cabX + 20, cabY + 190, 130, 45, 'Nguồn 24VDC', 'MDR-60-24', C.orange, C.orangePale, '⚡');
+
+            // CB
+            box(cabX + 160, cabY + 190, 130, 45, 'CB 1P 6A', 'Bảo vệ', C.orange, C.orangePale, '🔌');
+
+            // Inside connections
+            ctx.strokeStyle = C.green; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            // Switch → Gateway
+            ctx.beginPath(); ctx.moveTo(cabX + 90, cabY + 85); ctx.lineTo(cabX + 90, cabY + 110); ctx.stroke();
+            // Switch → Router
+            ctx.beginPath(); ctx.moveTo(cabX + 220, cabY + 85); ctx.lineTo(cabX + 220, cabY + 110); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // === ETHERNET LINES: UPS → Switch ===
+            for (var i = 0; i < 4; i++) {
+                var uy = upsStartY + i * (upsH + upsGap) + upsH / 2;
+                ctx.beginPath(); ctx.strokeStyle = C.blue; ctx.lineWidth = 2; ctx.setLineDash([]);
+                ctx.moveTo(upsX + upsW, uy);
+                ctx.lineTo(cabX + 20, cabY + 57); // to switch
+                ctx.stroke();
+            }
+            tag(245, upsStartY + 50, 'Ethernet', C.blue);
+            tag(245, upsStartY + 75, 'Modbus TCP', C.blue);
+
+            // === INTERNET LINE: Router → Cloud ===
+            var cloudX = 710, cloudY = 30;
+            var cloudB = box(cloudX, cloudY, 200, 55, 'Navis Cloud', 'Google Cloud — MQTT', C.green, C.greenPale, '☁️');
+
+            // Router → right edge of cabinet → up → cloud
+            ctx.beginPath(); ctx.strokeStyle = C.purple; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+            ctx.moveTo(cabX + cabW, cabY + 137);
+            ctx.lineTo(cabX + cabW + 30, cabY + 137);
+            ctx.lineTo(cabX + cabW + 30, 15);
+            ctx.lineTo(cloudX + 100, 15);
+            ctx.lineTo(cloudX + 100, cloudY);
+            ctx.stroke();
+            // arrow head
+            ctx.beginPath(); ctx.fillStyle = C.purple;
+            ctx.moveTo(cloudX + 100, cloudY); ctx.lineTo(cloudX + 96, cloudY - 8); ctx.lineTo(cloudX + 104, cloudY - 8);
+            ctx.closePath(); ctx.fill();
+            tag(cabX + cabW + 70, 15, '4G Internet', C.purple);
+
+            // === CLOUD → App/Web/Alarm ===
+            box(cloudX, 110, 200, 50, 'App Mobile', 'Android & iOS', C.blue, C.bluePale, '📱');
+            arrow(cloudX + 100, 85, cloudX + 100, 110, C.blue);
+
+            box(cloudX, 180, 200, 50, 'Web Dashboard', 'PC / Tablet', C.purple, C.purplePale, '💻');
+            arrow(cloudX + 100, 160, cloudX + 100, 180, C.purple);
+
+            box(cloudX, 250, 200, 50, 'Push Notification', 'Cảnh báo sự cố', C.orange, C.orangePale, '🔔');
+            arrow(cloudX + 100, 230, cloudX + 100, 250, C.orange);
+
+            box(cloudX, 320, 200, 50, 'Báo Cáo', 'Excel / PDF', C.green, C.greenPale, '📄');
+            arrow(cloudX + 100, 300, cloudX + 100, 320, C.green);
+
+            // === SIM Data note ===
+            ctx.font = '10px Inter,sans-serif'; ctx.fillStyle = C.textMuted; ctx.textAlign = 'center';
+            ctx.fillText('SIM Data Viettel/Mobi', cabX + cabW / 2, cabY + cabH - 80);
+            ctx.fillText('~2GB/tháng', cabX + cabW / 2, cabY + cabH - 66);
+
+            // === LEGEND ===
+            const lx = 30, ly = 430;
+            ctx.font = 'bold 11px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.textAlign = 'left';
+            ctx.fillText('CHÚ THÍCH:', lx, ly);
+            [
+                { c: C.blue, l: 'Ethernet / Modbus TCP (UPS → Switch)' },
+                { c: C.green, l: 'Switch → Gateway NM03 (LAN nội bộ)' },
+                { c: C.purple, l: 'Router 4G → Cloud (Internet)' },
+                { c: C.orange, l: 'Push Notification (Cảnh báo sự cố)' }
+            ].forEach(function (v, i) {
+                const y = ly + 20 + i * 22;
+                ctx.beginPath(); ctx.strokeStyle = v.c; ctx.lineWidth = 3;
+                ctx.moveTo(lx, y); ctx.lineTo(lx + 30, y); ctx.stroke();
+                ctx.beginPath(); ctx.arc(lx + 30, y, 3, 0, Math.PI * 2); ctx.fillStyle = v.c; ctx.fill();
+                ctx.font = '10px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.textAlign = 'left';
+                ctx.fillText(v.l, lx + 38, y + 4);
+            });
+
+            // IP Summary
+            ctx.font = 'bold 10px Inter,sans-serif'; ctx.fillStyle = C.text; ctx.textAlign = 'left';
+            ctx.fillText('SƠ ĐỒ IP:', 400, ly);
+            ctx.font = '10px Consolas, monospace'; ctx.fillStyle = C.textMuted;
+            ctx.fillText('Router:  192.168.1.1', 400, ly + 18);
+            ctx.fillText('Gateway: 192.168.1.100', 400, ly + 34);
+            ctx.fillText('UPS #1:  192.168.1.101', 400, ly + 50);
+            ctx.fillText('UPS #2:  192.168.1.102', 400, ly + 66);
+            ctx.fillText('UPS #3:  192.168.1.103', 400, ly + 82);
+            ctx.fillText('UPS #4:  192.168.1.104', 400, ly + 98);
+        })();
+    </script>
+
+</body>
+
+</html>

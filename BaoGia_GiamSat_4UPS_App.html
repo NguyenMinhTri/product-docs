@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Giá — Giám Sát 4 UPS Qua App & Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d7c3d;
+            --primary-light: #15a050;
+            --primary-pale: #e8f7ee;
+            --accent: #1a6fb5;
+            --accent-pale: #e3f2fd;
+            --purple: #7c3aed;
+            --purple-pale: #f0e7ff;
+            --orange: #e67e22;
+            --orange-pale: #fef3e2;
+            --red: #d32f2f;
+            --bg: #f8fafb;
+            --bg-white: #ffffff;
+            --bg-section: #f1f5f8;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--bg-white);
+            border-bottom: 2px solid var(--primary);
+            padding: 14px 0;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-group { display: flex; align-items: center; gap: 14px; }
+        .logo-group img { height: 44px; object-fit: contain; }
+
+        .logo-divider {
+            width: 2px; height: 32px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+        }
+
+        .header-right { text-align: right; }
+
+        .header-right h2 {
+            font-size: 12px; font-weight: 600; color: var(--primary);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        .header-right p { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #e3f2fd 0%, #e8f5e9 50%, #fef3e2 100%);
+            padding: 24px 36px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero h1 {
+            font-size: 22px; font-weight: 800; color: var(--primary);
+            margin-bottom: 6px; line-height: 1.3;
+        }
+
+        .hero .sub { font-size: 13px; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
+
+        /* ===== CONTAINER ===== */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 36px; }
+
+        .section { padding: 22px 0; }
+
+        .section-title {
+            font-size: 16px; font-weight: 700; color: var(--text);
+            display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+        }
+
+        .section-title .ico {
+            width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; color: #fff; flex-shrink: 0;
+        }
+
+        .ico.green { background: var(--primary); }
+        .ico.blue { background: var(--accent); }
+        .ico.purple { background: var(--purple); }
+        .ico.orange { background: var(--orange); }
+
+        /* ===== FEATURE GRID ===== */
+        .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+        .feat {
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 8px; padding: 10px; position: relative; overflow: hidden;
+        }
+
+        .feat::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .feat .em { font-size: 16px; margin-right: 4px; }
+        .feat h4 { font-size: 11px; font-weight: 700; display: inline; }
+        .feat p { font-size: 10px; color: var(--text-secondary); line-height: 1.4; margin-top: 2px; }
+
+        /* ===== ARCH BOX ===== */
+        .arch-box {
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 10px; padding: 14px 18px; margin-bottom: 12px;
+        }
+
+        .arch-flow {
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+            flex-wrap: nowrap; font-size: 11px; font-weight: 600;
+        }
+
+        .arch-node {
+            padding: 4px 10px; border-radius: 6px; text-align: center; line-height: 1.2;
+            white-space: nowrap; font-size: 10px;
+        }
+
+        .arch-node.ups { background: var(--accent-pale); color: var(--accent); border: 1px solid var(--accent); }
+        .arch-node.sw { background: var(--primary-pale); color: var(--primary); border: 1px solid var(--primary); }
+        .arch-node.gw { background: var(--accent-pale); color: var(--accent); border: 1px solid var(--accent); }
+        .arch-node.rt { background: var(--purple-pale); color: var(--purple); border: 1px solid var(--purple); }
+        .arch-node.cloud { background: var(--primary-pale); color: var(--primary); border: 1px solid var(--primary); }
+        .arch-node.app { background: var(--orange-pale); color: var(--orange); border: 1px solid var(--orange); }
+
+        .arch-arrow { color: var(--text-muted); font-size: 13px; flex-shrink: 0; }
+
+        .arch-label {
+            font-size: 8px; color: var(--text-muted); text-align: center;
+            display: block; margin-top: 1px; font-weight: 400;
+        }
+
+        /* ===== QUOTATION TABLE ===== */
+        .q-table {
+            width: 100%; border-collapse: collapse; font-size: 12px;
+            background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 8px; overflow: hidden;
+        }
+
+        .q-table thead th {
+            background: var(--accent); color: #fff; padding: 10px 10px;
+            text-align: center; font-weight: 600; font-size: 11px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .q-table tbody td {
+            padding: 8px 10px; border-bottom: 1px solid var(--border-light);
+            vertical-align: top;
+        }
+
+        .q-table tbody tr:hover { background: var(--bg-section); }
+
+        .q-table .stt { text-align: center; font-weight: 600; width: 36px; }
+        .q-table .qty { text-align: center; width: 40px; }
+        .q-table .unit { text-align: center; width: 44px; }
+        .q-table .price { text-align: right; width: 100px; font-family: 'Consolas', monospace; font-size: 11px; }
+        .q-table .amt { text-align: right; width: 110px; font-family: 'Consolas', monospace; font-size: 11px; font-weight: 600; }
+
+        .q-table .grp td {
+            background: var(--accent-pale); font-weight: 700; color: var(--accent);
+            font-size: 12px; letter-spacing: 0.5px; padding: 8px 10px;
+        }
+
+        .q-table .sub td {
+            background: var(--bg-section); font-weight: 600;
+            border-top: 2px solid var(--border);
+        }
+
+        .q-table .total td {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff; font-weight: 700; font-size: 13px; padding: 12px 10px;
+        }
+
+        .item-name { font-weight: 600; color: var(--text); }
+
+        .item-model {
+            font-family: 'Consolas', monospace; font-size: 10px;
+            color: var(--accent); background: var(--accent-pale);
+            padding: 1px 6px; border-radius: 4px; display: inline-block; margin-top: 2px;
+        }
+
+        .item-desc { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+
+        .item-features {
+            margin-top: 4px; padding-left: 12px; font-size: 10px;
+            color: var(--text-secondary); line-height: 1.5;
+        }
+
+        .item-features li { margin-bottom: 1px; }
+
+        /* ===== NOTES ===== */
+        .note-box {
+            border-left: 3px solid var(--orange); background: var(--orange-pale);
+            padding: 10px 14px; border-radius: 6px; font-size: 12px;
+            color: var(--text-secondary); margin-top: 12px;
+        }
+
+        .note-box strong { color: var(--orange); }
+
+        .note-box ul { margin-top: 4px; padding-left: 16px; }
+        .note-box li { margin-bottom: 2px; }
+
+        .info-note {
+            border-left: 3px solid var(--accent); background: var(--accent-pale);
+            padding: 10px 14px; border-radius: 6px; font-size: 12px;
+            color: var(--text-secondary); margin-top: 10px;
+        }
+
+        .info-note strong { color: var(--accent); }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--bg-white); padding: 16px 36px;
+            text-align: center; border-top: 2px solid var(--primary); margin-top: 10px;
+        }
+
+        .footer .cname { font-size: 13px; font-weight: 700; color: var(--primary); }
+        .footer p { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+        .contact-row {
+            display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+            margin-top: 8px; font-size: 11px;
+        }
+
+        .contact-row div { text-align: center; }
+        .contact-row .name { font-weight: 700; color: var(--primary); }
+
+        /* ===== PRINT ===== */
+        @media print {
+            @page { margin: 6mm 8mm; size: A4; }
+            body { background: #fff; font-size: 10px; line-height: 1.4; }
+            .header { padding: 6px 0; border-bottom-width: 1px; }
+            .header-content { padding: 0 20px; }
+            .logo-group img { height: 36px; }
+            .header-right h2 { font-size: 11px; }
+            .hero { padding: 10px 20px; }
+            .hero h1 { font-size: 16px; margin-bottom: 4px; }
+            .hero .sub { font-size: 10px; }
+            .container { padding: 0 20px; }
+            .section { padding: 8px 0; }
+            .section-title { font-size: 13px; margin-bottom: 6px; gap: 6px; }
+            .section-title .ico { width: 24px; height: 24px; font-size: 12px; border-radius: 5px; }
+            .arch-box { padding: 8px 12px; margin-bottom: 6px; border-radius: 6px; }
+            .arch-flow { gap: 4px; font-size: 10px; }
+            .arch-node { padding: 4px 8px; border-radius: 5px; }
+            .arch-label { font-size: 8px; }
+            .arch-arrow { font-size: 12px; }
+            .q-table { font-size: 10px; }
+            .q-table thead th { padding: 4px 6px; font-size: 9px; }
+            .q-table tbody td { padding: 4px 6px; }
+            .q-table .grp td { padding: 4px 6px; font-size: 10px; }
+            .item-name { font-size: 10px; }
+            .item-model { font-size: 9px; padding: 1px 4px; margin-top: 1px; }
+            .item-desc { font-size: 9px; margin-top: 2px; line-height: 1.3; }
+            .item-features { font-size: 9px; margin-top: 2px; padding-left: 10px; line-height: 1.3; }
+            .item-features li { margin-bottom: 0; }
+            .note-box { padding: 6px 10px; font-size: 10px; margin-top: 6px; }
+            .note-box ul { margin-top: 2px; padding-left: 14px; }
+            .note-box li { margin-bottom: 1px; }
+            .info-note { padding: 6px 10px; font-size: 10px; margin-top: 6px; }
+            .footer { padding: 8px 20px; margin-top: 4px; border-top-width: 1px; }
+            .footer .cname { font-size: 11px; }
+            .footer p { font-size: 9px; margin-top: 1px; }
+            .contact-row { margin-top: 4px; font-size: 9px; gap: 16px; }
+            .feat, .arch-box, .q-table tr { break-inside: avoid; }
+            .q-table { break-inside: auto; }
+            * { box-shadow: none !important; }
+            .header, .hero, .arch-box, .arch-node, .q-table thead th, .q-table .grp td, .note-box, .info-note, .footer {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 10px; }
+            .header-right { text-align: center; }
+            .container { padding: 0 16px; }
+            .feat-grid { grid-template-columns: repeat(2, 1fr); }
+            .arch-flow { flex-direction: column; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-group">
+                <img src="LOGO-omwater.png" alt="O&M Logo">
+                <div class="logo-divider"></div>
+                <img src="navis-logo.png" alt="Navis IoT">
+            </div>
+            <div class="header-right">
+                <h2>Báo Giá</h2>
+                <p>Ngày: 01/07/2026 • Rev 1.0</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Giám Sát 4 UPS — Cảnh Báo Sự Cố Qua App</h1>
+        <p class="sub">
+            Kết nối 4 UPS có sẵn Modbus TCP/IP qua mạng Ethernet — giám sát realtime trên App & Web,
+            cảnh báo Push Notification khi có sự cố bất thường.
+        </p>
+    </section>
+
+    <!-- 1. MÔ TẢ TÍNH NĂNG -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="ico green">⚡</div>
+                Mô Tả Giải Pháp
+            </div>
+
+            <!-- Architecture flow -->
+            <div class="arch-box" style="text-align: center; padding: 10px 14px;">
+                <div style="font-size: 11px; font-weight: 600; display: inline; line-height: 2;">
+                    <span style="background: var(--accent-pale); color: var(--accent); border: 1px solid var(--accent); padding: 3px 8px; border-radius: 5px;">🔋 4×UPS</span>
+                    <span style="color: #94a3b8; margin: 0 2px;">→</span>
+                    <span style="background: var(--primary-pale); color: var(--primary); border: 1px solid var(--primary); padding: 3px 8px; border-radius: 5px;">🔗 Switch</span>
+                    <span style="color: #94a3b8; margin: 0 2px;">→</span>
+                    <span style="background: var(--accent-pale); color: var(--accent); border: 1px solid var(--accent); padding: 3px 8px; border-radius: 5px;">📶 Gateway NM03</span>
+                    <span style="color: #94a3b8; margin: 0 2px;">→</span>
+                    <span style="background: var(--purple-pale); color: var(--purple); border: 1px solid var(--purple); padding: 3px 8px; border-radius: 5px;">📡 Router 4G</span>
+                    <span style="color: #94a3b8; margin: 0 2px;">→</span>
+                    <span style="background: var(--primary-pale); color: var(--primary); border: 1px solid var(--primary); padding: 3px 8px; border-radius: 5px;">☁️ Cloud</span>
+                    <span style="color: #94a3b8; margin: 0 2px;">→</span>
+                    <span style="background: var(--orange-pale); color: var(--orange); border: 1px solid var(--orange); padding: 3px 8px; border-radius: 5px;">📱 App & Web</span>
+                </div>
+                <div style="font-size: 9px; color: #94a3b8; margin-top: 6px;">
+                    Modbus TCP/IP &nbsp;│&nbsp; Ethernet LAN &nbsp;│&nbsp; Internet 4G &nbsp;│&nbsp; MQTT Cloud &nbsp;│&nbsp; Push Notification
+                </div>
+            </div>
+
+            <!-- ===== TÍNH NĂNG CHI TIẾT ===== -->
+
+            <!-- 1. Giám sát thông số -->
+            <div class="arch-box" style="margin-bottom: 10px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 8px;">
+                    📊 Giám Sát Realtime — Các Thông Số UPS Hiển Thị Trên App
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
+                    <div style="background: var(--accent-pale); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--accent);">
+                        <strong style="color: var(--accent);">📥 Đầu vào (Input)</strong>
+                        <ul style="margin-top: 3px; padding-left: 14px; font-size: 11px; color: var(--text-secondary);">
+                            <li>Điện áp đầu vào (V) — điện lưới cấp cho UPS</li>
+                            <li>Tần số đầu vào (Hz)</li>
+                            <li>Trạng thái nguồn lưới: Có / Mất</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--primary-pale); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--primary);">
+                        <strong style="color: var(--primary);">📤 Đầu ra (Output)</strong>
+                        <ul style="margin-top: 3px; padding-left: 14px; font-size: 11px; color: var(--text-secondary);">
+                            <li>Điện áp đầu ra (V) — điện UPS cấp cho tải</li>
+                            <li>Công suất tải (%) — phần trăm tải hiện tại</li>
+                            <li>Tần số đầu ra (Hz)</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--purple-pale); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--purple);">
+                        <strong style="color: var(--purple);">🔋 Pin / Battery</strong>
+                        <ul style="margin-top: 3px; padding-left: 14px; font-size: 11px; color: var(--text-secondary);">
+                            <li>Điện áp pin (V)</li>
+                            <li>Dung lượng pin còn lại (%)</li>
+                            <li>Thời gian lưu trữ dự phòng (phút)</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--orange-pale); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--orange);">
+                        <strong style="color: var(--orange);">⚠️ Trạng Thái & Alarm</strong>
+                        <ul style="margin-top: 3px; padding-left: 14px; font-size: 11px; color: var(--text-secondary);">
+                            <li>Chế độ: Normal / Battery / Bypass / Fault</li>
+                            <li>Nhiệt độ bên trong UPS (°C)</li>
+                            <li>Mã lỗi / sự cố (nếu có)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 6px; font-style: italic;">
+                    * Thông số cụ thể tùy thuộc vào bảng thanh ghi Modbus TCP của UPS — sẽ được mapping chi tiết khi triển khai.
+                </div>
+            </div>
+
+            <!-- 2. Cảnh báo qua App -->
+            <div class="arch-box" style="margin-bottom: 10px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--orange); margin-bottom: 8px;">
+                    🔔 Cảnh Báo Sự Cố — Gửi Thông Báo Qua App
+                </div>
+                <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
+                    Khi UPS gặp sự cố bất thường, hệ thống <strong>tự động gửi thông báo Push Notification</strong>
+                    lên điện thoại của tất cả người được phân quyền. Thông báo hiển thị <strong>ngay trên màn hình khóa</strong>,
+                    đảm bảo nhận biết kịp thời.
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; font-size: 11px;">
+                    <div style="background: #fdeaea; padding: 6px 10px; border-radius: 6px;">
+                        🔴 <strong>Mất điện lưới</strong> — UPS chuyển sang chế độ Battery
+                    </div>
+                    <div style="background: #fdeaea; padding: 6px 10px; border-radius: 6px;">
+                        🔴 <strong>Pin yếu</strong> — dung lượng pin dưới ngưỡng cài đặt
+                    </div>
+                    <div style="background: #fef3e2; padding: 6px 10px; border-radius: 6px;">
+                        🟠 <strong>Quá tải</strong> — tải vượt ngưỡng % cho phép
+                    </div>
+                    <div style="background: #fef3e2; padding: 6px 10px; border-radius: 6px;">
+                        🟠 <strong>Nhiệt độ cao</strong> — nhiệt độ UPS vượt ngưỡng
+                    </div>
+                    <div style="background: #fdeaea; padding: 6px 10px; border-radius: 6px;">
+                        🔴 <strong>UPS Fault</strong> — UPS báo lỗi phần cứng
+                    </div>
+                    <div style="background: #fef3e2; padding: 6px 10px; border-radius: 6px;">
+                        🟠 <strong>Điện áp bất thường</strong> — vào/ra ngoài dải cho phép
+                    </div>
+                </div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px; line-height: 1.5;">
+                    <strong>Cách hoạt động:</strong>
+                    Người dùng cài đặt <strong>ngưỡng cảnh báo</strong> cho từng thông số trên App (ví dụ: tải > 80%, pin < 30%, nhiệt độ > 40°C).
+                    Khi giá trị vượt ngưỡng liên tục trong 30 giây (chống báo giả), hệ thống gửi Push Notification + Email.
+                    Nếu chưa xác nhận, hệ thống <strong>nhắc lại</strong> sau mỗi X phút.
+                </div>
+            </div>
+
+            <!-- 3. Lịch sử & Báo cáo -->
+            <div class="arch-box" style="margin-bottom: 10px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+                    📈 Xem Lịch Sử & Xuất Báo Cáo
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 11px;">
+                    <div style="background: var(--primary-pale); padding: 8px 10px; border-radius: 6px; text-align: center;">
+                        <div style="font-size: 16px;">📈</div>
+                        <strong style="color: var(--primary);">Biểu đồ xu hướng</strong>
+                        <div style="color: var(--text-muted); margin-top: 2px;">
+                            Biểu đồ đường theo thời gian cho từng thông số. Phóng to/thu nhỏ. Hiển thị đường Hi/Lo-Limit.
+                        </div>
+                    </div>
+                    <div style="background: var(--accent-pale); padding: 8px 10px; border-radius: 6px; text-align: center;">
+                        <div style="font-size: 16px;">📊</div>
+                        <strong style="color: var(--accent);">Thống kê</strong>
+                        <div style="color: var(--text-muted); margin-top: 2px;">
+                            MAX / MIN / AVG theo ngày/tuần/tháng. Lọc theo khoảng thời gian tùy chọn.
+                        </div>
+                    </div>
+                    <div style="background: var(--purple-pale); padding: 8px 10px; border-radius: 6px; text-align: center;">
+                        <div style="font-size: 16px;">📄</div>
+                        <strong style="color: var(--purple);">Xuất báo cáo</strong>
+                        <div style="color: var(--text-muted); margin-top: 2px;">
+                            Xuất file Excel / PDF theo ngày, tuần, tháng. Lưu trữ Cloud 3–5 năm.
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 8px; line-height: 1.5;">
+                    <strong>Lịch sử alarm:</strong> Lưu lại toàn bộ sự kiện cảnh báo (thời điểm, thông số, giá trị, trạng thái xử lý).
+                    Tra cứu lại bất kỳ lúc nào trên App hoặc Web.
+                </div>
+            </div>
+
+            <!-- Nguyên lý kết nối -->
+            <div class="info-note" style="margin-top: 12px;">
+                <strong>📌 Nguyên lý kết nối:</strong>
+                Gateway NM03 chỉ có 1 cổng Ethernet → cần <strong>Switch</strong> gom 4 UPS + Gateway + Router vào 1
+                mạng LAN.
+                <strong>Router 4G</strong> cấp Internet để Gateway đẩy dữ liệu lên Cloud. Mỗi UPS đặt <strong>IP
+                    tĩnh</strong> riêng biệt (VD: 192.168.1.101~104), Gateway đọc thanh ghi Modbus TCP từ từng UPS.
+            </div>
+        </section>
+    </div>
+
+    <!-- 2. DANH MỤC THIẾT BỊ & DỊCH VỤ -->
+    <div class="container">
+        <section class="section">
+            <div class="section-title">
+                <div class="ico blue">📦</div>
+                Danh Mục Thiết Bị & Dịch Vụ Cung Cấp
+            </div>
+
+            <table class="q-table">
+                <thead>
+                    <tr>
+                        <th class="stt">STT</th>
+                        <th>Hạng Mục / Mô Tả</th>
+                        <th class="qty">SL</th>
+                        <th class="unit">ĐVT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- ===== A. GATEWAY ===== -->
+                    <tr class="grp">
+                        <td colspan="4">A. GATEWAY IoT</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">1</td>
+                        <td>
+                            <div class="item-name">Gateway Navis MOD NM03</div>
+                            <div class="item-model">NAVIS-NM03</div>
+                            <div class="item-desc">
+                                Bộ thu thập dữ liệu IoT — Modbus TCP/RTU Master.
+                                Kết nối 4 UPS qua Modbus TCP, đẩy dữ liệu lên Navis Cloud qua Internet.
+                            </div>
+                            <ul class="item-features">
+                                <li>Giao tiếp: RS485 Modbus RTU + Modbus TCP/IP</li>
+                                <li>Kết nối Internet: Ethernet LAN / WiFi 2.4GHz / 4G LTE</li>
+                                <li>Nguồn: 12–24VDC | Max 100 tags | OTA update</li>
+                                <li>Cloud: MQTT + TLS/SSL bảo mật</li>
+                                <li>Bảo hành: 12 tháng</li>
+                            </ul>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Bộ</td>
+                    </tr>
+
+                    <!-- ===== B. ROUTER ===== -->
+                    <tr class="grp">
+                        <td colspan="4">B. ROUTER — CẤP INTERNET</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">2</td>
+                        <td>
+                            <div class="item-name">Router 4G LTE</div>
+                            <div class="item-desc">
+                                Router 4G LTE, lắp SIM Data cấp Internet cho Gateway → Cloud.
+                                Kết nối LAN vào Switch để chia sẻ Internet cho toàn bộ mạng.
+                            </div>
+                            <ul class="item-features">
+                                <li>4G LTE — hỗ trợ các nhà mạng Viettel, Mobi, Vina</li>
+                                <li>Có cổng LAN RJ45 để nối vào Switch</li>
+                                <li>Chức năng: DHCP Server, NAT Internet</li>
+                                <li>SIM Data 4G: <strong>khách hàng tự trang bị</strong></li>
+                            </ul>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                    </tr>
+
+                    <!-- ===== C. SWITCH ===== -->
+                    <tr class="grp">
+                        <td colspan="4">C. SWITCH ETHERNET</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">3</td>
+                        <td>
+                            <div class="item-name">Switch Ethernet 8 Port</div>
+                            <div class="item-desc">
+                                Switch Ethernet 8 port, Unmanaged (không cần cấu hình).
+                                Gom tất cả thiết bị vào 1 mạng LAN: 4 UPS + Gateway + Router.
+                            </div>
+                            <ul class="item-features">
+                                <li>8 cổng RJ45 10/100Mbps — Fast Ethernet</li>
+                                <li>Unmanaged — cắm là chạy, không cần cấu hình</li>
+                                <li>Hỗ trợ Auto MDI/MDIX — tự nhận cáp thẳng/chéo</li>
+                                <li>Phân bổ: Port 1~4 → UPS | Port 5 → Gateway | Port 6 → Router</li>
+                                <li>Port 7~8 → dự phòng mở rộng</li>
+                            </ul>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                    </tr>
+
+                    <!-- ===== D. TỦ ĐIỆN & PHỤ KIỆN ===== -->
+                    <tr class="grp">
+                        <td colspan="4">D. TỦ ĐIỆN & VẬT TƯ PHỤ KIỆN</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">4</td>
+                        <td>
+                            <div class="item-name">Tủ điện sắt sơn tĩnh điện</div>
+                            <div class="item-desc">
+                                W300 × H400 × D200mm, IP54. Chứa Gateway, Switch, Router, nguồn, CB.
+                            </div>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">5</td>
+                        <td>
+                            <div class="item-name">Nguồn 24VDC — Meanwell MDR-60-24</div>
+                            <div class="item-model">MDR-60-24</div>
+                            <div class="item-desc">24VDC/2.5A, DIN Rail. Cấp nguồn cho Gateway NM03.</div>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">6</td>
+                        <td>
+                            <div class="item-name">CB 1P 6A</div>
+                            <div class="item-desc">CB bảo vệ ngắn mạch cho mạch nguồn 220VAC → 24VDC.</div>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Cái</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">7</td>
+                        <td>
+                            <div class="item-name">Phụ kiện lắp đặt tủ</div>
+                            <div class="item-desc">
+                                Rail DIN, domino, đầu cos, dây rút, ống luồn, ốc vít, máng cáp, nhãn dán, ổ cắm nguồn
+                                trong tủ.
+                            </div>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Bộ</td>
+                    </tr>
+
+                    <!-- ===== E. PHẦN MỀM & SETUP ===== -->
+                    <tr class="grp">
+                        <td colspan="4">E. PHẦN MỀM & CHI PHÍ SETUP</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">8</td>
+                        <td>
+                            <div class="item-name">Cấu hình & Cài đặt hệ thống (Setup)</div>
+                            <div class="item-desc">
+                                Toàn bộ chi phí cấu hình phần cứng + phần mềm để hệ thống hoạt động:
+                            </div>
+                            <ul class="item-features">
+                                <li>✅ Cấu hình IP tĩnh cho 4 UPS + Gateway + Router trên mạng LAN</li>
+                                <li>✅ Mapping thanh ghi Modbus TCP — đọc đúng thông số UPS (điện áp, tải, pin, alarm…)
+                                </li>
+                                <li>✅ Cài đặt ngưỡng cảnh báo sự cố trên App (Hi/Lo Alarm cho từng thông số)</li>
+                                <li>✅ Tạo tài khoản App Navis Smart Industry, phân quyền cho nhân viên</li>
+                                <li>✅ Test vận hành toàn bộ hệ thống, kiểm tra Push Notification</li>
+                                <li>✅ Hướng dẫn sử dụng App/Web từ xa cho nhân viên</li>
+                                <li>✅ Hỗ trợ kỹ thuật từ xa trong quá trình vận hành</li>
+                            </ul>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Gói</td>
+                    </tr>
+
+                    <!-- ===== F. CLOUD ===== -->
+                    <tr class="grp">
+                        <td colspan="4">F. DỊCH VỤ CLOUD (HÀNG NĂM)</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">9</td>
+                        <td>
+                            <div class="item-name">Phí Cloud Navis — Thu hàng năm</div>
+                            <div class="item-desc">
+                                Phí dịch vụ Cloud thu ngay khi triển khai, gia hạn hàng năm. Bao gồm:
+                            </div>
+                            <ul class="item-features">
+                                <li>✅ App Navis Smart Industry (Android & iOS) — giám sát realtime</li>
+                                <li>✅ Web Dashboard — xem trên PC/Tablet qua trình duyệt</li>
+                                <li>✅ Cloud Server (Google Cloud) — lưu trữ dữ liệu liên tục</li>
+                                <li>✅ Push Notification — cảnh báo sự cố tức thì lên điện thoại</li>
+                                <li>✅ Email Alert — gửi email khi có alarm</li>
+                                <li>✅ Biểu đồ xu hướng + thống kê MAX/MIN/AVG</li>
+                                <li>✅ Xuất báo cáo Excel/PDF theo ngày/tuần/tháng</li>
+                                <li>✅ Phân quyền 4 cấp — nhiều người cùng theo dõi</li>
+                                <li>✅ Google Maps — hiển thị vị trí trạm</li>
+                                <li>✅ Hỗ trợ kỹ thuật + cập nhật phần mềm</li>
+                                <li>✅ SSL bảo mật dữ liệu truyền</li>
+                            </ul>
+                        </td>
+                        <td class="qty">1</td>
+                        <td class="unit">Năm</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- GHI CHÚ -->
+            <div class="note-box">
+                <strong>📌 Ghi chú:</strong>
+                <ul>
+                    <li><strong>Chưa bao gồm</strong> chi phí thi công, lắp đặt, đi đến hiện trường.</li>
+                    <li><strong>Hình thức giao hàng:</strong> Giao hàng tại công ty + <strong>hỗ trợ kỹ thuật từ
+                            xa</strong> (cấu hình, setup, hướng dẫn sử dụng qua Zalo/Teamviewer).</li>
+                    <li><strong>SIM Data 4G:</strong> Khách hàng <strong>tự trang bị</strong> SIM Data cho Router 4G.</li>
+                    <li><strong>Phí Cloud:</strong> 800.000 VNĐ/năm — thu ngay khi triển khai, gia hạn hàng năm.</li>
+                    <li>Bảo hành thiết bị: <strong>12 tháng</strong> kể từ ngày giao hàng.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- LIÊN HỆ + FOOTER -->
+    <footer class="footer">
+        <p class="cname">CÔNG TY TNHH TM DV KT SX O & M</p>
+        <p>Giải pháp IoT Công Nghiệp — Navis Smart Industry</p>
+        <div class="contact-row">
+            <div>
+                <div class="name">👤 Mr. Cường — Kinh Doanh</div>
+                <div>📞 0932 786 579 (Zalo) | 📧 omwater.vn@gmail.com</div>
+            </div>
+            <div>
+                <div class="name" style="color: var(--accent);">👤 Trí Nguyễn — Kỹ Thuật IoT</div>
+                <div>📞 0387 226 446 | 🔧 Cấu hình Modbus, Gateway, Dashboard</div>
+            </div>
+        </div>
+        <p style="margin-top: 8px; font-size: 10px; color: var(--text-muted);">
+            🌐 omwater.vn &nbsp;|&nbsp; 🌐 navis.iotdaiviet.com
+        </p>
+    </footer>
+
+</body>
+
+</html>

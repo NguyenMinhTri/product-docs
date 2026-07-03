@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Đáp Bổ Sung & Cam Kết Kỹ Thuật — Navis Smart Industry</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #0F766E;           /* OMWater Teal chính */
+            --primary-light: #14B8A6;     /* Teal sáng */
+            --primary-dark: #0D5E58;      /* Teal đậm */
+            --primary-lighter: #CCFBF1;   /* Nền Teal nhạt */
+            --secondary: #1E3A8A;         /* Xanh dương đậm */
+            --bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text: #0F172A;
+            --text-light: #475569;
+            --text-lighter: #94A3B8;
+            --border: #E2E8F0;
+            --success: #16A34A;
+            --success-bg: #DCFCE7;
+            --warning: #EA580C;
+            --warning-bg: #FFEDD5;
+            --danger: #DC2626;
+            --danger-bg: #FEE2E2;
+            --info: #2563EB;
+            --info-bg: #DBEAFE;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 40px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid var(--primary-light);
+        }
+        
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 15px;
+            font-weight: 400;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 16px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* ===== NAVIGATION LINK ===== */
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+        .nav-back:hover {
+            color: var(--primary-dark);
+        }
+
+        /* ===== SECTION ===== */
+        .section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            padding: 24px 28px;
+        }
+
+        .section h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 18px;
+            border-bottom: 2px solid var(--primary-lighter);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 .section-num {
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* ===== TEXT ELEMENTS ===== */
+        p { margin-bottom: 12px; }
+        strong { font-weight: 600; color: var(--text); }
+        ul { margin-bottom: 16px; padding-left: 20px; }
+        li { margin-bottom: 6px; }
+
+        /* ===== TABLES ===== */
+        .qa-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 13px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .qa-table th {
+            background: var(--primary-lighter);
+            color: var(--primary-dark);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .qa-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        
+        .qa-table tr:last-child td { border-bottom: none; }
+        .qa-table tr:nth-child(even) td { background: #FAFBFC; }
+        .qa-table .highlight-green { color: var(--success); font-weight: 600; }
+        .qa-table .highlight-blue { color: var(--info); font-weight: 600; }
+
+        /* ===== ALERTS ===== */
+        .alert-info {
+            background: var(--info-bg);
+            border-left: 4px solid var(--info);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+            color: #1E3A8A;
+        }
+        
+        .alert-warning {
+            background: var(--warning-bg);
+            border-left: 4px solid var(--warning);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+            color: #7C2D12;
+        }
+
+        .alert-success {
+            background: var(--success-bg);
+            border-left: 4px solid var(--success);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+            color: #14532D;
+        }
+
+        /* ===== EXAMPLES CARD GRID ===== */
+        .example-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        
+        @media (min-width: 768px) {
+            .example-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .example-card {
+            background: #FAFBFD;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .example-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: var(--primary-light);
+        }
+
+        .example-card h3 {
+            font-size: 14px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .example-card ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .example-card li {
+            font-size: 12.5px;
+            padding: 4px 0;
+            border-bottom: 1px dashed #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .example-card li:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            color: var(--primary);
+            padding-top: 8px;
+        }
+
+        .tag-badge {
+            background: var(--primary-lighter);
+            color: var(--primary-dark);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ===== WORKFLOW DIAGRAM ===== */
+        .workflow-container {
+            background: #FAFBFD;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .workflow-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 32px;
+            bottom: -16px;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .workflow-step-num {
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+
+        .workflow-step-content h4 {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .workflow-step-content p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+            font-size: 13px;
+        }
+
+        .footer .contact {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+        
+        .footer .contact a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* ===== PRINTER FRIENDLY ===== */
+        @media print {
+            body {
+                background: white;
+                font-size: 12px;
+            }
+            .section {
+                box-shadow: none;
+                border: 1px solid #000;
+                page-break-inside: avoid;
+            }
+            .header {
+                background: white;
+                color: black;
+                border-bottom: 2px solid #000;
+                padding: 20px 0;
+            }
+            .header h1 { font-size: 20px; }
+            .header .badge { display: none; }
+            .nav-back { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <div class="header-content">
+        <h1>GIẢI ĐÁP BỔ SUNG & CAM KẾT KỸ THUẬT</h1>
+        <div class="subtitle">Giải pháp Giám sát IoT Công nghiệp Navis Smart Industry — OMWater</div>
+        <div class="badge">🔒 Tài liệu Bổ sung & Cam kết An toàn Thông tin</div>
+    </div>
+</div>
+
+<div class="container">
+    
+    <a href="file:///C:/Users/Tri/Docs/tra_loi_cau_hoi_khach_hang.html" class="nav-back">
+        ← Quay lại trang Giải Đáp Câu Hỏi Khách Hàng (Chính)
+    </a>
+
+    <!-- ===== SECTION 1: VÍ DỤ TAG THỰC TẾ ===== -->
+    <div class="section" id="sec-1">
+        <h2><span class="section-num">1</span> 📐 VÍ DỤ THỰC TẾ VỀ SỬ DỤNG HẠN MỨC 100 TAG/TRẠM</h2>
+        <p>Để giúp quý khách hàng hình dung rõ hơn về quy định <strong>"Tối đa 100 tag logic/trạm"</strong>, dưới đây là các ví dụ thực tế được phân bổ cho từng loại trạm công nghiệp. Một tag logic đại diện cho một thông số đầu ra hoàn chỉnh, độc lập với số lượng thanh ghi vật lý chiếm dụng trên đường truyền.</p>
+        
+        <div class="example-grid">
+            <!-- Example 1 -->
+            <div class="example-card">
+                <h3>🌊 1. Trạm Quan Trắc Nước Thải</h3>
+                <ul>
+                    <li>pH <span class="tag-badge">1 Tag</span></li>
+                    <li>Nhiệt độ nước <span class="tag-badge">1 Tag</span></li>
+                    <li>Chỉ số COD <span class="tag-badge">1 Tag</span></li>
+                    <li>Chỉ số TSS <span class="tag-badge">1 Tag</span></li>
+                    <li>Độ màu nước thải <span class="tag-badge">1 Tag</span></li>
+                    <li>Lưu lượng xả đầu vào <span class="tag-badge">1 Tag</span></li>
+                    <li>Lưu lượng xả đầu ra <span class="tag-badge">1 Tag</span></li>
+                    <li>Trạng thái máy lấy mẫu <span class="tag-badge">1 Tag</span></li>
+                    <li>Trạng thái tủ điện điều khiển <span class="tag-badge">2 Tag</span></li>
+                    <li><strong>Tổng cộng sử dụng</strong> <strong>10 / 100 Tag</strong></li>
+                </ul>
+            </div>
+            
+            <!-- Example 2 -->
+            <div class="example-card">
+                <h3>⚡ 2. Giám Sát Tủ Trạm Bơm Cấp Nước</h3>
+                <ul>
+                    <li>Điện áp 3 pha (Ua, Ub, Uc) <span class="tag-badge">3 Tag</span></li>
+                    <li>Dòng điện 3 pha (Ia, Ib, Ic) <span class="tag-badge">3 Tag</span></li>
+                    <li>Công suất tiêu thụ (P, Q) <span class="tag-badge">2 Tag</span></li>
+                    <li>Điện năng tích lũy (kWh) <span class="tag-badge">1 Tag</span></li>
+                    <li>Trạng thái 3 bơm (Chạy/Dừng/Lỗi) <span class="tag-badge">9 Tag</span></li>
+                    <li>Áp suất đường ống chính <span class="tag-badge">1 Tag</span></li>
+                    <li>Mức nước bể chứa <span class="tag-badge">1 Tag</span></li>
+                    <li><strong>Tổng cộng sử dụng</strong> <strong>20 / 100 Tag</strong></li>
+                </ul>
+            </div>
+
+            <!-- Example 3 -->
+            <div class="example-card">
+                <h3>❄️ 3. Hệ Thống Kho Lạnh Dược Phẩm</h3>
+                <ul>
+                    <li>Nhiệt độ (3 kho độc lập) <span class="tag-badge">3 Tag</span></li>
+                    <li>Độ ẩm (3 kho độc lập) <span class="tag-badge">3 Tag</span></li>
+                    <li>Trạng thái đóng/mở cửa kho <span class="tag-badge">3 Tag</span></li>
+                    <li>Trạng thái máy nén dàn lạnh <span class="tag-badge">3 Tag</span></li>
+                    <li>Cảnh báo sự cố mất nguồn chính <span class="tag-badge">1 Tag</span></li>
+                    <li><strong>Tổng cộng sử dụng</strong> <strong>13 / 100 Tag</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="alert-success">
+            <strong>💡 Kết luận thực tế:</strong> Với hạn mức 100 tag logic, một bộ Gateway Navis MOD có thể giám sát tích hợp đồng thời nhiều hệ thống nhỏ hoặc toàn bộ thiết bị đo đạc của một khu vực sản xuất quy mô vừa mà không phát sinh thêm chi phí phần cứng.
+        </div>
+    </div>
+
+    <!-- ===== SECTION 2: CHÍNH SÁCH BACKUP & GOOGLE CLOUD ===== -->
+    <div class="section" id="sec-2">
+        <h2><span class="section-num">2</span> ☁️ CHÍNH SÁCH SAO LƯU (BACKUP) & DỰ PHÒNG THẢM HỌA</h2>
+        <p>Hệ thống phần mềm và cơ sở dữ liệu Navis Smart Industry được vận hành trực tiếp trên hạ tầng đám mây toàn cầu của <strong>Google Cloud Platform (GCP)</strong>. Để tối ưu hóa tài nguyên và đảm bảo an toàn vận hành, chính sách sao lưu và khắc phục sự cố được thiết lập như sau:</p>
+        
+        <table class="qa-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Tiêu chuẩn kỹ thuật</th>
+                    <th style="width: 30%;">Chỉ số cam kết</th>
+                    <th>Chi tiết cơ chế áp dụng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Hạ tầng Máy chủ</strong></td>
+                    <td class="highlight-blue">Google Cloud (GCP)</td>
+                    <td>Vận hành trên trung tâm dữ liệu khu vực Đông Nam Á của Google, cam kết thời gian uptime phần cứng đạt 99.9%.</td>
+                </tr>
+                <tr>
+                    <td><strong>Chu kỳ Backup</strong></td>
+                    <td><strong>7 ngày</strong> (Retention)</td>
+                    <td>Hệ thống thực hiện sao lưu định kỳ tự động và luôn duy trì các bản khôi phục đầy đủ (Full Backup) của <strong>7 ngày gần nhất</strong> để sẵn sàng rollback khi xảy ra lỗi dữ liệu nghiêm trọng.</td>
+                </tr>
+                <tr>
+                    <td><strong>RPO (Recovery Point Objective)</strong></td>
+                    <td><strong>24 giờ</strong></td>
+                    <td>Hạn mức mất mát dữ liệu tối đa khi có sự cố thảm họa cần khôi phục lại hệ thống là 24 giờ (tương đương khoảng thời gian giữa hai chu kỳ backup định kỳ hàng ngày). Dữ liệu phát sinh trong ngày có thể bị ảnh hưởng khi phải restore từ bản sao lưu gần nhất.</td>
+                </tr>
+                <tr>
+                    <td><strong>RTO (Recovery Time Objective)</strong></td>
+                    <td><strong>24 giờ</strong></td>
+                    <td>Thời gian tối đa để đội ngũ kỹ thuật khôi phục hoàn toàn hoạt động bình thường của hệ thống dịch vụ kể từ thời điểm tiếp nhận và xác định sự cố nghiêm trọng.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== SECTION 3: XÁC THỰC 2 LỚP ===== -->
+    <div class="section" id="sec-3">
+        <h2><span class="section-num">3</span> 🔐 QUY TRÌNH ĐĂNG KÝ VÀ XÁC THỰC 2 LỚP (2FA)</h2>
+        <p>Để đảm bảo an toàn tuyệt đối trước các truy cập trái phép, quy trình đăng ký tài khoản mới và xác thực khi đăng nhập được quản lý nghiêm ngặt qua cơ chế kiểm duyệt của Admin nội bộ:</p>
+        
+        <div class="workflow-container">
+            <div class="workflow-step">
+                <div class="workflow-step-num">1</div>
+                <div class="workflow-step-content">
+                    <h4>Đăng ký tài khoản người dùng</h4>
+                    <p>Nhân viên vận hành thực hiện đăng ký tài khoản trên hệ thống bằng Số điện thoại (SĐT), Email cá nhân.</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-step-num">2</div>
+                <div class="workflow-step-content">
+                    <h4>Trạng thái chờ duyệt an toàn</h4>
+                    <p>Tài khoản sau khi tự đăng ký sẽ ở trạng thái chờ kích hoạt, hoàn toàn chưa thể truy cập hoặc xem bất kỳ dữ liệu nào của trạm giám sát.</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-step-num">3</div>
+                <div class="workflow-step-content">
+                    <h4>Xác nhận quyền từ Quản trị viên (Admin)</h4>
+                    <p><strong>Bắt buộc</strong> phải có sự phê duyệt, xác nhận danh tính và kích hoạt cấp quyền từ tài khoản Admin của khách hàng (Chủ sở hữu hệ thống) thì tài khoản mới có thể chính thức đăng nhập vào hệ thống.</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-step-num">4</div>
+                <div class="workflow-step-content">
+                    <h4>Xác thực 2 lớp khi đăng nhập</h4>
+                    <p>Mỗi lần đăng nhập, hệ thống sẽ yêu cầu cung cấp thêm mã OTP xác thực lớp thứ hai được gửi qua SĐT hoặc Email để hoàn tất quá trình truy cập an toàn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 4: AUDIT LOG & CHÍNH SÁCH TRUY CẬP ===== -->
+    <div class="section" id="sec-4">
+        <h2><span class="section-num">4</span> 🛠️ CƠ CHẾ AUDIT LOG & QUY TRÌNH KIỂM SOÁT NHÂN SỰ ĐẠI VIỆT</h2>
+        <p>Nhân sự kỹ thuật của Đại Việt IoT được quản lý dưới một quy trình phê duyệt nghiêm ngặt và phân cấp rõ ràng trước khi được phép chạm vào hệ thống phần mềm hoặc dữ liệu của khách hàng:</p>
+
+        <div class="alert-info">
+            <strong>📌 Chính sách truy cập cốt lõi:</strong> Nhân sự Đại Việt IoT <strong>CHỈ truy cập</strong> hệ thống của khách hàng khi và chỉ khi có <strong>yêu cầu hỗ trợ kỹ thuật rõ ràng</strong> từ phía khách hàng (qua văn bản, email hỗ trợ hoặc hotline).
+        </div>
+
+        <table class="qa-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Tình huống hệ thống</th>
+                    <th style="width: 30%;">Quy trình phê duyệt quyền</th>
+                    <th>Cơ chế Audit & Ghi nhận nhật ký</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Xử lý sự cố phần mềm hoặc Nâng cấp (Update)</strong></td>
+                    <td>Kỹ thuật viên thao tác phải được <strong>Trưởng phòng IT Đại Việt</strong> cấp quyền trực tiếp để xử lý sự cố hoặc cập nhật bản vá phần mềm.</td>
+                    <td rowspan="2" style="vertical-align: middle;">
+                        <ul>
+                            <li>Hệ thống tự động ghi lại toàn bộ hoạt động (Đăng nhập, nội dung thao tác, thời gian bắt đầu/kết thúc, IP truy cập) của kỹ thuật viên.</li>
+                            <li>Bản ghi nhật ký (Audit Log) được lưu trữ độc lập và bảo mật, không nhân viên nào có thể can thiệp hay xóa bỏ.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Hệ thống hoạt động bình thường</strong><br><small style="color:var(--text-light);">(Kiểm tra định kỳ hoặc chỉnh sửa cấu hình)</small></td>
+                    <td>Bắt buộc phải có đầy đủ đồng thời cả 3 yếu tố phê duyệt:
+                        <ol style="margin-top: 4px; padding-left: 16px; font-size: 12.5px;">
+                            <li>Có sự xác nhận và đồng ý bằng văn bản/email từ phía <strong>Khách hàng</strong>.</li>
+                            <li>Được phê duyệt và cấp quyền từ <strong>Trưởng phòng IT Đại Việt</strong>.</li>
+                            <li>Được sự phê duyệt cấp quyền thao tác từ <strong>Giám đốc Đại Việt IoT</strong>.</li>
+                        </ol>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== SECTION 5: NDA & BẢO MẬT ===== -->
+    <div class="section" id="sec-5">
+        <h2><span class="section-num">5</span> ✍️ CAM KẾT PHÁP LÝ (NDA) & AN TOÀN DỮ LIỆU KHÁCH HÀNG</h2>
+        <p>OMWater và đối tác công nghệ Đại Việt IoT cam kết bảo vệ toàn vẹn tài sản thông tin của quý khách hàng thông qua các điều khoản pháp lý và kỹ thuật chặt chẽ:</p>
+        
+        <ul style="padding-left: 24px; margin-bottom: 20px;">
+            <li style="margin-bottom: 12px;">
+                <strong>Ký kết thỏa thuận NDA chính thức:</strong> Đại Việt IoT cam kết thực hiện ký kết <strong>Thỏa thuận bảo mật thông tin (NDA - Non-Disclosure Agreement)</strong> bằng văn bản pháp lý chính thức có đóng dấu trước khi triển khai hệ thống.
+            </li>
+            <li style="margin-bottom: 12px;">
+                <strong>Cam kết không mua bán, chia sẻ dữ liệu:</strong> Toàn bộ dữ liệu đo đạc, thông số vận hành và thông tin nội bộ của khách hàng được bảo mật tuyệt đối. Chúng tôi cam kết bảo vệ thông tin data khách hàng, <strong>không mua bán, chia sẻ dữ liệu</strong> dưới bất kỳ hình thức nào.
+            </li>
+            <li style="margin-bottom: 12px;">
+                <strong>Cải tiến bảo mật liên tục:</strong> Đội ngũ kỹ thuật cam kết nghiên cứu, cải tiến bảo mật và cập nhật hệ thống liên tục để nâng cao mức độ an toàn thông tin, đảm bảo chống lại các nguy cơ tấn công mạng hiện đại.
+            </li>
+        </ul>
+
+        <div class="alert-warning">
+            <strong>⚠️ Lưu ý pháp lý:</strong> Thỏa thuận NDA sẽ quy định rõ trách nhiệm tài chính và pháp lý bồi thường thiệt hại của Đại Việt IoT trong trường hợp xảy ra rò rỉ dữ liệu vận hành do lỗi bảo mật từ phía nhà cung cấp hệ thống.
+        </div>
+    </div>
+
+</div><!-- /.container -->
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+    <p><strong>CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ KỸ THUẬT SẢN XUẤT O & M</strong></p>
+    <p style="margin-top: 4px; font-size:12px; color: var(--text-light);">Thương hiệu IoT: Navis Smart Industry / Đại Việt IoT</p>
+    <div class="contact">
+        <span>📞 Hotline: <a href="tel:0932786579">0932.786.579</a> (Mr. Cường)</span>
+        <span>✉️ Email: <a href="mailto:omwater.vn@gmail.com">omwater.vn@gmail.com</a></span>
+        <span>🌐 Web: <a href="https://omwater.vn" target="_blank">omwater.vn</a> &nbsp;|&nbsp; <a href="https://navis.iotdaiviet.com" target="_blank">navis.iotdaiviet.com</a></span>
+    </div>
+    <p style="margin-top:20px;font-size:11px;color:var(--text-lighter);">© 2026 OMWater & Đại Việt IoT. Tài liệu cam kết kỹ thuật đính kèm hợp đồng dịch vụ.</p>
+</div>
+
+</body>
+</html>
